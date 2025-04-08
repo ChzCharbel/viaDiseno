@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+    />
+
+    <title>Sistema de Inscripciones</title>
+  </head>
+
+  <body>
+    <nav class="navbar">
+      <div class="container-fluid">
+        <span class="navbar-brand">
+          <a>
+            <img
+              src="/images/logoviadiseno.jpg"
+              alt="Logo ViaDiseno"
+              width="60"
+              height="60"
+            />
+          </a>
+        </span>
+        <% if (rol == 'admin') { %>
+        <%- include('./_dropdown_ciclos') %> 
+        <% } else { %>
+            <div class="col-10"></div>
+        <% } %>
+        <span
+          class="mb-0 fs-3 position-absolute start-50 translate-middle-x text-light"
+        >
+        <% if (titulo == 'alumnos') { %>
+            Alumnos
+        <% } else if (titulo == 'maestros') { %>
+            Maestros
+        <% } else if (titulo == 'materias') { %>
+            Materias
+        <% } else if (titulo == 'oferta_academica') { %>
+            Oferta Académica
+        <% } else if (titulo == 'grupos') { %>
+            Grupos
+        <% } else if (titulo == 'solicitudes') { %>
+            Solicitudes
+        <% } else if (titulo == 'planes') { %>
+            Plan de Estudio
+        <% } else if (titulo == 'Horario de Clases') { %>
+            Horario de Clases
+        <% } %>
+        </span>
+        <span>
+          <a class="navbar-brand material-symbols-outlined fs-2">
+            notifications
+          </a>
+        </span>
+        <span
+          ><a class="navbar-brand material-symbols-outlined fs-1"
+            ><%- include('./_perfil_user') %></a
+          ></span
+        >
+      </div>
+    </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

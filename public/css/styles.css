@@ -1,0 +1,124 @@
+.custom-table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.custom-table th,
+.custom-table td {
+  border: 1px solid #dee2e6;
+  padding: 0;
+  height: 30px;
+}
+.color-block {
+  width: 100%;
+  height: 100%;
+}
+.bg-salmon {
+  background-color: #640c0c !important;
+}
+.bg-purple {
+  background-color: #611488 !important;
+}
+.bg-green {
+  background-color: #1c1f82 !important;
+}
+.bg-blue {
+  background-color: #4e86ac !important;
+}
+.bg-pink {
+  background-color: #7b4974 !important;
+}
+
+.btn-primary {
+  background-color: #95404c;
+  border-color: #95404c;
+}
+
+.btn-primary:hover {
+  background-color: #581c24;
+  border-color: #95404c;
+}
+
+.navbar {
+  background-color: #95404c;
+}
+
+.navbar-brand {
+  color: #ffffff;
+}
+
+.row-width {
+  width: 16%;
+}
+
+.row-width-hour {
+  width: 5%;
+}
+
+.hour {
+  text-align: center;
+}
+
+.search-navbar {
+  margin: 20px;
+}
+
+.form-container {
+  margin-top: 150px;
+  margin-left: 150px;
+  margin-right: 150px;
+}
+
+.form-select {
+  font-size: 1.5rem;
+}
+
+.form-select option {
+  padding: 8px 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.form-select option:last-child {
+  border-bottom: none;
+}
+
+#loginBody {
+  background-image: url(/images/background.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center top;
+}
+
+#loginLogo {
+  border: #ffffff;
+  border-width: 10px;
+  width: 250px;
+  height: 235px;
+}
+
+#loginCard {
+  width: 22rem;
+}
+
+.notificaciones {
+  max-width: 280px;
+  max-height: 200px;
+}
+
+.modalProfesor {
+  max-width: 80rem;
+}
+
+.profile-icon {
+  position: relative;
+  top: -12px;
+}
+
+.contenedor-con-margen {
+  margin: 20px auto;
+  max-width: 800px; 
+}
+
+.texto-pequeno {
+  font-size: 0.75rem;
+  color: #6c757d; /* grisecito para que se vea más como placeholder */
+}

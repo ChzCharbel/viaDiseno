@@ -1,0 +1,24 @@
+<!-- Profile Dropdown -->
+<div class="dropdown">
+  <a
+    class="navbar-brand material-symbols-outlined fs-2 profile-icon"
+    href="#"
+    role="button"
+    id="profileDropdown"
+    data-bs-toggle="dropdown"
+    aria-expanded="false"
+  >
+    account_circle
+  </a>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+    <li class="dropdown-item-text d-flex align-items-center">
+      <span class="material-symbols-outlined fs-1 me-2">account_circle</span>
+      <a><%=username%> </a>
+    </li>
+    <li class="dropdown-item-text d-flex align-items-center">
+      <a><%=mail%></a>
+    </li>
+    <li><hr class="dropdown-divider" /></li>
+    <li><a class="dropdown-item" href="/users/logout">Cerrar sesión</a></li>
+  </ul>
+</div>

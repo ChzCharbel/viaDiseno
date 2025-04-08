@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Inicio - Alumno <%= idAlumno %></title>
+</head>
+<body>
+  <h1>Bienvenido, alumno <%= idAlumno %></h1>
+  <h2>Materias inscritas:</h2>
+
+  <table border="1">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Créditos</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (materias.length > 0) { %>
+        <% materias.forEach(materia => { %>
+          <tr>
+            <td><%= materia.idMateria %></td>
+            <td><%= materia.nombre %></td>
+            <td><%= materia.creditos %></td>
+          </tr>
+        <% }) %>
+      <% } else { %>
+        <tr>
+          <td colspan="3">No estás inscrito en ninguna materia.</td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+</body>
+</html>

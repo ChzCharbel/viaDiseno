@@ -1,0 +1,92 @@
+<div
+  class="modal fade"
+  id="profModal<%= profesor.matriculaProfesor %>"
+  tabindex="-1"
+  aria-labelledby="modalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modalLabel">
+          Disponibilidad de horario
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div id="matricula" class="invisible">
+          <%= profesor.matriculaProfesor %>
+        </div>
+        <dl class="row">
+          <dt class="col-sm-3">Nombre</dt>
+          <dd class="col-sm-9" id="profName"><%= profesor.nombreProfesor %></dd>
+
+          <dt class="col-sm-3">Matrícula</dt>
+          <dd class="col-sm-9" id="profId">
+            <%= profesor.matriculaProfesor %>
+          </dd>
+        </dl>
+
+        <h6>Seleccione los horarios disponibles:</h6>
+
+        <div class="selector-container">
+          <div class="row mb-2 text-center offset-2">
+            <div class="col-auto">Lunes</div>
+            <div class="col-auto">Martes</div>
+            <div class="col-auto">Miércoles</div>
+            <div class="col-auto">Jueves</div>
+            <div class="col-auto">Viernes</div>
+          </div>
+
+          <% const dias = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes'];
+          const horas = [ '7:00', '7:30', '8:00', '8:30', '9:00', '9:30',
+          '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00',
+          '13:30', '14:00', '14:30', '15:00', '15:30' ]; horas.forEach(hora => {
+          const horaId = hora.replace(':', '-'); %>
+          <div class="row mb-1 align-items-center">
+            <div class="col-2 text-end fw-bold"><%= hora %></div>
+            <% dias.forEach(dia => { %>
+            <div class="col text-center">
+              <input
+                type="checkbox"
+                class="btn-check"
+                id="<%= dia %>-<%= horaId %>-<%= profesor.matriculaProfesor %>"
+                autocomplete="off"
+              />
+              <label
+                class="btn btn-outline-primary"
+                style="width: 35px; height: 35px"
+                for="<%= dia %>-<%= horaId %>-<%= profesor.matriculaProfesor %>"
+              ></label>
+            </div>
+            <% }); %>
+          </div>
+          <% }); %>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            id="saveAvailability<%= profesor.matriculaProfesor %>"
+            data-bs-dismiss="modal"
+            onclick="guardarHorario1()"
+          >
+            Aceptar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    console.log("script");
+    const allProfesores = "<%- JSON.stringify(profesores) %>";
+    console.log(allProfesores);
+  </script>
+  <script src="/app2.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</div>

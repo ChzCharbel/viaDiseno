@@ -1,0 +1,47 @@
+.search-navbar {
+  margin: 20px;
+}
+
+/* Your existing styles can go here */
+.navbar {
+  background-color: #95404C;
+}
+
+.navbar-brand {
+  color: #ffffff;
+}
+
+.btn-primary {
+  background-color: #95404C;
+  border-color: #95404C;
+}
+
+.btn-primary:hover{
+  background-color: #581c24;
+  border-color: #95404C;
+}
+
+.search-navbar {
+  margin: 20px;
+}
+
+
+.form-container {
+  margin-top: 150px;
+  margin-left: 150px;
+  margin-right: 150px;
+}
+
+.form-select {
+  font-size: 1.5rem; /* Increase font size */
+}
+
+.form-select option {
+  padding: 8px 10px;  /* Add more vertical padding for line spacing */
+  border-bottom: 1px solid #ccc;  /* Add gray divider line */
+}
+
+/* Remove border from the last option */
+.form-select option:last-child {
+  border-bottom: none;
+}
