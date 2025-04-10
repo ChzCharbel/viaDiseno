@@ -15,7 +15,7 @@ router.get("/:idCiclo/agregar", isAuth, canView, (request, response, next) => {
 router.post("/:idCiclo/agregar", isAuth, canView, (request, response, next) => {
   console.log(request.body);
   maestros.push(request.body.nombre);
-
+  
   const maestros = [];
   response.render("lista_maestros", {
     maestros: maestros,
