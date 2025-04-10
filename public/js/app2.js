@@ -167,3 +167,6 @@ function guardarHorario2() {
         alert("Error al guardar horario");
       });
   }
+
+  const contenedor = document.getElementById("profContainer");
+  const allProfesores = JSON.parse(contenedor.dataset.profesores);
