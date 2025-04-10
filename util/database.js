@@ -24,7 +24,7 @@ if (isProduction) {
     // Usa variables de entorno para la configuracion de la base de datos
     // en caso de que no se use Heroku
     poolConfig = {
-      host: process.env.POSTRESQL_HOST,
+      host: process.env.POSTGRESQL_HOST,
       user: process.env.POSTGRESQL_USER,
       database: process.env.POSTGRESQL_DB,
       port: process.env.POSTGRESQL_PORT,
