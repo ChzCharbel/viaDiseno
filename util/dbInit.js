@@ -1,19 +1,17 @@
 /**
- * Database Initialization Script
- * This file handles database initialization, schema creation, and seeding initial data
+ *  Script de inicializacion de base de datos
  */
 const fs = require('fs');
 const path = require('path');
 const pool = require('./database');
 
-// SQL files for database initialization
+// Archivos SQL para crear tablas e insertar datos
 const TABLES_SQL_FILE = 'crearTablas.sql';
 const INSERTS_SQL_FILE = 'inserts.sql';
 
 /**
- * Executes an SQL file against the database
- * @param {string} fileName - Name of the SQL file in the sql directory
- * @returns {Promise} - A promise that resolves when the SQL execution is complete
+ * Ejecuta un script SQL desde un archivo
+ * Devuelve una promesa cuando la ejecucion sql es correcta.
  */
 const executeSQL = async (fileName) => {
   try {
@@ -31,19 +29,19 @@ const executeSQL = async (fileName) => {
 };
 
 /**
- * Initialize the database by creating tables and seeding initial data
- * @returns {Promise} - A promise that resolves when initialization is complete
+ * Inicializa la base de datos y carga los datos iniciales
+ * Regresa una promesa cuando la inicializacion es correcta.
  */
 const initializeDatabase = async () => {
   try {
     console.log('Starting database initialization...');
     
-    // Test database connection
+    // Prueba la conexion a la base de datos
     await testConnection();
-      // Create tables
+      // Crea tablas y relaciones
     await executeSQL(TABLES_SQL_FILE);
     
-    // Seed initial data
+    // Inserta datos iniciales
     await executeSQL(INSERTS_SQL_FILE);
     
     console.log('Database initialization completed successfully.');
@@ -55,8 +53,8 @@ const initializeDatabase = async () => {
 };
 
 /**
- * Test the database connection
- * @returns {Promise} - A promise that resolves when connection test is successful
+ * Prueba conexion de base de datos
+ * Devuelve una promesa si la conexion es correcta o lanza un error si no lo es
  */
 const testConnection = async () => {
   try {
@@ -71,10 +69,8 @@ const testConnection = async () => {
 };
 
 /**
- * Runs a custom query against the database
- * @param {string} queryText - The SQL query text
- * @param {Array} params - Query parameters (for parameterized queries)
- * @returns {Promise} - A promise that resolves with the query results
+ * Corre una consulta SQL en la base de datos
+ * Devuelve una promesa con el resultado de la consulta o lanza un error si no se puede ejecutar
  */
 const runQuery = async (queryText, params = []) => {
   try {
@@ -91,10 +87,11 @@ module.exports = {
   testConnection,
   executeSQL,
   runQuery,
-  pool, // Export the pool for direct access if needed
+  pool, // Exporta el pool para que pueda ser utilizado en otros módulos
 };
 
-// Allow running this file directly from command line (node util/dbInit.js)
+// Permite ejecutar el script directamente desde la línea de comandos
+// (ejemplo: node util/dbInit.js)
 if (require.main === module) {
   initializeDatabase()
     .then(() => {

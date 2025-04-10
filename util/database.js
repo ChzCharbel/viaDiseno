@@ -1,15 +1,15 @@
 const Pool = require("pg-pool");
 
-// Determine if we're in production mode (like on Heroku)
+// Revisa si estamos en produccion o desarrollo
 const isProduction = process.env.NODE_ENV === 'production';
 
 let poolConfig;
 
-// Configure database connection based on environment
+// Configura la conexion a la base de datos dependiendo del entorno
 if (isProduction) {
-  // Production environment (Heroku) uses DATABASE_URL
+  // Heroku usa DATABASE_URL para la configuracion de la base de datos
   if (process.env.DATABASE_URL) {
-    // Parse the DATABASE_URL to get connection parameters
+    // Parsea la URL de la base de datos para obtener los detalles de la conexión
     const url = new URL(process.env.DATABASE_URL);
     poolConfig = {
       user: url.username,
@@ -17,36 +17,37 @@ if (isProduction) {
       host: url.hostname,
       port: url.port,
       database: url.pathname.split('/')[1],
-      ssl: { rejectUnauthorized: false } // Required for Heroku PostgreSQL
+      ssl: { rejectUnauthorized: false }
     };
-    console.log('Using production database configuration with DATABASE_URL');
+    console.log('Usando configuracion de base de datos de Heroku');
   } else {
-    // Fallback to environment variables if DATABASE_URL is not available
+    // Usa variables de entorno para la configuracion de la base de datos
+    // en caso de que no se use Heroku
     poolConfig = {
       host: process.env.POSTRESQL_HOST,
       user: process.env.POSTGRESQL_USER,
       database: process.env.POSTGRESQL_DB,
       port: process.env.POSTGRESQL_PORT,
       password: process.env.POSTGRESQL_PASSWORD,
-      ssl: { rejectUnauthorized: false } // SSL for production
+      ssl: { rejectUnauthorized: false }
     };
-    console.log('Using production database configuration with environment variables');
+    console.log('Usando configuracion de base de datos local');
   }
 } else {
-  // Development environment configuration
+  // Configuracion de desarrollo
   poolConfig = {
     host: process.env.DEV_POSTRESQL_HOST || process.env.POSTRESQL_HOST || 'localhost',
     user: process.env.DEV_POSTGRESQL_USER || process.env.POSTGRESQL_USER || 'postgres',
     database: process.env.DEV_POSTGRESQL_DB || process.env.POSTGRESQL_DB || 'postgres',
     port: process.env.DEV_POSTGRESQL_PORT || process.env.POSTGRESQL_PORT || 5432,
     password: process.env.DEV_POSTGRESQL_PASSWORD || process.env.POSTGRESQL_PASSWORD || '',
-    // In development, SSL is optional based on configuration
     ssl: process.env.DEV_POSTGRESQL_SSL === 'true' ? { rejectUnauthorized: false } : undefined
   };
-  console.log('Using development database configuration');
+  console.log('Usando configuracion de base de datos de desarrollo');
 }
 
-// Create the connection pool with the appropriate configuration
+// Crea la conexion a la base de datos
+// usando la configuracion definida arriba
 const pool = new Pool(poolConfig);
 
 module.exports = pool;
