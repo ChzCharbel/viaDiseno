@@ -99,6 +99,9 @@ app.use("/planes", planesRoutes);
 const ofertaRoutes = require("./routes/oferta.routes");
 app.use("/oferta_academica", ofertaRoutes);
 
+const solicitudesRoutes = require("./routes/solicitudes.routes");
+app.use("/solicitudes", solicitudesRoutes);
+
 const disponibilidadRoutes = require("./routes/maestros.routes");
 app.use(express.json());
 app.use(disponibilidadRoutes);
