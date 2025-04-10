@@ -1,4 +1,4 @@
-/*const Disponible = require("../models/disponible.model");
+const Disponible = require("../models/disponible.model");
  
  exports.guardarDisponibilidad = async (req, res) => {
    try {
@@ -9,4 +9,4 @@
      console.error("Error al guardar disponibilidad:", error);
      res.status(500).json({ message: "Error al guardar horario" });
    }
- };*/
+ };

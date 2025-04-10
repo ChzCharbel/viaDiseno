@@ -118,7 +118,7 @@ function guardarHorario2() {
     
   }; */
   
-  /*
+  
   function guardarHorario1() {
     const profesorId = document.getElementById("profId").textContent.trim();
     const cicloEscolar = "FebJun21"; //  hacerlo dinámico 
@@ -166,4 +166,4 @@ function guardarHorario2() {
         console.error("Error al guardar horario:", err);
         alert("Error al guardar horario");
       });
-  }*/
+  }

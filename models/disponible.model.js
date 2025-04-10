@@ -1,4 +1,4 @@
-/*const pool = require("../util/database");
+const pool = require("../util/database");
  
  exports.guardar = async (data) => {
    const {
@@ -34,4 +34,4 @@
      toPGArray(jueves),
      toPGArray(viernes)
    ]);
- };*/
+ };

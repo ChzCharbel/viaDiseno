@@ -107,7 +107,7 @@ app.use("/oferta_academica", ofertaRoutes);
 const solicitudesRoutes = require("./routes/solicitudes.routes");
 app.use("/solicitudes", solicitudesRoutes);
 
-/*const disponibleRoutes = require("./routes/disponible.routes");
- app.use("/disponible", disponibleRoutes);*/
+const disponibleRoutes = require("./routes/disponible.routes");
+ app.use("/disponible", disponibleRoutes);
  
 app.listen(3000);
