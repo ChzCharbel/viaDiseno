@@ -10,10 +10,10 @@
         <div class="col offset-1" id="col_tabs">
             <ul class="nav nav-underline">
                 <li class="nav-item">
-                    <a class="nav-link link-dark" aria-current="page" href="#">Materias seleccionadas</a>
+                    <a class="nav-link link-dark" aria-current="page" href="/oferta_academica/<%= cicloActual %>/plan_version">Materias seleccionadas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link link-dark active" href="/oferta_academica/<%= cicloActual %>/agregar" onclick="changeTabs('hola')">Agregar materias</a>
+                    <a class="nav-link link-dark active" href="/oferta_academica/<%= cicloActual %>/plan_version/agregar">Agregar materias</a>
                 </li>
         </div>
         <div class="col-auto">
@@ -31,7 +31,7 @@
             <ul class="dropdown-menu" id="dropdown-planes">
                 <% for (let plan of planes) { %>
                     <li>
-                        <a class="dropdown-item" href="/oferta_academica/<%=ciclosEscolares[0].idCicloEscolar %>/<%= plan %>"><%= plan %></a> 
+                        <a class="dropdown-item" href="/oferta_academica/<%=ciclosEscolares[0].idCicloEscolar %>/<%= plan %>/agregar"><%= plan %></a> 
                     </li>
                 <% } %>
             </ul>
@@ -132,8 +132,9 @@
                 let count2 = 0; 
                 for (let i = 0; i < materias.length; i++) {
                 const materia = materias[i];
-                if (materia.plans[0].status == 'active' &&
-                    materia.plans_courses[0].semester == 2
+                if ((materia.plans[0].status == 'active') &&
+                    (materia.plans_courses[0].semester == 2) && 
+                    (materia.plans[0].id == planActual)
                 ) {
                     if (count2 % 4 === 0) { %>
                     </div><div class="row">
@@ -174,8 +175,9 @@
                 let count3 = 0; 
                 for (let i = 0; i < materias.length; i++) {
                 const materia = materias[i];
-                if (materia.plans[0].status == 'active' &&
-                    materia.plans_courses[0].semester == 3
+                if ((materia.plans[0].status == 'active') &&
+                    (materia.plans_courses[0].semester == 3) && 
+                    (materia.plans[0].id == planActual)
                 ) {
                     if (count3 % 4 === 0) { %>
                     </div><div class="row">
@@ -209,8 +211,9 @@
                 let count4 = 0; 
                 for (let i = 0; i < materias.length; i++) {
                 const materia = materias[i];
-                if (materia.plans[0].status == 'active' &&
-                    materia.plans_courses[0].semester == 4
+                if ((materia.plans[0].status == 'active') &&
+                    (materia.plans_courses[0].semester == 4) && 
+                    (materia.plans[0].id == planActual)
                 ) {
                     if (count4 % 4 === 0) { %>
                     </div><div class="row">
@@ -244,8 +247,9 @@
                 let count5 = 0; 
                 for (let i = 0; i < materias.length; i++) {
                 const materia = materias[i];
-                if (materia.plans[0].status == 'active' &&
-                    materia.plans_courses[0].semester == 5
+                if ((materia.plans[0].status == 'active') &&
+                    (materia.plans_courses[0].semester == 5) && 
+                    (materia.plans[0].id == planActual)
                 ) {
                     if (count5 % 4 === 0) { %>
                     </div><div class="row">
@@ -279,8 +283,9 @@
                 let count6 = 0; 
                 for (let i = 0; i < materias.length; i++) {
                 const materia = materias[i];
-                if (materia.plans[0].status == 'active' &&
-                    materia.plans_courses[0].semester == 6
+                if ((materia.plans[0].status == 'active') &&
+                    (materia.plans_courses[0].semester == 6) && 
+                    (materia.plans[0].id == planActual)
                 ) {
                     if (count6 % 4 === 0) { %>
                     </div><div class="row">
@@ -314,8 +319,9 @@
                 let count7 = 0; 
                 for (let i = 0; i < materias.length; i++) {
                 const materia = materias[i];
-                if (materia.plans[0].status == 'active' &&
-                    materia.plans_courses[0].semester == 7
+                if ((materia.plans[0].status == 'active') &&
+                    (materia.plans_courses[0].semester == 7) && 
+                    (materia.plans[0].id == planActual)
                 ) {
                     if (count7 % 4 === 0) { %>
                     </div><div class="row">
@@ -350,8 +356,9 @@
                 let count8 = 0; 
                 for (let i = 0; i < materias.length; i++) {
                 const materia = materias[i];
-                if (materia.plans[0].status == 'active' &&
-                    materia.plans_courses[0].semester == 8
+                if ((materia.plans[0].status == 'active') &&
+                    (materia.plans_courses[0].semester == 8) && 
+                    (materia.plans[0].id == planActual)
                 ) {
                     if (count8 % 4 === 0) { %>
                     </div><div class="row">
@@ -385,8 +392,9 @@
                 let count9 = 0; 
                 for (let i = 0; i < materias.length; i++) {
                 const materia = materias[i];
-                if (materia.plans[0].status == 'active' &&
-                    materia.plans_courses[0].semester == 9
+                if ((materia.plans[0].status == 'active') &&
+                    (materia.plans_courses[0].semester == 9) && 
+                    (materia.plans[0].id == planActual)
                 ) {
                     if (count9 % 4 === 0) { %>
                     </div><div class="row">
