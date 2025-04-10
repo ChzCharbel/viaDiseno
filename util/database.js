@@ -38,9 +38,9 @@ if (isProduction) {
   poolConfig = {
     host: process.env.DEV_POSTRESQL_HOST || process.env.POSTRESQL_HOST || 'localhost',
     user: process.env.DEV_POSTGRESQL_USER || process.env.POSTGRESQL_USER || 'postgres',
-    database: process.env.DEV_POSTGRESQL_DB || process.env.POSTGRESQL_DB || 'postgres',
+    database: process.env.DEV_POSTGRESQL_DB || process.env.POSTGRESQL_DB || 'prueba',
     port: process.env.DEV_POSTGRESQL_PORT || process.env.POSTGRESQL_PORT || 5432,
-    password: process.env.DEV_POSTGRESQL_PASSWORD || process.env.POSTGRESQL_PASSWORD || '',
+    password: process.env.DEV_POSTGRESQL_PASSWORD || process.env.POSTGRESQL_PASSWORD || '1234',
     ssl: process.env.DEV_POSTGRESQL_SSL === 'true' ? { rejectUnauthorized: false } : undefined
   };
   console.log('Usando configuracion de base de datos de desarrollo');
