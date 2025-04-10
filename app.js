@@ -110,4 +110,7 @@ app.use("/solicitudes", solicitudesRoutes);
 const disponibleRoutes = require("./routes/disponible.routes");
  app.use("/disponible", disponibleRoutes);
  
-app.listen(3000);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
