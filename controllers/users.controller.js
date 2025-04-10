@@ -58,8 +58,6 @@ exports.get_login = (request, response, next) => {
 };
 
 exports.post_login = (request, response, next) => {
-    console.log(request.body.matriculaInput);
-    console.log(request.body.passwordInput);
     Usuario.fetchOne(request.body.matriculaInput).then((usuario) => {
         console.log(usuario.rows);
         if(usuario.rows.length > 0) {
@@ -123,7 +121,6 @@ exports.post_login = (request, response, next) => {
 };
 
 exports.get_logout = (request, response, next) => {
-
     request.session.destroy(() => {
         response.redirect('/users/login');
     })
