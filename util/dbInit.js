@@ -38,8 +38,6 @@ const initializeDatabase = async () => {
     
     // Prueba la conexion a la base de datos
     await testConnection();
-      // Crea tablas y relaciones
-    await executeSQL(TABLES_SQL_FILE);
     
     // Inserta datos iniciales
     await executeSQL(INSERTS_SQL_FILE);
