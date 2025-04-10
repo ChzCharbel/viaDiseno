@@ -76,17 +76,14 @@ exports.get_login = (request, response, next) => {
 exports.post_login = (request, response, next) => {
   Usuario.fetchOne(request.body.matriculaInput)
     .then((usuario) => {
-      console.log(usuario.rows);
       if (usuario.rows.length > 0) {
         const bcrypt = require("bcryptjs");
-        console.log(usuario.rows[0]);
         bcrypt
           .compare(request.body.passwordInput, usuario.rows[0].password)
           .then((doMatch) => {
             if (doMatch) {
               Usuario.getPrivilegios(usuario.rows[0].idIVD)
                 .then((privilegios) => {
-                  console.log(privilegios.rows);
                   request.session.privilegios = privilegios.rows;
                   request.session.isLoggedIn = true;
                   request.session.matricula = request.body.matriculaInput;
@@ -100,7 +97,6 @@ exports.post_login = (request, response, next) => {
                     if (usuario.rows[0].rol == "admin") {
                       CicloEscolar.fetchAll()
                         .then((ciclos) => {
-                          console.log(ciclos.rows);
                           request.session.ciclosEscolares = ciclos.rows;
                           response.redirect(
                             "/inicio/" + ciclos.rows[0].idCicloEscolar
@@ -112,7 +108,6 @@ exports.post_login = (request, response, next) => {
                     } else {
                       CicloEscolar.fetchAll()
                         .then((ciclos) => {
-                          console.log(ciclos.rows);
                           request.session.ciclosEscolares = ciclos.rows;
                           request.session.cicloActual =
                             ciclos.rows[ciclos.rows.length - 1].idCicloEscolar;
