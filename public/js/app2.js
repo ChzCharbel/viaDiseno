@@ -117,3 +117,53 @@ function guardarHorario2() {
     console.log(availability[profName][0]);
     
   }; */
+  
+  /*
+  function guardarHorario1() {
+    const profesorId = document.getElementById("profId").textContent.trim();
+    const cicloEscolar = "FebJun21"; //  hacerlo dinámico 
+  
+    const dias = ["lunes", "martes", "miercoles", "jueves", "viernes"];
+    const horas = [
+      "7:00", "7:30", "8:00", "8:30", "9:00", "9:30", "10:00", "10:30", "11:00",
+      "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30"
+    ];
+  
+    const disponibilidad = {
+      idCicloEscolar: cicloEscolar,
+      matriculaProfesor: profesorId,
+      lunes: [],
+      martes: [],
+      miercoles: [],
+      jueves: [],
+      viernes: []
+    };
+  
+    horas.forEach(hora => {
+      const horaFormatted = hora.replace(":", "-");
+      dias.forEach(dia => {
+        const checkboxId = `${dia}-${horaFormatted}-${profesorId}`;
+        const checkbox = document.getElementById(checkboxId);
+        if (checkbox && checkbox.checked) {
+          disponibilidad[dia].push(hora);
+        }
+      });
+    });
+  
+    fetch("/disponible/guardar", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(disponibilidad),
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log("Disponibilidad guardada:", data);
+        alert("Horario guardado correctamente");
+      })
+      .catch(err => {
+        console.error("Error al guardar horario:", err);
+        alert("Error al guardar horario");
+      });
+  }*/
