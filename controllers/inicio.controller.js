@@ -3,7 +3,6 @@ const ciclosModel = require('../models/ciclos.model.js');
 exports.get_inicio = (request, response, next) => {
     const idCiclo = request.params.idCiclo || '';
 
-    console.log('CICLO ESCOLAR RUTA: ' + idCiclo);
     ciclosModel.fetchAll()
         .then(result => {
             const ciclosEscolares = result.rows;

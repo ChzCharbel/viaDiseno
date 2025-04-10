@@ -1,6 +1,4 @@
 exports.get_solicitudes = (request, response, next) => {
-  console.log("usuario:", request.session.username);
-  console.log("privilegios:", request.session.privilegios);
 
   response.render("solicitudes.ejs", {
     titulo: "solicitudes",

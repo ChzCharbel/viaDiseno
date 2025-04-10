@@ -74,8 +74,6 @@ exports.get_login = (request, response, next) => {
 };
 
 exports.post_login = (request, response, next) => {
-  console.log(request.body.matriculaInput);
-  console.log(request.body.passwordInput);
   Usuario.fetchOne(request.body.matriculaInput)
     .then((usuario) => {
       console.log(usuario.rows);
@@ -97,9 +95,6 @@ exports.post_login = (request, response, next) => {
                   request.session.username = usuario.rows[0].nombreUsuario;
                   request.session.mail = usuario.rows[0].correoInstitucional;
                   request.session.rol = usuario.rows[0].rol;
-                  console.log(
-                    "Carrera del usuario: " + request.session.carrera
-                  );
 
                   return request.session.save((error) => {
                     if (usuario.rows[0].rol == "admin") {
