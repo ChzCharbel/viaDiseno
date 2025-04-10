@@ -1,41 +1,21 @@
-const ciclosModel = require('../models/ciclos.model.js');
+exports.get_inscripciones_guardadas = (req, res, next) => {
+    const idCiclo = req.params.idCiclo;
 
-exports.get_inicio = (request, response, next) => {
-    const idCiclo = request.params.idCiclo || '';
-
-    ciclosModel.fetchAll()
+    CicloEscolar.fetchOne(idCiclo)
         .then(result => {
-            const ciclosEscolares = result.rows;
+            if (result.rows.length > 0) {
+                const ciclo = result.rows[0]; 
 
-            response.render('inicio.ejs', {
-                titulo: 'inicio',
-                privilegios: request.session.privilegios || [],
-                carrera: request.session.carrera || '',
-                ciclosEscolares: ciclosEscolares,
-                cicloActual: idCiclo,
-                username: request.session.username || '',
-                mail: request.session.mail || '',
-                rol: request.session.rol || '',
-            });
+                res.render('inscripcionGuardada.ejs', {
+                    ciclo: ciclo,
+                    username: req.user?.nombre || 'Usuario'
+                });
+            } else {
+                res.status(404).send('Ciclo escolar no encontrado');
+            }
         })
         .catch(err => {
-            console.error('Error al obtener ciclos escolares:', err);
-            response.status(500).send('Error interno al cargar ciclos escolares');
+            console.log(err);
+            res.status(500).send('Error al obtener los datos del ciclo');
         });
-    };
-
-
-exports.post_guardar = (request, response, next) => {
-    const idCicloEscolar = request.params.idCiclo;
-    const { fechaInicio, fechaFin } = request.body;
-
-
-    const ciclo = new ciclosModel(idCicloEscolar, fechaInicio, fechaFin);
-
-  ciclo.save()
-    .then(() => response.redirect('/inicio/' + idCicloEscolar))
-    .catch(err => {
-      console.error('Error al guardar inscripción:', err);
-      response.status(500).send('Error al guardar inscripción');
-    });
 };

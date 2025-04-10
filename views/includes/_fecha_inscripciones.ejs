@@ -2,26 +2,27 @@
   <h1 id="bienvenida"></h1>
   <p id="inscripciones"></p>
 
-  <h1>¡Bienvenido <%= username %>!</h1>
+  <h1 class="grande">¡Bienvenido <%= username %>!</h1>
   <br>
-  <p>Indica la fecha de la semana de inscripciones:</p>
+  <h4>Indica la fecha de la semana de inscripciones:</h4>
 
   <form action="/inicio/<%= cicloActual %>" method="POST">
     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
     <div class="mb-3">
       <br>
-      <label for="fechaInicio" class="form-label">Fecha de inicio</label>
+      <h3 for="fechaInicio" class="form-label">Fecha de inicio</h3>
       <div></div>
-      <small><small>Primer día para que los alumnos ingresen a confirmar su horario</small></small>
+      <h5>Primer día para que los alumnos ingresen a confirmar su horario</h5>
       <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" required>
     </div>
   
     <div class="mb-3">
-      <label for="fechaFin" class="form-label">Fecha final</label>
+      <h3 for="fechaFin" class="form-label">Fecha final</h3>
       <div></div>
-      <small><small>Último día para que los alumnos ingresen a confirmar su horario</small></small>
+      <h5>Último día para que los alumnos ingresen a confirmar su horario</h5>
       <input type="date" class="form-control" id="fechaFin" name="fechaFin" required>
     </div>
+    <br>
   
     <!-- Botón de guardar -->
     <button type="submit" class="btn btn-success">Guardar inscripción</button>
