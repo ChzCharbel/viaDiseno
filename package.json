@@ -17,9 +17,9 @@
   "name": "viadiseno",
   "version": "1.0.0",
   "description": "proyecto de inscripciones para viadiseno",
-  "main": "app.js",
-  "scripts": {
-    "start": "nodemon",
+  "main": "app.js",  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon",
     "test": "echo \\\"Error: no test specified\\\" && exit 1"
   },
   "repository": {
