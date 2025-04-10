@@ -109,6 +109,21 @@ app.use("/solicitudes", solicitudesRoutes);
 
 const disponibleRoutes = require("./routes/disponible.routes");
  app.use("/disponible", disponibleRoutes);
+
+// Add root route handler to redirect to login page or appropriate landing page
+app.get("/", (req, res) => {
+  res.redirect("/users/login");
+});
+
+// Handle 404 errors for undefined routes
+app.use((req, res, next) => {
+  res.status(404).render('error', { 
+    pageTitle: 'Page Not Found', 
+    path: '/404',
+    isAuthenticated: req.session.isLoggedIn,
+    user: req.session.user || null
+  });
+});
  
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
