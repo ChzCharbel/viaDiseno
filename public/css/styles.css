@@ -1,3 +1,8 @@
+.grande {
+  font-size: 60px;
+  font-weight: bold;
+}
+
 .custom-table {
   border-collapse: separate;
   border-spacing: 0;
@@ -115,7 +120,7 @@
 
 .contenedor-con-margen {
   margin: 20px auto;
-  max-width: 800px; 
+  max-width: 1000px; 
 }
 
 .texto-pequeno {
