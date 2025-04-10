@@ -1,0 +1,22 @@
+<body>
+    <div class="container text-center mt-5">
+      <h1 class="display-4">¡Fechas de inscripción guardadas!</h1>
+  
+      <h2 class="mt-4 fw-bold text-success">
+        Del 
+        <%= new Date(ciclo.inicioinscripcion).toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' }) %> 
+        al 
+        <%= new Date(ciclo.fininscripcion).toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' }) %>
+      </h2>
+  
+      <p class="lead mt-3">
+        Estas fechas han sido registradas para el ciclo escolar 
+        <strong><%= ciclo.idcicloescolar %></strong>.
+      </p>
+  
+      <a href="/inicio/<%= ciclo.idcicloescolar %>" class="btn btn-primary mt-4">Volver al formulario</a>
+    </div>
+  
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+  </html>
