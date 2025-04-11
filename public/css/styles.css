@@ -2,6 +2,10 @@
   font-size: 60px;
   font-weight: bold;
 }
+.modal-backdrop.show {
+  opacity: 0.1 !important; /* o 0 si quieres invisible */
+  background-color: #000 !important; /* o quítalo para que no tenga color */
+}
 
 .custom-table {
   border-collapse: separate;

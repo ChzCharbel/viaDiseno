@@ -1,32 +1,50 @@
-<!--Busqueda profesores -->
-<div class="input-group mb-3 w-50 mx-auto">
-  <input
-    type="text"
-    class="form-control"
-    placeholder="Buscar..."
-    aria-label="Buscar"
-  />
-  <button id="demo" class="btn btn-outline-secondary" type="button">
-    Buscar
-  </button>
-</div>
-<!--Botones profesores -->
-<% for (let profesor of profesores) { %>
-<div class="container mt-4">
+<!-- Buscador de Profesores -->
+<div class="container mt-5">
   <div class="row justify-content-center">
-    <div class="col-md-6 d-flex flex-column gap-2">
-      <button
-        type="button"
-        class="btn btn-secondary"
-        data-bs-toggle="modal"
-        data-bs-target="#profModal<%= profesor.matriculaProfesor %>"
-        data-prof-name="<%= profesor.nombreProfesor %>"
-        data-prof-id="<%= profesor.matriculaProfesor %>"
-      >
-        <%= profesor.nombreProfesor %>
-      </button>
+    <div class="col-md-6">
+      <form class="input-group shadow rounded-pill overflow-hidden" onsubmit="return false;" role="search">
+        <input
+          id="buscarProfesor"
+          type="search"
+          class="form-control border-0 ps-4"
+          placeholder="Buscar profesora o profesor..."
+          aria-label="Buscar profesor"
+          style="background-color: #f8f9fa;"
+        />
+        <button class="btn btn-primary rounded-0 rounded-end px-4" type="button">
+          <i class="bi bi-search"></i>
+        </button>
+      </form>
     </div>
   </div>
 </div>
 
-<%- include('_modal_horario', { profesor: profesor }) %> <% } %>
+<!-- Lista de Profesores -->
+<div class="container mt-5" id="profesores_lista">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-body p-5">
+          <h4 class="text-center mb-4 text-dark fw-semibold">
+            <i class="bi bi-person-badge-fill me-2"></i>Profesores disponibles
+          </h4>
+
+          <div class="d-grid gap-3" id="profesores_botones">
+            <% for (let profesor of profesores) { %>
+              <button
+                type="button"
+                class="btn btn-outline-secondary text-start shadow-sm py-3 px-4 rounded-pill"
+                data-bs-toggle="modal"
+                data-bs-target="#profModal<%= profesor.matriculaProfesor %>"
+              >
+                <i class="bi bi-person-circle me-3 fs-5"></i><%= profesor.nombreProfesor %>
+              </button>
+
+              <%- include('_modal_horario', { profesor: profesor }) %>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

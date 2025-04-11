@@ -1,136 +1,119 @@
-<div class="container justify-content-center">
-    <nav class="navbar bg-body-tertiary search-nav justify-content-end">
-        <nav class="navbar bg-body-tertiary">
-            <div class="container-fluid">
-            <form class="d-flex" role="search">
-               <input
-               id="buscar"
-                name="buscar"
-                class="form-control me-2"
-                type="search"
-               placeholder="Alumno"
-               aria-label="Search" 
-              >
-              <button class="btn btn-outline-success" type="submit">
-                Buscar
-            </button> 
-            </form>
-              
+<!-- Buscador estilizado -->
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <form class="input-group shadow rounded-pill overflow-hidden" onsubmit="return false;" role="search">
+        <input
+          id="buscar"
+          name="buscar"
+          type="search"
+          class="form-control border-0 ps-4"
+          placeholder="Buscar alumna o alumno..."
+          aria-label="Buscar"
+          style="background-color: #f8f9fa;"
+        />
+        <button class="btn btn-primary rounded-0 rounded-end px-4" type="button">
+          <i class="bi bi-search"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
 
-            <br><br>  
-            </div>
-        </nav>
-    </nav>
+<!-- Lista de Alumnos -->
+<div class="container mt-5" id="alumnos_lista">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-body p-5">
+          <h4 class="text-center mb-4 text-dark fw-semibold">
+            <i class="bi bi-person-lines-fill me-2"></i>Alumnas y Alumnos
+          </h4>
 
-    <div id = "alumnos_lista" class="container col-md-5 justify-content-center">
-        <ul class="list-group col-5 offset-3 gap-3 justify-content-center" size="10" aria-label="Size 20 select example">
+          <div class="d-grid gap-3" id="alumnos_botones">
             <% for (let alumno of alumnos) { %>
-                <% if (alumno.carrera == carrera) { %>
-                <button type="button" class="btn btn-primary mb-6 " data-bs-toggle="modal" data-bs-target="#modal<%= alumno.matricula %>">
-                    <%= alumno.nombreUsuario %>
+              <% if (alumno.carrera == carrera) { %>
+                <button
+                  type="button"
+                  class="btn btn-outline-primary text-start shadow-sm py-3 px-4 rounded-pill"
+                  data-bs-toggle="modal"
+                  data-bs-target="#modal<%= alumno.matricula %>"
+                >
+                  <i class="bi bi-person-fill me-3 fs-5"></i><%= alumno.nombreUsuario %>
                 </button>
-                  
-                <div class="modal" tabindex="-1" id = "modal<%= alumno.matricula %>">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title"> <%= alumno.nombreUsuario %> </h5>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                          <p>
-                            Nombre: <%= alumno.nombreUsuario %> 
-                            <br>
-                            Matricula: <%= alumno.matricula %>
-                            <br>
-                            Semestre: <%= alumno.semestre %>
-                            <br>
-                            Regular:  <%= alumno.regular %>
-                            <br>
-                            Carrera:  <%= alumno.carrera %>
-                            <br>
-                          </p>
-                        </div>
-                        <div class="modal-footer">
-                        </div>
+
+                <div class="modal fade" id="modal<%= alumno.matricula %>" tabindex="-1" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title"><%= alumno.nombreUsuario %></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                      </div>
+                      <div class="modal-body">
+                        <p>
+                          <strong>Nombre:</strong> <%= alumno.nombreUsuario %><br>
+                          <strong>Matrícula:</strong> <%= alumno.matricula %><br>
+                          <strong>Semestre:</strong> <%= alumno.semestre %><br>
+                          <strong>Regular:</strong> <%= alumno.regular %><br>
+                          <strong>Carrera:</strong> <%= alumno.carrera %><br>
+                        </p>
                       </div>
                     </div>
                   </div>
-              </li>
-              
-          <% } } %>
-      </ul>
+                </div>
+              <% } %>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
 
-
 <script>
-
   const buscar = document.getElementById('buscar');
   buscar.onkeyup = () => {
-      console.log(buscar.value);
+    fetch('/alumnos/:idCiclo/buscar/' + buscar.value)
+      .then((result) => result.json())
+      .then((nombreAlumnos) => {
+        const contenedor = document.getElementById('alumnos_botones');
+        let html = '';
 
-      fetch('/alumnos/:idCiclo/buscar/' + buscar.value, {
-            method: 'GET',
-        }).then((result) => {
-            console.log(result)
-            return result.json();
-        }).then ((nombreAlumnos) => {
-          console.log(nombreAlumnos)
-
-          let html  = `<ul class="list-group col-5 offset-3 gap-3 justify-content-center" size="10" aria-label="Size 20 select example">`
-
-          for(let alumno of nombreAlumnos.alumno){
-            html += `
-            <button type="button" class="btn btn-primary mb-6 " data-bs-toggle="modal" data-bs-target="#modal${alumno.matricula}">
-                     ${alumno.nombreUsuario}
+        for (let alumno of nombreAlumnos.alumno) {
+          html += `
+            <button
+              type="button"
+              class="btn btn-outline-primary text-start shadow-sm py-3 px-4 rounded-pill"
+              data-bs-toggle="modal"
+              data-bs-target="#modal${alumno.matricula}">
+              <i class="bi bi-person-fill me-3 fs-5"></i>${alumno.nombreUsuario}
             </button>
 
-            <div class="modal" tabindex="-1" id = "modal${alumno.matricula}">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title"> ${alumno.nombreUsuario} </h5>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                          <p>
-                            Nombre: ${ alumno.nombreUsuario }
-                            <br>
-                            Matricula: ${alumno.matricula}
-                            <br>
-                            Semestre: ${alumno.semestre}
-                            <br>
-                            Regular:  ${alumno.regular}
-                            <br>
-                            Carrera:  ${alumno.carrera}
-                            <br>
-                          </p>
-                        </div>
-                        <div class="modal-footer">
-                        </div>
-                      </div>
-                    </div>
+            <div class="modal fade" id="modal${alumno.matricula}" tabindex="-1" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">${alumno.nombreUsuario}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                   </div>
-                  `
-            }
-          html += '</ul> </div>';
+                  <div class="modal-body">
+                    <p>
+                      <strong>Nombre:</strong> ${alumno.nombreUsuario}<br>
+                      <strong>Matrícula:</strong> ${alumno.matricula}<br>
+                      <strong>Semestre:</strong> ${alumno.semestre}<br>
+                      <strong>Regular:</strong> ${alumno.regular}<br>
+                      <strong>Carrera:</strong> ${alumno.carrera}<br>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        }
 
-          const container = document.getElementById('alumnos_lista');
-          container.innerHTML = html
-
-        }).catch((error) => {
-            console.log(error);
-        });
-
-  }
+        contenedor.innerHTML = html;
+      })
+      .catch((error) => console.error(error));
+  };
 </script>
-
-<script src="/js/scriptIVD.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-
-</body>
-
-</html>

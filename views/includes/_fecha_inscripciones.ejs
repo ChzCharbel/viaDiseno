@@ -1,50 +1,65 @@
-<div class="contenedor-con-margen">
-  <h1 id="bienvenida"></h1>
-  <p id="inscripciones"></p>
+<div class="text-center mb-5">
+  <h1 class="fw-semibold mb-1" style="font-size: 2.2rem;">
+    Bienvenido, <span class="text-danger"><%= username %></span>
+  </h1>
 
-  <h1 class="grande">¡Bienvenido <%= username %>!</h1>
-  <br>
-  <h4>Indica la fecha de la semana de inscripciones:</h4>
+  <p class="text-muted fs-5 mt-2">
+    Configura las fechas en las que tus estudiantes podrán confirmar su horario.
+  </p>
 
-  <form action="/inicio/<%= cicloActual %>" method="POST">
-    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-    <div class="mb-3">
-      <br>
-      <h3 for="fechaInicio" class="form-label">Fecha de inicio</h3>
-      <div></div>
-      <h5>Primer día para que los alumnos ingresen a confirmar su horario</h5>
-      <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" required>
-    </div>
-  
-    <div class="mb-3">
-      <h3 for="fechaFin" class="form-label">Fecha final</h3>
-      <div></div>
-      <h5>Último día para que los alumnos ingresen a confirmar su horario</h5>
-      <input type="date" class="form-control" id="fechaFin" name="fechaFin" required>
-    </div>
-    <br>
-  
-    <!-- Botón de guardar -->
-    <button type="submit" class="btn btn-success">Guardar inscripción</button>
-  </form>
-  
-
-  <% if (ciclo.inicioInscripcion && ciclo.finInscripcion) { %>
-    <p>
-      La fecha de inscripciones es del 
-      <%= new Date(ciclo.inicioInscripcion).toLocaleDateString('es-MX', { day: 'numeric', month: 'long' }) %> 
-      al 
-      <%= new Date(ciclo.finInscripcion).toLocaleDateString('es-MX', { day: 'numeric', month: 'long' }) %>.
-    </p>
-  <% } else { %>
-    <p>Aún no se han definido las fechas de inscripción para este ciclo.</p>
-  <% } %>
-    
+  <p class="fs-6 text-secondary mt-3">
+    Esta sección corresponde a la semana de inscripciones del ciclo actual.
+  </p>
 </div>
 
 
-    <script src="app.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+  <form action="/inicio/<%= cicloActual %>" method="POST" class="mx-auto" style="max-width: 700px;">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
-</html>
+    <!-- Fecha de inicio -->
+    <div class="mb-4">
+      <label for="fechaInicio" class="form-label h5">
+        <i class="bi bi-calendar-event me-2 text-primary"></i>Fecha de inicio
+      </label>
+      <p class="text-muted">Primer día para que los alumnos ingresen a confirmar su horario</p>
+      <input type="date" class="form-control form-control-lg shadow-sm" id="fechaInicio" name="fechaInicio" required>
+    </div>
+
+    <!-- Fecha de fin -->
+    <div class="mb-4">
+      <label for="fechaFin" class="form-label h5">
+        <i class="bi bi-calendar-x me-2 text-danger"></i>Fecha final
+      </label>
+      <p class="text-muted">Último día para que los alumnos ingresen a confirmar su horario</p>
+      <input type="date" class="form-control form-control-lg shadow-sm" id="fechaFin" name="fechaFin" required>
+    </div>
+
+    <!-- Botón de guardar -->
+    <div class="text-center mt-4">
+      <button type="submit" class="btn btn-success btn-lg px-5 rounded-pill">
+        <i class="bi bi-save me-2"></i>Guardar inscripción
+      </button>
+    </div>
+  </form>
+
+  <!-- Fechas actuales -->
+  <div class="text-center mt-5">
+    <% if (ciclo.inicioInscripcion && ciclo.finInscripcion) { %>
+      <p class="text-muted">
+        <i class="bi bi-info-circle me-2"></i>
+        La fecha de inscripciones es del
+        <strong>
+          <%= new Date(ciclo.inicioInscripcion).toLocaleDateString('es-MX', { day: 'numeric', month: 'long' }) %>
+        </strong> al
+        <strong>
+          <%= new Date(ciclo.finInscripcion).toLocaleDateString('es-MX', { day: 'numeric', month: 'long' }) %>
+        </strong>.
+      </p>
+    <% } else { %>
+      <p class="text-muted">
+        <i class="bi bi-exclamation-circle me-2"></i>
+        Aún no se han definido las fechas de inscripción para este ciclo.
+      </p>
+    <% } %>
+  </div>
+</div>
