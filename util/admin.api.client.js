@@ -1,6 +1,8 @@
+const dotenv = require('dotenv');
+dotenv.config(); // 👈 Importante que sea antes de cualquier uso de process.env
+
 const axios = require('axios');
 const NodeCache = require('node-cache');
-const dotenv = require('dotenv').config();
 
 const cache = new NodeCache();
 
@@ -17,13 +19,17 @@ async function getToken() {
         }
 
         console.log("Fetching new token");
-        
-        // Check if environment variables are set
+
+        // Verificamos si se están leyendo las variables del .env correctamente
+        console.log("CLIENT_ID:", process.env.ADMIN_API_M2M_CLIENT_ID);
+        console.log("CLIENT_SECRET:", process.env.ADMIN_API_M2M_CLIENT_SECRET);
+
+        // Verifica si las variables están definidas
         if (!process.env.ADMIN_API_M2M_CLIENT_ID || !process.env.ADMIN_API_M2M_CLIENT_SECRET) {
             console.error("Error: Missing API credentials. ADMIN_API_M2M_CLIENT_ID and/or ADMIN_API_M2M_CLIENT_SECRET not set.");
             return null;
         }
-        
+
         const m2m_credentials = {
             client_id: process.env.ADMIN_API_M2M_CLIENT_ID,
             client_secret: process.env.ADMIN_API_M2M_CLIENT_SECRET,
@@ -36,9 +42,9 @@ async function getToken() {
         token = response.data.token;
         cache.set("token", token);
 
-    console.log(token);
+        console.log(token);
 
-    return token;
+        return token;
     } catch (error) {
         console.error("Error getting authentication token:", error.message);
         return null;
@@ -58,7 +64,7 @@ async function getUserById(id) {
             console.error("Error: Could not get authentication token");
             return { error: "Authentication failed", data: null };
         }
-        
+
         const headers = getHeaders(token);
         console.log(headers);
 
@@ -69,11 +75,10 @@ async function getUserById(id) {
             },
         });
         console.log(response.data);
-        
+
         const jsonString = JSON.stringify(response.data);
         const parsedJson = JSON.parse(jsonString);
-        // asi obtienes un atributo en especifico
-        console.log(parsedJson.data.type);  
+        console.log(parsedJson.data.type);
         return parsedJson;
     } catch (error) {
         console.error("Error fetching user by ID:", error.message);
@@ -88,7 +93,7 @@ async function getUserGroups(cycle_id, user_ivd_id) {
             console.error("Error: Could not get authentication token");
             return { error: "Authentication failed" };
         }
-        
+
         const headers = getHeaders(token);
 
         const response = await axiosAdminClient.get("v1/school_cycles/user_groups_index", {
@@ -108,38 +113,41 @@ async function getUserGroups(cycle_id, user_ivd_id) {
         console.error("Error fetching user groups:", error.message);
         return { error: error.message };
     }
-};
+}
 
-async function getAcademicHistory(ivd_id){
+async function getAcademicHistory(ivd_id) {
     try {
         const token = await getToken();
         if (!token) {
             console.error("Error: Could not get authentication token");
             return { error: "Authentication failed" };
         }
-        
+
         const headers = getHeaders(token);
 
         const response = await axiosAdminClient.get("v1/students/academic_history", {
             headers,
             params: {
-            ivd_id,
+                ivd_id,
             },
         });
-        //console.log(response.data);
 
         const jsonString = JSON.stringify(response.data);
         const parsedJson = JSON.parse(jsonString);
-        //console.log(parsedJson.data);
         return parsedJson.data;
     } catch (error) {
         console.error("Error fetching academic history:", error.message);
         return { error: error.message };
     }
-};
+}
 
-async function getAllCourses(){
+async function getAllCourses() {
     const token = await getToken();
+    if (!token) {
+        console.error("Error: No token retrieved");
+        return [];
+    }
+
     const headers = getHeaders(token);
 
     const response = await axiosAdminClient.get("/v1/courses/all", {
@@ -148,17 +156,16 @@ async function getAllCourses(){
 
     const jsonString = JSON.stringify(response.data);
     const parsedJson = JSON.parse(jsonString);
-    //console.log(parsedJson.data);
     return parsedJson.data;
-};
+}
 
-async function getAllUsers(userType){
+async function getAllUsers(userType) {
     const token = await getToken();
     const headers = getHeaders(token);
     const response = await axiosAdminClient.get("/v1/users/all", {
         headers, params: {
             type: userType || '',
-        } 
+        }
     });
     const jsonString = JSON.stringify(response.data);
     const parsedJson = JSON.parse(jsonString);
@@ -172,22 +179,27 @@ const grupo13 = (async () => {
 
 const historial100123 = (async () => {
     const alumnoHistorial = await getAcademicHistory(100123);
-    //cada materia es un elemento del arreglo data
-    for (materia of alumnoHistorial){
+    for (materia of alumnoHistorial) {
         console.log(materia.course_name);
     }
 });
 
 const materias = (async () => {
     const courses = await getAllCourses();
-    //cada materia es un elemento del arreglo data
-    for (materia of courses){
-        if (materia.name != 'Progra' && materia.name != 'Algoritmos'){
+    for (materia of courses) {
+        if (materia.name != 'Progra' && materia.name != 'Algoritmos') {
             console.log(materia.name);
         }
     }
 });
 
-//getUserById(100023);
-//console.log(grupo13.room);
-module.exports = { getUserById, getUserGroups, getAcademicHistory, getAllCourses, getAllUsers, getToken, getHeaders, axiosAdminClient };
+module.exports = {
+    getUserById,
+    getUserGroups,
+    getAcademicHistory,
+    getAllCourses,
+    getAllUsers,
+    getToken,
+    getHeaders,
+    axiosAdminClient
+};
