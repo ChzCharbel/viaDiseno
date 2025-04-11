@@ -4,17 +4,16 @@
             Nota: Guarda la oferta académica por semestre
         </div>
     </div>
-    
-
-    <div class="row mb-3 p-3">
+        <div class="row mb-3 p-3">
         <div class="col offset-1" id="col_tabs">
             <ul class="nav nav-underline">
                 <li class="nav-item">
-                    <a class="nav-link link-dark" aria-current="page" href="/oferta_academica/<%= cicloActual %>/plan_version">Materias seleccionadas</a>
+                    <a class="nav-link link-dark" aria-current="page" href="/oferta_academica/<%= cicloActual %>/<%= planActual %>">Materias seleccionadas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link link-dark active" href="/oferta_academica/<%= cicloActual %>/plan_version/agregar">Agregar materias</a>
+                    <a class="nav-link link-dark active" href="/oferta_academica/<%= cicloActual %>/<%= planActual %>/agregar">Agregar materias</a>
                 </li>
+            </ul>
         </div>
         <div class="col-auto">
             <div class="dropdown">
@@ -27,11 +26,11 @@
                 aria-expanded="false"
             >
                 Versión del Plan
-            </a>
+            </a>            
             <ul class="dropdown-menu" id="dropdown-planes">
                 <% for (let plan of planes) { %>
                     <li>
-                        <a class="dropdown-item" href="/oferta_academica/<%=ciclosEscolares[0].idCicloEscolar %>/<%= plan %>/agregar"><%= plan %></a> 
+                        <a class="dropdown-item" href="/oferta_academica/<%= cicloActual %>/<%= plan %>/agregar"><%= plan %></a> 
                     </li>
                 <% } %>
             </ul>
@@ -49,10 +48,9 @@
                         </button>
                     </form>
                 </div>
-            </nav> 
+            </nav>
         </div>
         
-        </ul>
         <br></br>
     </div>
     <div class="container mt-5">
@@ -84,12 +82,13 @@
                                 Selecciona una versión del Plan de Estudio
                             </div>
                         </div>
-                <% } %>
-                <% 
+                <% } %>                <% 
                 let count = 0; 
                 for (let i = 0; i < materias.length; i++) {
                 const materia = materias[i];
-                if ((materia.plans[0].status == 'active') &&
+                if (materia.plans && materia.plans.length > 0 && 
+                    materia.plans_courses && materia.plans_courses.length > 0 &&
+                    (materia.plans[0].status == 'active') &&
                     (materia.plans_courses[0].semester == 1) && 
                     (materia.plans[0].id == planActual)
                 ) {

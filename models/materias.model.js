@@ -19,8 +19,13 @@ module.exports = class Grupo{
             const planes = [];
             const arr = [];
             for (let materia of materias) {
-                if (materia.plans[0].degree.name == carrera) {
+                // Verificar que la materia tenga planes y que el primer plan tenga una carrera
+                if (materia.plans && materia.plans.length > 0 && 
+                    materia.plans[0].degree && 
+                    materia.plans[0].degree.name == carrera) {
+                    
                     arregloMaterias.push(materia); 
+                    // Agregar el ID del plan si no existe ya en el array de planes
                     if (planes.length != 0) {
                         if (planes.includes(materia.plans[0].id) == false){
                             planes.push(materia.plans[0].id); 

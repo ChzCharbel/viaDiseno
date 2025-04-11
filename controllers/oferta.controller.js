@@ -23,8 +23,11 @@ exports.get_oferta = (request, response, next) => {
 
 exports.get_agregar = (request, response, next) => {
     Materia.fetchByDegree(request.session.carrera).then((data) => {
-        const materias = data[0];
-        const planVersiones = data[1];
+        const materias = data[0] || [];
+        const planVersiones = data[1] || [];
+        console.log("Planes disponibles:", planVersiones);
+        console.log("Plan actual:", request.params.idPlan);
+        console.log("Ciclo actual:", request.params.idCiclo);
         response.render('oferta_agregar.ejs',{
             titulo: 'oferta_academica',
             privilegios: request.session.privilegios || [],
