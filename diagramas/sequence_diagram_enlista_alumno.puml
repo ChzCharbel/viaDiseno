@@ -1,0 +1,77 @@
+@startuml Diagrama de Secuencia - /enlista/alumno
+
+' Definición de actores y componentes
+actor "Alumno" as user
+participant "Navegador" as browser
+participant "Express Server" as server
+participant "Middleware isAuth" as isAuth
+participant "Middleware canView" as canView
+participant "enlistaController" as controller
+participant "EnlistaModel" as model
+database "PostgreSQL" as db
+participant "Vista (EJS)" as view
+
+' Flujo de la secuencia
+user -> browser : Accede a /enlista/alumno
+browser -> server : GET /enlista/alumno
+server -> isAuth : Verifica autenticación
+activate isAuth
+
+alt Usuario no autenticado
+    isAuth --> server : 401 Unauthorized
+    server --> browser : Redirecciona a login
+    browser --> user : Muestra página de login
+else Usuario autenticado
+    isAuth --> canView : Usuario autenticado
+    deactivate isAuth
+    activate canView
+    
+    canView -> canView : Verifica permisos para ver grupos asignados
+    
+    alt Sin permisos
+        canView --> server : 403 Forbidden
+        server --> browser : Muestra error de permisos
+        browser --> user : Muestra mensaje de acceso denegado
+    else Con permisos
+        canView --> controller : Ejecuta get_enlista
+        deactivate canView
+        activate controller
+        
+        controller -> controller : Verifica sesión y obtiene matrícula
+        
+        alt Sesión no iniciada
+            controller --> server : 401 Unauthorized
+            server --> browser : Muestra error de sesión
+            browser --> user : Muestra mensaje de sesión no iniciada
+        else Sesión válida
+            controller -> model : obtenerGruposDeAlumno(matricula)
+            activate model
+            
+            model -> db : Consulta SQL (JOIN entre tablas)
+            activate db
+            db --> model : Resultados (grupos del alumno)
+            deactivate db
+            
+            model --> controller : Resultados de la consulta
+            deactivate model
+            
+            controller -> controller : Transforma resultados \npara la vista
+            controller -> view : Renderiza 'horario_alumnos_regulares' con datos
+            activate view
+            
+            view --> controller : HTML generado
+            deactivate view
+            
+            controller --> server : Respuesta HTML
+            deactivate controller
+            
+            server --> browser : Envía HTML
+            browser --> user : Muestra horario de clases
+        end
+    end
+end
+
+' Footer
+caption Diagrama de Secuencia para la ruta /enlista/alumno - Sistema de Inscripciones viaDiseno
+
+@enduml
