@@ -1,65 +1,71 @@
-<div class="container">
-    <nav class="navbar bg-body-tertiary search-nav">
-        <nav class="navbar bg-body-tertiary">
-            <p>Buscar materia</p>
-            <div class="container-fluid">
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Materia" aria-label="Search" />
-                    <button class="btn btn-outline-success" type="submit">
-                        Buscar
-                    </button>
-                </form>
-            </div>
-        </nav>
-    </nav>
-    <br />
-
-    <div class="table-responsive">
-        <table class="table table-bordered align-middle text-center">
-            <thead class="table-light">
-                <tr>
-                    <th>Materia</th>
-                    <th>Profesor</th>
-                    <th>Salón</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% for (let materia of materias) { %>
-                    <% if (materia.plans[0].degree.name == carrera && materia.plans[0].status == 'active') { %>
-                        <tr>
-                            <td><%= materia.name %></td>
-                            <td>
-                                <select class="form-select" name="profesor_<%= materia.id %>">
-                                    <option selected disabled class="texto-pequeno">Selecciona un profesor</option>
-                                    <% for (let profesor of profesores) { %>
-                                        <option value="<%= profesor.matriculaProfesor %>">
-                                            <%= profesor.nombreProfesor %>
-                                        </option>
-                                    <% } %>
-                                </select>
-                            </td>
-                            <td>
-                                <select class="form-select" name="salon_<%= materia.id %>">
-                                    <<option selected disabled class="texto-pequeno">Selecciona un salón</option>
-                                    <% for (let salon of salones) { %>
-                                        <option value="<%= salon.idSalon %>">
-                                            <%= salon.idSalon %> (<%= salon.descripcion %>)
-                                        </option>
-                                    <% } %>
-                                </select>
-                            </td>
-                            <td>
-                                <button class="btn btn-primary btn-sm">Guardar</button>
-                            </td>
-                        </tr>
-                    <% } %>
-                <% } %>
-            </tbody>
-        </table>
+<div class="container mt-5">
+    <!-- Buscador estilizado -->
+    <div class="row justify-content-center mb-4">
+      <div class="col-md-8">
+        <div class="card shadow-sm border-0 rounded-4 p-4">
+          <h5 class="mb-3 fw-semibold">Buscar materia</h5>
+          <form class="d-flex" role="search">
+            <input
+              class="form-control form-control-lg me-3 rounded-pill"
+              type="search"
+              placeholder="Materia"
+              aria-label="Search"
+            />
+            <button class="btn btn-outline-success rounded-pill px-4" type="submit">
+              Buscar
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
-
+  
+    <!-- Tabla estilizada -->
+    <div class="table-responsive">
+      <table class="table table-bordered align-middle text-center shadow-sm rounded-4 overflow-hidden">
+        <thead class="table-light">
+          <tr class="align-middle">
+            <th>Materia</th>
+            <th>Profesor</th>
+            <th>Salón</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for (let materia of materias) { %>
+            <% if (materia.plans[0].degree.name == carrera && materia.plans[0].status == 'active') { %>
+              <tr>
+                <td class="fs-5 fw-medium"><%= materia.name %></td>
+                <td>
+                  <select class="form-select rounded-pill" name="profesor_<%= materia.id %>">
+                    <option selected disabled class="texto-pequeno">Selecciona un profesor</option>
+                    <% for (let profesor of profesores) { %>
+                      <option value="<%= profesor.matriculaProfesor %>">
+                        <%= profesor.nombreProfesor %>
+                      </option>
+                    <% } %>
+                  </select>
+                </td>
+                <td>
+                  <select class="form-select rounded-pill" name="salon_<%= materia.id %>">
+                    <option selected disabled class="texto-pequeno">Selecciona un salón</option>
+                    <% for (let salon of salones) { %>
+                      <option value="<%= salon.idSalon %>">
+                        <%= salon.idSalon %> (<%= salon.descripcion %>)
+                      </option>
+                    <% } %>
+                  </select>
+                </td>
+                <td>
+                  <button class="btn btn-primary btn-sm rounded-pill px-3">Guardar</button>
+                </td>
+              </tr>
+            <% } %>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  
     <script src="/js/grupos.js"></script>
     <script src="/js/scriptIVD.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</div>
+  </div>  

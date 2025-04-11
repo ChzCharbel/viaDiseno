@@ -1,5 +1,5 @@
 const dotenv = require('dotenv');
-dotenv.config(); // 👈 Importante que sea antes de cualquier uso de process.env
+dotenv.config(); 
 
 const axios = require('axios');
 const NodeCache = require('node-cache');
@@ -20,7 +20,7 @@ async function getToken() {
 
         console.log("Fetching new token");
 
-        // Verificamos si se están leyendo las variables del .env correctamente
+        // Verificar si se están leyendo las variables del .env correctamente
         console.log("CLIENT_ID:", process.env.ADMIN_API_M2M_CLIENT_ID);
         console.log("CLIENT_SECRET:", process.env.ADMIN_API_M2M_CLIENT_SECRET);
 
