@@ -1,8 +1,9 @@
 const db = require("../util/database");
+const {getAllUsers} = require('../util/admin.api.client');
 
 module.exports = class Profesor {
   static fetchAll() {
-    return db.query(`SELECT * FROM "Profesor"`);
+    return db.query(`SELECT * FROM "Profesor" WHERE estatus = 'active'`);
   }
 
   static fetchOne(id) {
@@ -10,6 +11,35 @@ module.exports = class Profesor {
       `SELECT * FROM "Profesor" WHERE "matriculaProfesor" = $1::text`,
       [id]
     );
+  }
+
+  static async getAllUsers(userType) {
+    return await getAllUsers(userType);
+  }
+
+  static async sincronizarDesdeAPI() {
+    try {
+      const profesores = await getAllUsers('Users::Professor');
+
+      for (let profe of profesores) {
+        if (profe.status == 'active') {
+          const { ivd_id, name, first_surname, second_surname,  status} = profe;
+          await db.query(`
+            INSERT INTO "Profesor" ("matriculaProfesor", "nombreProfesor")
+            VALUES ($1::text, $2::text)
+            ON CONFLICT ("matriculaProfesor") DO NOTHING
+          `, [ivd_id, name + ' ' + first_surname + ' ' + second_surname]);
+          await db.query(`UPDATE "Profesor" SET estatus = $1::text WHERE 
+            "matriculaProfesor" = $2::text`, [status, ivd_id]);
+        }
+      }
+  
+      console.log("Profesores sincronizados exitosamente.");
+      return { mensaje: "Sincronización completada", total: profesores.length };
+      } catch (error) {
+        console.error("Error al sincronizar profesores:", error);
+        throw error;
+      }
   }
 
   static contarHoras(dias) {

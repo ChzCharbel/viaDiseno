@@ -1,7 +1,9 @@
 const Profesor = require("../models/profesores.model");
 
 exports.get_all_maestros = (request, response, next) => {
-  Profesor.fetchAll()
+  Profesor.sincronizarDesdeAPI().then((data) => {
+    console.log(data);
+    Profesor.fetchAll()
     .then((profesores) => {
       console.log(profesores.rows);
       request.session.profesores = profesores.rows;
@@ -21,4 +23,8 @@ exports.get_all_maestros = (request, response, next) => {
       console.log(error);
       response.render("error.ejs");
     });
+  }).catch((error) => {
+    console.log(error);
+  })
+  
 };
