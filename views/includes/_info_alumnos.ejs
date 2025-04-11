@@ -61,11 +61,9 @@
         <div class="card-body p-5">
           <h4 class="text-center mb-4 text-dark fw-semibold">
             <i class="bi bi-person-lines-fill me-2 icon-vino"></i>Alumnas y Alumnos
-          </h4>
-
+          </h4>          
           <div class="d-grid gap-3" id="alumnos_botones">
             <% for (let alumno of alumnos) { %>
-              <% if (alumno.carrera == carrera) { %>
                 <button
                   type="button"
                   class="btn btn-outline-vino text-start shadow-sm py-3 px-4 rounded-pill"
@@ -113,9 +111,7 @@
 
                     </div>
                   </div>
-                </div>
-              <% } %>
-            <% } %>
+                </div>            <% } %>
           </div>
         </div>
       </div>
@@ -124,10 +120,9 @@
 </div>
 
 <!-- Script para buscar -->
-<script>
-  const buscar = document.getElementById('buscar');
+<script>  const buscar = document.getElementById('buscar');
   buscar.onkeyup = () => {
-    fetch('/alumnos/:idCiclo/buscar/' + buscar.value)
+    fetch('/alumnos/<%= cicloActual %>/buscar/' + buscar.value)
       .then((result) => result.json())
       .then((nombreAlumnos) => {
         const contenedor = document.getElementById('alumnos_botones');
