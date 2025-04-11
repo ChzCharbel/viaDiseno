@@ -1,1 +1,112 @@
-<div>hola</div>
+<div class="container-fluid px-3">
+  <nav class="navbar bg-white justify-content-end">
+    <div class="container-fluid">
+      <form class="d-flex w-100" role="search">
+        <input
+          id="buscar"
+          name="buscar"
+          class="form-control me-2"
+          type="search"
+          placeholder="Matricula"
+          aria-label="Search"
+        />
+        <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+      </form>
+      <div class="mt-3 d-flex justify-content-end">
+        <select
+          id="filtroEstatus"
+          class="form-select form-select-sm p-2"
+          style="width: 120px; font-size: 16px"
+        >
+          <option value="">Todos</option>
+          <option value="Aprobado">Aprobado</option>
+          <option value="Pendiente">Pendiente</option>
+          <option value="Rechazado">Rechazado</option>
+        </select>
+      </div>
+    </div>
+  </nav>
+
+  <div class="table-responsive mt-3">
+    <table class="table table-sm">
+      <thead>
+        <tr>
+          <th scope="col">Número</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Correo</th>
+          <th scope="col">Matrícula</th>
+          <th scope="col">Descripción de solicitud</th>
+          <th scope="col">Estatus</th>
+          <th scope="col">Fecha de solicitud</th>
+          <th scope="col">Fecha de resolución</th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody class="table-group-divider">
+        <% SolicitaCambio.forEach((solicitud, index) => { %>
+        <tr
+          data-estatus="<%= solicitud.resuelto === true ? 'Aprobado' : solicitud.resuelto === false ? 'Rechazado' : 'Pendiente' %>"
+        >
+          <th scope="row"><%= index + 1 %></th>
+          <td><%= solicitud.nombreUsuario %></td>
+          <td><%= solicitud.correoInstitucional %></td>
+          <td><%= solicitud.matricula %></td>
+          <td><%= solicitud.descripcion %></td>
+          <td
+            class="<%= solicitud.resuelto === true ? 'text-success fw-bold' : solicitud.resuelto === false ? 'text-danger fw-bold' : 'text-warning fw-bold' %>"
+          >
+            <%= solicitud.resuelto === true ? "Aprobado" : solicitud.resuelto
+            === false ? "Rechazado" : "Pendiente" %>
+          </td>
+
+          <td>
+            <%= solicitud.fechaSolicitud ?
+            solicitud.fechaSolicitud.toISOString().slice(0, 10) : "" %>
+          </td>
+          <td>
+            <%= solicitud.fechaResolucion ?
+            solicitud.fechaResolucion.toISOString().slice(0, 10) : "" %>
+          </td>
+          <td>
+            <button
+              type="button"
+              class="btn btn-success btn-aprobar"
+              data-id="<%= solicitud._id %>"
+            >
+              Aprobar
+            </button>
+          </td>
+          <td>
+            <button
+              type="button"
+              class="btn btn-danger btn-rechazar"
+              data-id="<%= solicitud._id %>"
+            >
+              Rechazar
+            </button>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<script>
+  const filtroEstatus = document.getElementById("filtroEstatus");
+
+  filtroEstatus.addEventListener("change", () => {
+    const estatusSeleccionado = filtroEstatus.value;
+    const filas = document.querySelectorAll("tbody tr");
+
+    filas.forEach((fila) => {
+      const estatus = fila.getAttribute("data-estatus");
+
+      if (!estatusSeleccionado || estatus === estatusSeleccionado) {
+        fila.style.display = "";
+      } else {
+        fila.style.display = "none";
+      }
+    });
+  });
+</script>
