@@ -129,5 +129,29 @@
 
 .texto-pequeno {
   font-size: 0.75rem;
-  color: #6c757d; /* grisecito para que se vea más como placeholder */
+  color: #6c757d; 
+}
+
+.btn-vino {
+  background-color: #95404c;
+  color: white;
+  border: none;
+}
+
+.btn-outline-vino {
+  border: 1px solid #95404c;
+  color: #95404c;
+}
+
+.btn-outline-vino:hover {
+  background-color: #95404c;
+  color: white;
+}
+
+.text-vino {
+  color: #95404c !important;
+}
+
+.icon-vino {
+  color: #95404c;
 }

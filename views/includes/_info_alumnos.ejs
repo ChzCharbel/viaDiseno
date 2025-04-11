@@ -1,3 +1,36 @@
+<!-- Estilos personalizados -->
+<style>
+  .btn-vino {
+    background-color: #95404c;
+    color: white;
+    border: none;
+  }
+
+  .btn-vino:hover {
+    background-color: #7d3642;
+    color: white;
+  }
+
+  .btn-outline-vino {
+    border: 1px solid #95404c;
+    color: #95404c;
+    background-color: transparent;
+  }
+
+  .btn-outline-vino:hover {
+    background-color: #95404c;
+    color: white;
+  }
+
+  .text-vino {
+    color: #95404c !important;
+  }
+
+  .icon-vino {
+    color: #95404c;
+  }
+</style>
+
 <!-- Buscador estilizado -->
 <div class="container mt-5">
   <div class="row justify-content-center">
@@ -12,7 +45,7 @@
           aria-label="Buscar"
           style="background-color: #f8f9fa;"
         />
-        <button class="btn btn-primary rounded-0 rounded-end px-4" type="button">
+        <button class="btn btn-vino rounded-0 rounded-end px-4" type="button">
           <i class="bi bi-search"></i>
         </button>
       </form>
@@ -27,7 +60,7 @@
       <div class="card shadow-lg border-0 rounded-4">
         <div class="card-body p-5">
           <h4 class="text-center mb-4 text-dark fw-semibold">
-            <i class="bi bi-person-lines-fill me-2"></i>Alumnas y Alumnos
+            <i class="bi bi-person-lines-fill me-2 icon-vino"></i>Alumnas y Alumnos
           </h4>
 
           <div class="d-grid gap-3" id="alumnos_botones">
@@ -35,29 +68,49 @@
               <% if (alumno.carrera == carrera) { %>
                 <button
                   type="button"
-                  class="btn btn-outline-primary text-start shadow-sm py-3 px-4 rounded-pill"
+                  class="btn btn-outline-vino text-start shadow-sm py-3 px-4 rounded-pill"
                   data-bs-toggle="modal"
                   data-bs-target="#modal<%= alumno.matricula %>"
                 >
-                  <i class="bi bi-person-fill me-3 fs-5"></i><%= alumno.nombreUsuario %>
+                  <i class="bi bi-person-fill me-3 fs-5 icon-vino"></i><%= alumno.nombreUsuario %>
                 </button>
 
+                <!-- Modal -->
                 <div class="modal fade" id="modal<%= alumno.matricula %>" tabindex="-1" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title"><%= alumno.nombreUsuario %></h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content rounded-4 border-0 shadow-lg">
+
+                      <!-- Encabezado -->
+                      <div class="modal-header border-bottom-0 pb-0 pt-3 px-4">
+                        <div class="d-flex align-items-center w-100">
+                          <i class="bi bi-person-circle fs-3 icon-vino me-2"></i>
+                          <h5 class="modal-title mb-0 text-dark fw-semibold"><%= alumno.nombreUsuario %></h5>
+                          <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
                       </div>
-                      <div class="modal-body">
-                        <p>
-                          <strong>Nombre:</strong> <%= alumno.nombreUsuario %><br>
-                          <strong>Matrícula:</strong> <%= alumno.matricula %><br>
-                          <strong>Semestre:</strong> <%= alumno.semestre %><br>
-                          <strong>Regular:</strong> <%= alumno.regular %><br>
-                          <strong>Carrera:</strong> <%= alumno.carrera %><br>
-                        </p>
+
+                      <!-- Cuerpo -->
+                      <div class="modal-body px-4 pt-2 pb-4">
+                        <div class="border rounded-3 p-3 bg-light-subtle">
+                          <div class="mb-2">
+                            <span class="text-muted small">Matrícula</span><br>
+                            <span class="fw-medium"><%= alumno.matricula %></span>
+                          </div>
+                          <div class="mb-2">
+                            <span class="text-muted small">Semestre</span><br>
+                            <span class="fw-medium"><%= alumno.semestre %></span>
+                          </div>
+                          <div class="mb-2">
+                            <span class="text-muted small">Regular</span><br>
+                            <span class="fw-medium"><%= alumno.regular %></span>
+                          </div>
+                          <div>
+                            <span class="text-muted small">Carrera</span><br>
+                            <span class="fw-medium"><%= alumno.carrera %></span>
+                          </div>
+                        </div>
                       </div>
+
                     </div>
                   </div>
                 </div>
@@ -70,7 +123,7 @@
   </div>
 </div>
 
-
+<!-- Script para buscar -->
 <script>
   const buscar = document.getElementById('buscar');
   buscar.onkeyup = () => {
@@ -84,27 +137,41 @@
           html += `
             <button
               type="button"
-              class="btn btn-outline-primary text-start shadow-sm py-3 px-4 rounded-pill"
+              class="btn btn-outline-vino text-start shadow-sm py-3 px-4 rounded-pill"
               data-bs-toggle="modal"
               data-bs-target="#modal${alumno.matricula}">
-              <i class="bi bi-person-fill me-3 fs-5"></i>${alumno.nombreUsuario}
+              <i class="bi bi-person-fill me-3 fs-5 icon-vino"></i>${alumno.nombreUsuario}
             </button>
 
             <div class="modal fade" id="modal${alumno.matricula}" tabindex="-1" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title">${alumno.nombreUsuario}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content rounded-4 border-0 shadow-lg">
+                  <div class="modal-header border-bottom-0 pb-0 pt-3 px-4">
+                    <div class="d-flex align-items-center w-100">
+                      <i class="bi bi-person-circle fs-3 icon-vino me-2"></i>
+                      <h5 class="modal-title mb-0 text-dark fw-semibold">${alumno.nombreUsuario}</h5>
+                      <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
                   </div>
-                  <div class="modal-body">
-                    <p>
-                      <strong>Nombre:</strong> ${alumno.nombreUsuario}<br>
-                      <strong>Matrícula:</strong> ${alumno.matricula}<br>
-                      <strong>Semestre:</strong> ${alumno.semestre}<br>
-                      <strong>Regular:</strong> ${alumno.regular}<br>
-                      <strong>Carrera:</strong> ${alumno.carrera}<br>
-                    </p>
+                  <div class="modal-body px-4 pt-2 pb-4">
+                    <div class="border rounded-3 p-3 bg-light-subtle">
+                      <div class="mb-2">
+                        <span class="text-muted small">Matrícula</span><br>
+                        <span class="fw-medium">${alumno.matricula}</span>
+                      </div>
+                      <div class="mb-2">
+                        <span class="text-muted small">Semestre</span><br>
+                        <span class="fw-medium">${alumno.semestre}</span>
+                      </div>
+                      <div class="mb-2">
+                        <span class="text-muted small">Regular</span><br>
+                        <span class="fw-medium">${alumno.regular}</span>
+                      </div>
+                      <div>
+                        <span class="text-muted small">Carrera</span><br>
+                        <span class="fw-medium">${alumno.carrera}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
