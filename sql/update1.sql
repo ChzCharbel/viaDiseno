@@ -1,7 +1,2 @@
-ALTER TABLE IF EXISTS public."Profesor" DROP COLUMN IF EXISTS estatus;
-
-ALTER TABLE IF EXISTS public."Profesor"
-    ADD COLUMN estatus character varying;
-
-UPDATE "Profesor"
-SET estatus = 'active';
+INSERT INTO public."Enlista" VALUES ('G003', '100007');
+INSERT INTO public."Enlista" VALUES ('G004', '100007');
