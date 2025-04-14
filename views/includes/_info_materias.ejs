@@ -21,9 +21,10 @@
   
     <!-- Tabla estilizada -->
     <div class="table-responsive">
-      <table class="table table-bordered align-middle text-center shadow-sm rounded-4 overflow-hidden">
+      <table class="table table-bordered align-middle text-center shadow-sm overflow-hidden">
         <thead class="table-light">
           <tr class="align-middle">
+            <th>Carrera</th>
             <th>Materia</th>
             <th>Profesor</th>
             <th>Salón</th>
@@ -31,10 +32,18 @@
           </tr>
         </thead>
         <tbody>
-          <% for (let materia of materias) { %>
-            <% if (materia.plans[0].degree.name == carrera && materia.plans[0].status == 'active') { %>
+          <% if (materias.length === 0) { %>
+            <tr>
+              <td colspan="6" class="text-center py-3">No hay materias disponibles</td>
+            </tr>
+          <% } else { %>
+            <% for (let materia of materias) { %>
+              <% 
+                const nombreCarrera = materia.plans[0].degree.name;
+              %>
               <tr>
-                <td class="fs-5 fw-medium"><%= materia.name %></td>
+                <td><%= nombreCarrera %></td>
+                <td><%= materia.name %></td>
                 <td>
                   <select class="form-select rounded-pill" name="profesor_<%= materia.id %>">
                     <option selected disabled class="texto-pequeno">Selecciona un profesor</option>

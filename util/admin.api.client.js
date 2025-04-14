@@ -6,8 +6,12 @@ const NodeCache = require('node-cache');
 
 const cache = new NodeCache();
 
+// Usar la URL de la API desde las variables de entorno
+const baseApiUrl = process.env.ADMIN_API_URL || 'https://ivd-qa-0dc175b0ba43.herokuapp.com';
+console.log("Usando API URL:", baseApiUrl);
+
 const axiosAdminClient = axios.create({
-    baseURL: 'https://ivd-qa-0dc175b0ba43.herokuapp.com',
+    baseURL: baseApiUrl,
 });
 
 async function getToken() {
@@ -142,21 +146,50 @@ async function getAcademicHistory(ivd_id) {
 }
 
 async function getAllCourses() {
-    const token = await getToken();
-    if (!token) {
-        console.error("Error: No token retrieved");
+    try {
+        console.log("Obteniendo todas las materias...");
+        const token = await getToken();
+        if (!token) {
+            console.error("Error: No token retrieved");
+            return [];
+        }
+
+        const headers = getHeaders(token);
+        console.log("Headers para la solicitud de materias:", headers);
+
+        console.log("Haciendo solicitud a:", `${axiosAdminClient.defaults.baseURL}/v1/courses/all`);
+        const response = await axiosAdminClient.get("/v1/courses/all", {
+            headers,
+        });
+
+        console.log("Respuesta recibida, status:", response.status);
+        
+        if (!response.data) {
+            console.error("No se recibieron datos de la API");
+            return [];
+        }
+
+        const jsonString = JSON.stringify(response.data);
+        const parsedJson = JSON.parse(jsonString);
+        
+        if (!parsedJson.data || parsedJson.data.length === 0) {
+            console.log("No se encontraron materias en la respuesta");
+        } else {
+            console.log(`Se encontraron ${parsedJson.data.length} materias`);
+        }
+        
+        return parsedJson.data;
+    } catch (error) {
+        console.error("Error al obtener las materias:", error.message);
+        if (error.response) {
+            console.error("Detalles de la respuesta:", {
+                status: error.response.status,
+                statusText: error.response.statusText,
+                data: error.response.data
+            });
+        }
         return [];
     }
-
-    const headers = getHeaders(token);
-
-    const response = await axiosAdminClient.get("/v1/courses/all", {
-        headers,
-    });
-
-    const jsonString = JSON.stringify(response.data);
-    const parsedJson = JSON.parse(jsonString);
-    return parsedJson.data;
 }
 
 async function getAllUsers(userType) {
