@@ -7,17 +7,39 @@ exports.get_inicio = (request, response, next) => {
     ciclosModel.fetchAll()
         .then(result => {
             const ciclosEscolares = result.rows;
-
-            response.render('inicio.ejs', {
-                titulo: 'inicio',
-                privilegios: request.session.privilegios || [],
-                carrera: request.session.carrera || '',
-                ciclosEscolares: ciclosEscolares,
-                cicloActual: idCiclo,
-                username: request.session.username || '',
-                mail: request.session.mail || '',
-                rol: request.session.rol || '',
-            });
+            if (idCiclo) {
+                return ciclosModel.fetchOne(idCiclo)
+                    .then(cicloResult => {
+                        const ciclo = cicloResult.rows.length > 0 ? cicloResult.rows[0] : {};
+                        
+                        response.render('inicio.ejs', {
+                            titulo: 'inicio',
+                            privilegios: request.session.privilegios || [],
+                            carrera: request.session.carrera || '',
+                            ciclosEscolares: ciclosEscolares,
+                            cicloActual: idCiclo,
+                            ciclo: ciclo,
+                            username: request.session.username || '',
+                            mail: request.session.mail || '',
+                            rol: request.session.rol || '',
+                            csrfToken: request.csrfToken ? request.csrfToken() : '', 
+                        });
+                    });
+            } else {
+                // Si no hay ciclo seleccionado, renderizamos sin detalles del ciclo
+                response.render('inicio.ejs', {
+                    titulo: 'inicio',
+                    privilegios: request.session.privilegios || [],
+                    carrera: request.session.carrera || '',
+                    ciclosEscolares: ciclosEscolares,
+                    cicloActual: idCiclo,
+                    ciclo: {},
+                    username: request.session.username || '',
+                    mail: request.session.mail || '',
+                    rol: request.session.rol || '',
+                    csrfToken: request.csrfToken ? request.csrfToken() : '', 
+                });
+            }
         })
         .catch(err => {
             console.error('Error al obtener ciclos escolares:', err);
