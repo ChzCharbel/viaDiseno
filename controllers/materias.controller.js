@@ -10,7 +10,7 @@ exports.get_materias = (request, response, next) => {
         Salon.fetchAll(),
     ]).then(([materias, profesores, salones]) => {
         response.render('materias.ejs', {
-            titulo: 'materias',
+            titulo: 'Grupos',
             materias: materias || [],
             privilegios: request.session.privilegios || [],
             profesores: profesores.rows || [],
