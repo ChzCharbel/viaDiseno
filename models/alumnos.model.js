@@ -15,6 +15,6 @@ module.exports = class Alumno {
             `SELECT u."nombreUsuario", a."matricula", a."carrera", a."regular", a."semestre"
 			FROM "Usuario" u, "Alumno" a
 			WHERE a."matricula" = u."idIVD" AND u."nombreUsuario" LIKE $1::text`,
-            [nombreUsuario + '%']);
+            ['%' + nombreUsuario + '%']);
     }
 }

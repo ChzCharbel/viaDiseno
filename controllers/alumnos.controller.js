@@ -20,6 +20,13 @@ exports.get_alumnos = (request, response, next) => {
     console.log(request.session.privilegios);
     Alumno.fetchAll().then((alumnos) => {
         console.log(alumnos.rows);
+        
+        // Si es una petición AJAX, devolver JSON
+        if (request.xhr || request.headers['x-requested-with'] === 'XMLHttpRequest') {
+            return response.status(200).json({ alumnos: alumnos.rows });
+        }
+        
+        // Si no es AJAX, renderizar la vista normal
         response.render('alumnos', {
             titulo: 'alumnos',
             privilegios: request.session.privilegios || [],

@@ -56,62 +56,90 @@
 <!-- Lista de Alumnos -->
 <div class="container mt-5" id="alumnos_lista">
   <div class="row justify-content-center">
-    <div class="col-md-8">
+    <div class="col-md-10">
       <div class="card shadow-lg border-0 rounded-4">
         <div class="card-body p-5">
           <h4 class="text-center mb-4 text-dark fw-semibold">
             <i class="bi bi-person-lines-fill me-2 icon-vino"></i>Alumnas y Alumnos
-          </h4>          
-          <div class="d-grid gap-3" id="alumnos_botones">
-            <% for (let alumno of alumnos) { %>
-                <button
-                  type="button"
-                  class="btn btn-outline-vino text-start shadow-sm py-3 px-4 rounded-pill"
-                  data-bs-toggle="modal"
-                  data-bs-target="#modal<%= alumno.matricula %>"
-                >
-                  <i class="bi bi-person-fill me-3 fs-5 icon-vino"></i><%= alumno.nombreUsuario %>
-                </button>
+          </h4>
+          
+          <!-- Modales para visualizar detalles -->
+          <% for (let alumno of alumnos) { %>
+            <!-- Modal -->
+            <div class="modal fade" id="modal<%= alumno.matricula %>" tabindex="-1" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content rounded-4 border-0 shadow-lg">
 
-                <!-- Modal -->
-                <div class="modal fade" id="modal<%= alumno.matricula %>" tabindex="-1" aria-hidden="true">
-                  <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content rounded-4 border-0 shadow-lg">
-
-                      <!-- Encabezado -->
-                      <div class="modal-header border-bottom-0 pb-0 pt-3 px-4">
-                        <div class="d-flex align-items-center w-100">
-                          <i class="bi bi-person-circle fs-3 icon-vino me-2"></i>
-                          <h5 class="modal-title mb-0 text-dark fw-semibold"><%= alumno.nombreUsuario %></h5>
-                          <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                        </div>
-                      </div>
-
-                      <!-- Cuerpo -->
-                      <div class="modal-body px-4 pt-2 pb-4">
-                        <div class="border rounded-3 p-3 bg-light-subtle">
-                          <div class="mb-2">
-                            <span class="text-muted small">Matrícula</span><br>
-                            <span class="fw-medium"><%= alumno.matricula %></span>
-                          </div>
-                          <div class="mb-2">
-                            <span class="text-muted small">Semestre</span><br>
-                            <span class="fw-medium"><%= alumno.semestre %></span>
-                          </div>
-                          <div class="mb-2">
-                            <span class="text-muted small">Regular</span><br>
-                            <span class="fw-medium"><%= alumno.regular %></span>
-                          </div>
-                          <div>
-                            <span class="text-muted small">Carrera</span><br>
-                            <span class="fw-medium"><%= alumno.carrera %></span>
-                          </div>
-                        </div>
-                      </div>
-
+                  <!-- Encabezado -->
+                  <div class="modal-header border-bottom-0 pb-0 pt-3 px-4">
+                    <div class="d-flex align-items-center w-100">
+                      <i class="bi bi-person-circle fs-3 icon-vino me-2"></i>
+                      <h5 class="modal-title mb-0 text-dark fw-semibold"><%= alumno.nombreUsuario %></h5>
+                      <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                     </div>
                   </div>
-                </div>            <% } %>
+
+                  <!-- Cuerpo -->
+                  <div class="modal-body px-4 pt-2 pb-4">
+                    <div class="border rounded-3 p-3 bg-light-subtle">
+                      <div class="mb-2">
+                        <span class="text-muted small">Matrícula</span><br>
+                        <span class="fw-medium"><%= alumno.matricula %></span>
+                      </div>
+                      <div class="mb-2">
+                        <span class="text-muted small">Semestre</span><br>
+                        <span class="fw-medium"><%= alumno.semestre %></span>
+                      </div>
+                      <div class="mb-2">
+                        <span class="text-muted small">Regular</span><br>
+                        <span class="fw-medium"><%= alumno.regular ? 'Sí' : 'No' %></span>
+                      </div>
+                      <div>
+                        <span class="text-muted small">Carrera</span><br>
+                        <span class="fw-medium"><%= alumno.carrera %></span>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          <% } %>
+          
+          <!-- Vista de tabla -->
+          <div id="alumnos_tabla">
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead class="text-vino">
+                  <tr>
+                    <th>Matrícula</th>
+                    <th>Nombre</th>
+                    <th>Semestre</th>
+                    <th>Estatus</th>
+                    <th>Carrera</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="tabla_alumnos_body">
+                  <% for (let alumno of alumnos) { %>
+                    <tr>
+                      <td><span class="fw-medium"><%= alumno.matricula %></span></td>
+                      <td><%= alumno.nombreUsuario %></td>
+                      <td><%= alumno.semestre %></td>
+                      <td><span class="badge <%= alumno.regular ? 'bg-success' : 'bg-warning text-dark' %>">
+                        <%= alumno.regular ? 'Regular' : 'Irregular' %>
+                      </span></td>
+                      <td><%= alumno.carrera %></td>
+                      <td>
+                        <button class="btn btn-sm btn-vino" data-bs-toggle="modal" data-bs-target="#modal<%= alumno.matricula %>">
+                          <i class="bi bi-eye"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  <% } %>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
@@ -120,62 +148,61 @@
 </div>
 
 <!-- Script para buscar -->
-<script>  const buscar = document.getElementById('buscar');
+<script>
+  // Referencias a elementos DOM
+  const buscar = document.getElementById('buscar');
+    // Función de búsqueda
   buscar.onkeyup = () => {
-    fetch('/alumnos/<%= cicloActual %>/buscar/' + buscar.value)
-      .then((result) => result.json())
-      .then((nombreAlumnos) => {
-        const contenedor = document.getElementById('alumnos_botones');
-        let html = '';
-
-        for (let alumno of nombreAlumnos.alumno) {
-          html += `
-            <button
-              type="button"
-              class="btn btn-outline-vino text-start shadow-sm py-3 px-4 rounded-pill"
-              data-bs-toggle="modal"
-              data-bs-target="#modal${alumno.matricula}">
-              <i class="bi bi-person-fill me-3 fs-5 icon-vino"></i>${alumno.nombreUsuario}
-            </button>
-
-            <div class="modal fade" id="modal${alumno.matricula}" tabindex="-1" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content rounded-4 border-0 shadow-lg">
-                  <div class="modal-header border-bottom-0 pb-0 pt-3 px-4">
-                    <div class="d-flex align-items-center w-100">
-                      <i class="bi bi-person-circle fs-3 icon-vino me-2"></i>
-                      <h5 class="modal-title mb-0 text-dark fw-semibold">${alumno.nombreUsuario}</h5>
-                      <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                    </div>
-                  </div>
-                  <div class="modal-body px-4 pt-2 pb-4">
-                    <div class="border rounded-3 p-3 bg-light-subtle">
-                      <div class="mb-2">
-                        <span class="text-muted small">Matrícula</span><br>
-                        <span class="fw-medium">${alumno.matricula}</span>
-                      </div>
-                      <div class="mb-2">
-                        <span class="text-muted small">Semestre</span><br>
-                        <span class="fw-medium">${alumno.semestre}</span>
-                      </div>
-                      <div class="mb-2">
-                        <span class="text-muted small">Regular</span><br>
-                        <span class="fw-medium">${alumno.regular}</span>
-                      </div>
-                      <div>
-                        <span class="text-muted small">Carrera</span><br>
-                        <span class="fw-medium">${alumno.carrera}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          `;
+    // Si el campo está vacío, obtenemos todos los alumnos
+    if (buscar.value.trim() === '') {
+      fetch('/alumnos/<%= cicloActual %>', {
+        method: 'GET',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
         }
-
-        contenedor.innerHTML = html;
+      }).then((result) => {
+        return result.json();
+      }).then((data) => {
+        actualizarTabla(data.alumnos || []);
+      }).catch((error) => console.error(error));
+    } else {
+      // Búsqueda normal si hay texto
+      fetch('/alumnos/<%= cicloActual %>/buscar/' + buscar.value, {
+        method: 'GET',
+      }).then((result) => {
+        return result.json();
+      }).then((nombreAlumnos) => {
+        actualizarTabla(nombreAlumnos.alumno);
       })
       .catch((error) => console.error(error));
-  };
+    }
+  }
+  // Actualizar tabla de alumnos
+  function actualizarTabla(alumnos) {
+    const tablaBody = document.getElementById('tabla_alumnos_body');
+    let html = '';
+    
+    for (let alumno of alumnos) {
+      // Determinar el status y la clase de la etiqueta
+      const regularTexto = alumno.regular ? 'Regular' : 'Irregular';
+      const badgeClass = alumno.regular ? 'bg-success' : 'bg-warning text-dark';
+      
+      html += `
+        <tr>
+          <td><span class="fw-medium">${alumno.matricula}</span></td>
+          <td>${alumno.nombreUsuario}</td>
+          <td>${alumno.semestre}</td>
+          <td><span class="badge ${badgeClass}">${regularTexto}</span></td>
+          <td>${alumno.carrera}</td>
+          <td>
+            <button class="btn btn-sm btn-vino" data-bs-toggle="modal" data-bs-target="#modal${alumno.matricula}">
+              <i class="bi bi-eye"></i>
+            </button>
+          </td>
+        </tr>
+      `;
+    }
+    
+    tablaBody.innerHTML = html;
+  }
 </script>

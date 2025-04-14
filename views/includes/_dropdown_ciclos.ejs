@@ -10,15 +10,14 @@
     Ciclo escolar
   </a>
   <ul class="dropdown-menu" id="dropdown-menu">
-    <div class="overflow-auto" style="max-height: 100px">
+    <div class="dropdown-items-container overflow-auto" style="max-height: 100px">
       <% for (ciclo of ciclosEscolares) { %>
       <li>
         <a class="dropdown-item" href="/<%= titulo %>/<%= ciclo.idCicloEscolar %>"> <%= ciclo.idCicloEscolar %> </a>
       </li>
       <% } %>
-      <li><hr class="dropdown-divider" /></li>
     </div>
-
+    <li><hr class="dropdown-divider" /></li>
     <li>
       <a class="dropdown-item text-dark fw-bold" href="#" id="add-cycle">
         <i class="bi bi-plus-circle-fill"></i> Agregar nuevo
@@ -43,5 +42,3 @@
       }
     });
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
