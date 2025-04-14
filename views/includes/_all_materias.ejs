@@ -128,6 +128,58 @@
                             </div>
                         </div>
                 <% } %>
+                <div class="row px-3">
+      <div class="col-12">
+        <div class="table-responsive">
+          <table class="table table-striped table-hover">
+            <thead class="table-light">
+              <tr>
+                <th scope="col">Plan</th>
+                <th scope="col">Clave</th>
+                <th scope="col">Materia</th>
+                <th scope="col">Créditos</th>
+                <th scope="col">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for (let i = 0; i < materias.length; i++) { 
+                const materia = materias[i]; %>
+                <tr>
+                  <td><%= materia.idPlan %></td>
+                  <td><%= materia.idMateria %></td>
+                  <td><%= materia.nombreMateria %></td>
+                  <td><%= materia.creditos %></td>
+                  <td>
+                    <button
+                      class="btn btn-outline-secondary btn-sm"
+                      data-bs-toggle="popover"
+                      data-bs-title="Detalles de la materia"
+                      data-bs-placement="left"
+                      data-bs-content="<%= materia.descripcion || 'Sin descripción disponible' %>"
+                    >
+                      <i class="bi bi-info-circle"></i> Más info
+                    </button>
+                  </td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+      popoverTriggerList.forEach((popoverTriggerEl) => {
+        new bootstrap.Popover(popoverTriggerEl, {
+          html: true
+        });
+      });
+    });
+  </script>
                 <% 
                 let count2 = 0; 
                 for (let i = 0; i < materias.length; i++) {
@@ -436,8 +488,9 @@
     </div>
 </div>
 
-
+<script type="text/javascript" src="//code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="/js/scriptIVD.js"></script>
+<script src="/js/oferta.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

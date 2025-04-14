@@ -16,26 +16,21 @@ module.exports = class Grupo{
     static async fetchByDegree(carrera) {
         return this.getAllCourses().then((materias) => {
             const arregloMaterias = [];
-            const planes = [];
-            const arr = [];
+            let agregar = true;
             for (let materia of materias) {
                 if (materia.plans[0].degree.name == carrera) {
-                    arregloMaterias.push(materia); 
-                    if (planes.length != 0) {
-                        if (planes.includes(materia.plans[0].id) == false){
-                            planes.push(materia.plans[0].id); 
-                        }
-                    } else {
-                        planes.push(materia.plans[0].id);  
-                    }
+                    arregloMaterias.push(materia);
                 }
             }
-            arr.push(arregloMaterias);
-            arr.push(planes);
-            return arr;
+            
+            return arregloMaterias;
         }).catch((error) => {
             console.log(error);
         });
+    }
+
+    static async fetchPlanes(carrera) {
+        
     }
 }
 

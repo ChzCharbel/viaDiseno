@@ -3,7 +3,6 @@ const Oferta = require('../models/oferta.model');
 
 exports.get_oferta = (request, response, next) => {
     Oferta.fetchAll(request.params.idCiclo).then((materiasOfertadas) => {
-        console.log(materiasOfertadas);
         response.render('oferta_academica.ejs',{
         titulo: 'oferta_academica',
         privilegios: request.session.privilegios || [],
@@ -29,6 +28,7 @@ exports.get_agregar = (request, response, next) => {
         response.render('oferta_agregar.ejs',{
             titulo: 'oferta_academica',
             privilegios: request.session.privilegios || [],
+            csrfToken: request.csrfToken(),
             materias: materias,
             carrera: request.session.carrera || '',
             ciclosEscolares: request.session.ciclosEscolares || [],
@@ -44,5 +44,15 @@ exports.get_agregar = (request, response, next) => {
 }
 
 exports.post_agregar = (request, response, next) => {
-
+    console.log('Id de las materias del ciclo ' + request.params.idCiclo + ': ')
+    console.log(request.body.idMateriasAgregar);
+    const idMaterias = [];
+    stringIds = request.body.idMateriasAgregar.split(',');
+    for (let id of stringIds) {
+        if (id != '') {
+            idMaterias.push(id);
+        }
+    }
+    const miOferta = new Oferta(request.params.idCiclo, idMaterias);
+    miOferta.save();
 }
