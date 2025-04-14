@@ -1,0 +1,96 @@
+@startuml Diagrama de Secuencia - /users/login
+
+' Definición de actores y componentes
+actor "Usuario" as user
+participant "Navegador" as browser
+participant "Express Server" as server
+participant "CSRF Middleware" as csrf
+participant "usersController" as controller
+participant "Usuario Model" as model
+participant "CicloEscolar Model" as cicloModel
+participant "bcrypt" as bcrypt
+database "PostgreSQL DB" as db
+participant "Admin API" as api
+participant "Vista EJS" as view
+
+' Flujo para GET /users/login (Mostrar formulario de login)
+user -> browser : Accede a /users/login
+browser -> server : GET /users/login
+server -> csrf : Genera token CSRF
+csrf --> server : Token CSRF generado
+server -> controller : usersController.get_login
+activate controller
+
+controller -> view : Renderiza login.ejs con token CSRF
+activate view
+view --> controller : HTML generado
+deactivate view
+controller --> server : Devuelve HTML
+deactivate controller
+server --> browser : Muestra formulario de login
+browser --> user : Ve formulario de login
+
+' Flujo para POST /users/login (Proceso de autenticación)
+user -> browser : Ingresa credenciales y envía formulario
+browser -> server : POST /users/login con credenciales y token CSRF
+server -> csrf : Verifica token CSRF
+csrf --> server : Token válido
+server -> controller : usersController.post_login
+activate controller
+
+controller -> model : Usuario.fetchOne(matricula)
+activate model
+model -> db : Consulta usuario por matrícula
+db --> model : Datos del usuario
+model --> controller : Resultado de la consulta
+deactivate model
+
+alt Usuario no encontrado
+    controller --> server : Redirige a /users/login con mensaje de error
+    server --> browser : Redirección a login
+    browser --> user : Muestra formulario con mensaje de error
+else Usuario encontrado
+    controller -> bcrypt : Compara contraseña
+    activate bcrypt
+    bcrypt --> controller : Resultado de comparación
+    deactivate bcrypt
+    
+    alt Contraseña incorrecta
+        controller --> server : Redirige a /users/login con mensaje de error
+        server --> browser : Redirección a login
+        browser --> user : Muestra formulario con mensaje de error
+    else Contraseña correcta
+        controller -> model : Usuario.getPrivilegios(idIVD)
+        activate model
+        model -> db : Consulta privilegios
+        db --> model : Lista de privilegios
+        model --> controller : Privilegios del usuario
+        deactivate model
+        
+        controller -> controller : Establece datos de sesión\n(privilegios, isLoggedIn, matricula, etc.)
+        
+        controller -> cicloModel : CicloEscolar.fetchAll()
+        activate cicloModel
+        cicloModel -> db : Consulta ciclos escolares
+        db --> cicloModel : Lista de ciclos
+        cicloModel --> controller : Ciclos escolares
+        deactivate cicloModel
+        
+        alt Usuario es admin
+            controller --> server : Redirige a /inicio/{idCiclo}
+            server --> browser : Redirección a inicio
+            browser --> user : Muestra panel de administrador
+        else Usuario es alumno
+            controller --> server : Redirige a /enlista/alumno/
+            server --> browser : Redirección a enlista/alumno
+            browser --> user : Muestra horario de alumno
+        end
+    end
+end
+
+deactivate controller
+
+' Footer
+caption Diagrama de Secuencia para el proceso de login (/users/login) - Sistema de Inscripciones viaDiseno
+
+@enduml

@@ -1,30 +1,159 @@
 // Objeto para almacenar la disponibilidad de cada profesor
 let availability = {};
 
-// Parsear allProfesores
-const profesores = JSON.parse(allProfesores);
+// Se inicializará cuando se cargue el DOM
+let profesores = [];
 
-// Referencia al modal
-for (let profesor of profesores) {
-  let profModalPrueba = document.getElementById(
-    "profModal" + profesor.matriculaProfesor
-  );
-  profModalPrueba.addEventListener("show.bs.modal", function (event) {
-    console.log(
-      "PROFESss: " +
-        profesores[0].matriculaProfesor +
-        " " +
-        profesores[0].nombreProfesor
-    );
-    const button = event.relatedTarget; // Botón que abrió el modal
-    let profName = button.getAttribute("data-prof-name"); // Nombre del profesor
-    let profMatricula = button.getAttribute("data-prof-id"); // Matricula del profesor
-    console.log("matricula:" + profMatricula);
-    console.log("nombre:" + profName);
-    document.getElementById("profName").textContent = profName;
-    console.log(`Disponibilidad actualizada para ${profName}`);
+// Función para cargar los horarios de un profesor específico
+async function cargarHorarioProfesor(matriculaProf) {
+  try {
+    // Obtener el ciclo escolar actual
+    const cicloActual = document.getElementById('cicloActualId')?.value || 
+                        localStorage.getItem('cicloActual') || "FebJun21"; // Usa el mismo valor por defecto que en guardarHorario1
+    
+    console.log(`Cargando horario para profesor: ${matriculaProf}, ciclo: ${cicloActual}`);
+    
+    // Solicitar la disponibilidad específica del profesor
+    const url = `/disponible/obtener/${cicloActual}/${matriculaProf}`;
+    console.log("Consultando URL:", url);
+    
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      throw new Error(`Error al obtener el horario del profesor ${matriculaProf}: ${response.status} ${response.statusText}`);
+    }
+    
+    const disponibilidad = await response.json();
+    console.log("Disponibilidad cargada:", disponibilidad);
+    
+    // Guardar la disponibilidad en el objeto global
+    availability[matriculaProf] = disponibilidad;
+    
+    // Marcar los checkboxes correspondientes para este profesor
+    marcarHorarioProfesor(matriculaProf, disponibilidad);
+    
+  } catch (error) {
+    console.error(`Error al cargar horario del profesor ${matriculaProf}:`, error);
+  }
+}
+
+// Función para marcar los checkboxes de un profesor específico
+function marcarHorarioProfesor(matriculaProf, disponibilidad) {
+  const dias = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes'];
+  
+  console.log(`Marcando horarios para profesor ${matriculaProf}`);
+  console.log("Disponibilidad recibida:", disponibilidad);
+  
+  // Si disponibilidad es un array en lugar de un objeto, puede ser que la API
+  // esté devolviendo datos en un formato inesperado
+  if (Array.isArray(disponibilidad)) {
+    console.error("La disponibilidad es un array, se esperaba un objeto");
+    return;
+  }
+  
+  // Si no hay disponibilidad, no hay nada que marcar
+  if (!disponibilidad) {
+    console.log("No hay disponibilidad guardada para este profesor");
+    return;
+  }
+  
+  dias.forEach(dia => {
+    // Verificar si este día tiene horas guardadas
+    if (disponibilidad[dia] && Array.isArray(disponibilidad[dia])) {
+      console.log(`Día ${dia} tiene ${disponibilidad[dia].length} horas guardadas`);
+        // Para cada hora guardada en ese día
+      disponibilidad[dia].forEach(horaGuardada => {
+        if (typeof horaGuardada !== 'string') {
+          console.error(`Formato de hora inválido para ${dia}: ${horaGuardada}`);
+          return;
+        }
+        
+        // Limpiar el formato de hora para eliminar posibles errores
+        // Puede venir como '13:00', '[13:00]', '"13:00"', etc.
+        let horaLimpia = horaGuardada.replace(/[\[\]\"]/g, '').trim();
+        
+        // Formatear la hora para el ID del checkbox (7:00 -> 7-00)
+        const horaFormateada = horaLimpia.replace(':', '-');
+        const checkboxId = `${dia}-${horaFormateada}-${matriculaProf}`;
+        console.log(`Buscando checkbox con ID: ${checkboxId}`);
+        
+        const checkbox = document.getElementById(checkboxId);
+        
+        // Si existe el checkbox, marcarlo como seleccionado
+        if (checkbox) {
+          checkbox.checked = true;
+          console.log(`Marcando checkbox ${checkboxId}`);
+        } else {
+          console.log(`No se encontró el checkbox ${checkboxId}. Intentando otras variantes...`);
+          
+          // Intentar varias posibilidades de formato
+          const posiblesIds = [
+            `${dia}-${horaFormateada}`, // Sin matrícula
+            `${dia}-${horaLimpia}`, // Sin reemplazar el : por -
+            `${dia}-${horaFormateada}-${matriculaProf}`.toLowerCase(), // En minúsculas
+            `${dia}-${horaLimpia.split(':')[0]}-${horaLimpia.split(':')[1]}` // Formato diferente (ej: jueves-13-00)
+          ];
+          
+          let encontrado = false;
+          for (const id of posiblesIds) {
+            const checkboxAlt = document.getElementById(id);
+            if (checkboxAlt) {
+              checkboxAlt.checked = true;
+              console.log(`Marcando checkbox con ID alternativo: ${id}`);
+              encontrado = true;
+              break;
+            }
+          }
+          
+          if (!encontrado) {
+            console.log(`No se encontró checkbox para ${dia} ${horaGuardada} después de probar múltiples formatos`);
+          }
+        }
+      });
+    } else {
+      console.log(`No hay horas guardadas para el día ${dia}`);
+    }
   });
 }
+
+// Configurar los event listeners para los modales cuando la página se carga
+document.addEventListener('DOMContentLoaded', function() {
+  console.log("DOM completamente cargado");
+  
+  // Obtener la lista de profesores del elemento en el DOM
+  const contenedor = document.getElementById("profContainer");
+  if (contenedor && contenedor.dataset.profesores) {
+    try {
+      profesores = JSON.parse(contenedor.dataset.profesores);
+      console.log(`${profesores.length} profesores cargados correctamente`);
+    } catch (e) {
+      console.error("Error al parsear profesores:", e);
+    }
+  } else {
+    console.error("No se encontró el contenedor de profesores o no contiene datos");
+  }
+
+  // Configurar cada modal de profesor
+  profesores.forEach(profesor => {
+    let profModal = document.getElementById("profModal" + profesor.matriculaProfesor);
+    if (profModal) {
+      console.log(`Configurando modal para profesor: ${profesor.nombreProfesor} (${profesor.matriculaProfesor})`);
+      
+      // Cuando se abre el modal
+      profModal.addEventListener("show.bs.modal", function (event) {
+        console.log(`Abriendo modal para profesor: ${profesor.nombreProfesor} (${profesor.matriculaProfesor})`);
+        
+        // Obtener matrícula del profesor desde el elemento del modal
+        const profId = profesor.matriculaProfesor;
+        
+        // Cargar los horarios guardados para este profesor específico
+        cargarHorarioProfesor(profId);
+      });
+    } else {
+      console.warn(`No se encontró el modal para el profesor ${profesor.nombreProfesor} (${profesor.matriculaProfesor})`);
+    }
+  });
+});
 const profModal = document.getElementById("profModalIVD012902");
 
 function guardarHorario2() {
