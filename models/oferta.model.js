@@ -10,7 +10,7 @@ module.exports = class OfertaAcademica {
     save() {
         /* cadena para guardar toda la oferta con una sola 
         consulta */
-        let consulta = `INSERT INTO "Ofrece" VALUES`;
+        let consulta = `INSERT INTO ofrece VALUES`;
         let i = 2;
         for (let id of stringIds) {
             if (id != '') {
@@ -25,12 +25,13 @@ module.exports = class OfertaAcademica {
         const ciclo = [this.idCiclo];
         const parametros = ciclo.concat(this.idsMaterias);
         console.log(parametros);
-        //return db.query(consulta, parametros);
+        return db.query(consulta, parametros);
     }
 
     static fetchAll(idCicloE) {
-        return db.query(`SELECT DISTINCT  m.*
-        FROM materias m, ofrece o
-        WHERE o.id_ciclo_escolar = $1::text;`, [idCicloE]);
+        return db.query(`SELECT DISTINCT  materias.*
+        FROM materias, ofrece
+        WHERE ofrece.id_ciclo_escolar = $1::text AND
+        materias.id_materia = ofrece.id_materia;`, [idCicloE]);
     }
 }
