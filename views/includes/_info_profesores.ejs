@@ -22,25 +22,56 @@
 <!-- Lista de Profesores -->
 <div class="container mt-5" id="profesores_lista">
   <div class="row justify-content-center">
-    <div class="col-md-8">
+    <div class="col-md-10">
       <div class="card shadow-lg border-0 rounded-4">
         <div class="card-body p-5">
           <h4 class="text-center mb-4 text-dark fw-semibold">
             <i class="bi bi-person-badge-fill me-2"></i>Profesores disponibles
           </h4>          
-          <div class="d-grid gap-3" id="profesores_botones">
-            <% for (let profesor of profesores) { %>
-              <button
-                type="button"
-                class="btn btn-outline-secondary text-start shadow-sm py-3 px-4 rounded-pill"
-                data-bs-toggle="modal"
-                data-bs-target="#profModal<%= profesor.matricula_profesor %>"
-              >
-                <i class="bi bi-person-circle me-3 fs-5"></i><%= profesor.nombre_profesor %>
-              </button>
-
-              <%- include('_modal_horario', { profesor: profesor }) %>
-            <% } %>
+          
+          <div class="table-responsive">
+            <table class="table table-hover align-middle">
+              <thead class="table-light">
+                <tr>
+                  <th>Matrícula</th>
+                  <th>Nombre</th>
+                  <th class="text-center">Disponibilidad</th>
+                  <th class="text-center">Materias</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% for (let profesor of profesores) { %>
+                  <tr>
+                    <td><span class="fw-medium"><%= profesor.matricula_profesor %></span></td>
+                    <td><%= profesor.nombre_profesor %></td>
+                    <td class="text-center">
+                      <button 
+                        type="button" 
+                        class="btn btn-outline-primary btn-sm"
+                        data-bs-toggle="modal"
+                        data-bs-target="#profModal<%= profesor.matricula_profesor %>"
+                      >
+                        <i class="bi bi-calendar-check me-1"></i> Horarios
+                      </button>
+                    </td>
+                    <td class="text-center">
+                      <button 
+                        type="button" 
+                        class="btn btn-outline-success btn-sm"
+                        data-bs-toggle="modal"
+                        data-bs-target="#materiasModal<%= profesor.matricula_profesor %>"
+                      >
+                        <i class="bi bi-list-check me-1"></i> Asignar Materias
+                      </button>
+                    </td>
+                  </tr>
+                  
+                  <!-- Modal de Disponibilidad de horarios -->
+                  <%- include('_modal_horario', { profesor: profesor }) %>
+                  
+                  <!-- Modal de Asignación de Materias -->
+                  <%- include('_modal_asignacion_materias', { profesor: profesor }) %>
+                <% } %>
           </div>
         </div>
       </div>

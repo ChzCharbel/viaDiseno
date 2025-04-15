@@ -1,0 +1,52 @@
+<div class="modal fade" id="materiasModal<%= profesor.matricula_profesor %>" tabindex="-1" aria-labelledby="materiasModalLabel<%= profesor.matricula_profesor %>" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="materiasModalLabel<%= profesor.matricula_profesor %>">
+            Asignar materias a <%= profesor.nombre_profesor %>
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>          <div class="modal-body">          
+          <p class="text-muted mb-3">Seleccione las materias que puede impartir este profesor:</p>
+          
+          <% if (materias && materias.length > 0) { %>
+            <div class="row">
+              <!-- Columna izquierda -->
+              <div class="col-md-6">
+                <% for (let i = 0; i < Math.ceil(materias.length/2); i++) { %>
+                  <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" value="<%= materias[i].id || materias[i].code %>" 
+                           id="materia<%= i %>_<%= profesor.matricula_profesor %>">
+                    <label class="form-check-label" for="materia<%= i %>_<%= profesor.matricula_profesor %>">
+                      <%= materias[i].name || materias[i].nombre_materia %>
+                    </label>
+                  </div>
+                <% } %>
+              </div>
+              <!-- Columna derecha -->
+              <div class="col-md-6">
+                <% for (let i = Math.ceil(materias.length/2); i < materias.length; i++) { %>
+                  <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" value="<%= materias[i].id || materias[i].code %>" 
+                           id="materia<%= i %>_<%= profesor.matricula_profesor %>">
+                    <label class="form-check-label" for="materia<%= i %>_<%= profesor.matricula_profesor %>">
+                      <%= materias[i].name || materias[i].nombre_materia %>
+                    </label>
+                  </div>
+                <% } %>
+              </div>
+            </div>
+          <% } else { %>
+            <div class="alert alert-info">
+              No hay materias disponibles
+            </div>
+          <% } %>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-success">Guardar Asignaciones</button>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
