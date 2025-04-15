@@ -11,6 +11,7 @@ exports.get_enlista = (req, res, next) => {
         const grupos = result.rows.map(row => ({
           idGrupo: row.id_grupo,
           materia: {
+            id: row.id_materia,
             nombre: row.nombre_materia
           },
           profesor: {
@@ -41,6 +42,7 @@ exports.get_enlista = (req, res, next) => {
               username: req.session.username || '',
               mail: req.session.mail || '',
               rol: req.session.rol || '',
+              matricula: req.session.matricula
             });
         })
         .catch(err => {

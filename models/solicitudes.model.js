@@ -13,4 +13,15 @@ module.exports = class SolicitaCambio {
       [id]
     );
   }
+
+  static crearSolicitud ({ matricula, id_materia, descripcion}) {
+    const fecha_solicitud = new Date().toISOString().split('T')[0];
+
+    return db.query(
+      `INSERT INTO solicitudes_cambio
+      (matricula, id_materia, resuelto, descripcion, fecha_solicitud, fecha_resolucion)
+      VALUES ($1, $2, $3, $4, $5, $6);`,
+      [matricula, id_materia, null, descripcion, fecha_solicitud, null]
+    );
+  }
 };

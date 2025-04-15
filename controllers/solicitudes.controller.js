@@ -15,6 +15,7 @@ exports.get_solicitudes = (request, response, next) => {
         mail: request.session.mail || "",
         rol: request.session.rol || "",
         SolicitaCambio: solicitudes.rows,
+        matricula: request.session.matricula
       });
     })
     .catch((error) => {
@@ -22,3 +23,31 @@ exports.get_solicitudes = (request, response, next) => {
       response.render("error.ejs");
     });
 };
+
+exports.enviarSolicitud = async (request, response, next) => {
+  try {
+    const { matricula, id_materia, descripcion, tipo, nombre_materia } = request.body;
+
+    let descripcionFinal = "";
+
+    if (tipo === "cambio") {
+      descripcionFinal = `El alumno solicita cambiar la materia ${nombre_materia}. Por la materia: ${descripcion}`;
+    } else if (tipo === "eliminar") {
+      descripcionFinal = `El alumno solicita eliminar la materia ${nombre_materia}. Descripción del cambio: ${descripcion}`;
+    } else {
+      descripcionFinal = descripcion; // respaldo si no se envía tipo
+    }
+
+    await SolicitaCambio.crearSolicitud({
+      matricula,
+      id_materia,
+      descripcion: descripcionFinal,
+    });
+
+    response.redirect("/enlista/alumno/");
+  } catch (error) {
+    console.error("Error al guardar la solicitud:", error);
+    response.status(500).render("error.ejs");
+  }
+};
+
