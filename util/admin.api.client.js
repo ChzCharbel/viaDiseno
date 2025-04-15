@@ -193,27 +193,84 @@ async function getAllCourses() {
 }
 
 async function getAllUsers(userType) {
-    const token = await getToken();
-    const headers = getHeaders(token);
-    const response = await axiosAdminClient.get("/v1/users/all", {
-        headers, params: {
-            type: userType || '',
+    try {
+        const token = await getToken();
+        const headers = getHeaders(token);
+        const response = await axiosAdminClient.get("/v1/users/all", {
+            headers, params: {
+                type: userType || '',
+            }
+        });
+
+        console.log("Respuesta recibida, status:", response.status);
+        
+        if (!response.data) {
+            console.error("No se recibieron datos de la API");
+            return [];
         }
-    });
-    const jsonString = JSON.stringify(response.data);
-    const parsedJson = JSON.parse(jsonString);
-    return parsedJson.data;
+
+        const jsonString = JSON.stringify(response.data);
+        const parsedJson = JSON.parse(jsonString);
+
+        if (!parsedJson.data || parsedJson.data.length === 0) {
+            console.log("No se encontraron usuarios en la respuesta");
+        } else {
+            console.log(`Se encontraron ${parsedJson.data.length} usuarios`);
+        }
+
+        return parsedJson.data;
+    }
+    catch (error) {
+        console.error("Error al obtener los usuarios:", error.message);
+        if (error.response) {
+            console.error("Detalles de la respuesta:", {
+                status: error.response.status,
+                statusText: error.response.statusText,
+                data: error.response.data
+            });
+        }
+        return [];
+    }
 }
 
 async function getAllDegrees() {
-    const token = await getToken();
+    try {
+        const token = await getToken();
     const headers = getHeaders(token);
     const response = await axiosAdminClient.get("/v1/degrees/index", {
         headers,
     })
+
+    console.log("Respuesta recibida, status:", response.status);
+        
+    if (!response.data) {
+        console.error("No se recibieron datos de la API");
+        return [];
+    }
+
     const jsonString = JSON.stringify(response.data);
     const parsedJson = JSON.parse(jsonString);
+
+    if (!parsedJson.data || parsedJson.data.length === 0) {
+        console.log("No se encontraron planes en la respuesta");
+    } else {
+        console.log(`Se encontraron ${parsedJson.data.length} planes`);
+    }
+
     return parsedJson.data;
+    }
+    catch (error) {
+        console.error("Error al obtener los planes:", error.message);
+        if (error.response) {
+            console.error("Detalles de la respuesta:", {
+                status: error.response.status,
+                statusText: error.response.statusText,
+                data: error.response.data
+            });
+        }
+        return [];
+    }
+    
 }
 
 const grupo13 = (async () => {

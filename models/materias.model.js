@@ -10,10 +10,6 @@ module.exports = class Grupo{
         return await getAllDegrees();
     }
 
-    static async syncMaterias() {
-
-    }
-
     /* Filtra las materias por la carrera
     que reciba como parametro */
     static async fetchByDegree(carrera) {
@@ -30,7 +26,7 @@ module.exports = class Grupo{
             console.log(error);
         });
     }
-    
+
     /* Filtra los planes de estudio por carrera */
     static async fetchPlanesByDegree(carrera) {
         return this.getAllDegrees().then((planes) => {
@@ -48,6 +44,7 @@ module.exports = class Grupo{
         let plansLength = 0;
         for (let plan of planes) {
             if (plan.name == carrera) {
+                console.log(plan)
                 plansLength = plan.plans.length;
                 if (plansLength > 0) {
                     for (let i = 0; i < plansLength; i++) {
@@ -56,6 +53,9 @@ module.exports = class Grupo{
                         }
                     }
                 }
+                else {
+                    arregloPlanes.push(plan.plans[0]);
+                }
             }
         }
 
@@ -63,6 +63,31 @@ module.exports = class Grupo{
         }).catch((error) => {
             console.log(error);
         })
+    }
+
+    static async sincronizarDesdeAPI() {
+        try {
+        const materias = await getAllCourses();
+        for (let materia of materias) {
+            if (materia.plans[0].degree.status == 'active') {
+                const estatus = materia.plans[0].degree.status;
+                const { id, name, credits, hours_professor} = materia;
+                await db.query(`
+                    INSERT INTO materias (id_materia, nombre_materia, creditos, horas_profesor)
+                    VALUES ($1::text, $2::text, $3::integer, $4::integer)
+                    ON CONFLICT (id_materia) DO NOTHING
+                `, [id, name, parseInt(credits), hours_professor]);
+                await db.query(`UPDATE materias SET estatus = $1::text WHERE 
+                    id_materia = $2::text`, [estatus, id]);
+                }
+        }
+    
+        console.log("Materias sincronizadas exitosamente.");
+        return { mensaje: "Sincronización completada", total: materias.length };
+        } catch (error) {
+            console.error("Error al sincronizar materias:", error);
+            throw error;
+        }
     }
 }
 

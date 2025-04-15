@@ -23,31 +23,28 @@ exports.get_oferta = (request, response, next) => {
 
 exports.get_agregar = (request, response, next) => {
     Promise.all([
+        Materia.sincronizarDesdeAPI(),
         Materia.fetchPlanesByDegree(request.session.carrera),
         Materia.fetchByDegree(request.session.carrera),
-    ]).then(([planVersiones, materias]) => {
-        response.render('oferta_agregar.ejs',{
-            titulo: 'oferta_academica',
-            privilegios: request.session.privilegios || [],
-            csrfToken: request.csrfToken(),
-            materias: materias,
-            carrera: request.session.carrera || '',
-            ciclosEscolares: request.session.ciclosEscolares || [],
-            cicloActual: request.params.idCiclo || '',
-            username: request.session.username || '',
-            mail: request.session.mail || '',
-            planes: planVersiones || [],
-            planActual: request.params.idPlan || '',
-            rol: request.session.rol || '',
-        })
+        ]).then(([data, planVersiones, materias]) => {
+            console.log(data)
+            response.render('oferta_agregar.ejs',{
+                titulo: 'oferta_academica',
+                privilegios: request.session.privilegios || [],
+                csrfToken: request.csrfToken(),
+                materias: materias,
+                carrera: request.session.carrera || '',
+                ciclosEscolares: request.session.ciclosEscolares || [],
+                cicloActual: request.params.idCiclo || '',
+                username: request.session.username || '',
+                mail: request.session.mail || '',
+                planes: planVersiones || [],
+                planActual: request.params.idPlan || '',
+                rol: request.session.rol || '',
+            })
     }).catch((error) => {
         console.log(error);
-    })
-    Materia.fetchPlanesByDegree(request.session.carrera).then((data) => {
-        console.log(data);
-    }).catch((error) => {
-        console.log(error);
-    })
+    });
     /*Materia.fetchByDegree(request.session.carrera).then((data) => {
         const materias = data[0];
         const planVersiones = data[1];
