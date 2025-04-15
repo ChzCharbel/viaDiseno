@@ -6,7 +6,7 @@ exports.get_horario_alumnos_regulares = (request, response, next) => {
         privilegios: request.session.privilegios || [],
         carrera: request.session.carrera || '',
         ciclosEscolares: request.session.ciclosEscolares || [],
-            cicloActual: request.params.idCiclo || '',
+        cicloActual: request.params.idCiclo || '',
         username: request.session.username || '',
         mail: request.session.mail || '',
         grupos: [],

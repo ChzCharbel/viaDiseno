@@ -27,17 +27,16 @@
         <div class="card-body p-5">
           <h4 class="text-center mb-4 text-dark fw-semibold">
             <i class="bi bi-person-badge-fill me-2"></i>Profesores disponibles
-          </h4>
-
+          </h4>          
           <div class="d-grid gap-3" id="profesores_botones">
             <% for (let profesor of profesores) { %>
               <button
                 type="button"
                 class="btn btn-outline-secondary text-start shadow-sm py-3 px-4 rounded-pill"
                 data-bs-toggle="modal"
-                data-bs-target="#profModal<%= profesor.matriculaProfesor %>"
+                data-bs-target="#profModal<%= profesor.matricula_profesor %>"
               >
-                <i class="bi bi-person-circle me-3 fs-5"></i><%= profesor.nombreProfesor %>
+                <i class="bi bi-person-circle me-3 fs-5"></i><%= profesor.nombre_profesor %>
               </button>
 
               <%- include('_modal_horario', { profesor: profesor }) %>

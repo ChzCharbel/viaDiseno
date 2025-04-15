@@ -1,7 +1,7 @@
 <div
 
   class="modal fade"
-  id="profModal<%= profesor.matriculaProfesor %>"
+  id="profModal<%= profesor.matricula_profesor %>"
   tabindex="-1"
   aria-labelledby="modalLabel"
   aria-hidden="true"
@@ -21,15 +21,15 @@
       </div>
       <div class="modal-body">
         <div id="matricula" class="invisible">
-          <%= profesor.matriculaProfesor %>
+          <%= profesor.matricula_profesor %>
         </div>
         <dl class="row">
           <dt class="col-sm-3">Nombre</dt>
-          <dd class="col-sm-9" id="profName"><%= profesor.nombreProfesor %></dd>
+          <dd class="col-sm-9" id="profName"><%= profesor.nombre_profesor %></dd>
 
           <dt class="col-sm-3">Matrícula</dt>
           <dd class="col-sm-9" id="profId">
-            <%= profesor.matriculaProfesor %>
+            <%= profesor.matricula_profesor %>
           </dd>
         </dl>
 
@@ -56,13 +56,13 @@
               <input
                 type="checkbox"
                 class="btn-check"
-                id="<%= dia %>-<%= horaId %>-<%= profesor.matriculaProfesor %>"
+                id="<%= dia %>-<%= horaId %>-<%= profesor.matricula_profesor %>"
                 autocomplete="off"
               />
               <label
                 class="btn btn-outline-primary"
                 style="width: 35px; height: 35px"
-                for="<%= dia %>-<%= horaId %>-<%= profesor.matriculaProfesor %>"
+                for="<%= dia %>-<%= horaId %>-<%= profesor.matricula_profesor %>"
               ></label>
             </div>
             <% }); %>
@@ -73,7 +73,7 @@
           <button
             type="button"
             class="btn btn-secondary"
-            id="saveAvailability<%= profesor.matriculaProfesor %>"
+            id="saveAvailability<%= profesor.matricula_profesor %>"
             data-bs-dismiss="modal"
             onclick="guardarHorario1()"
           >

@@ -115,7 +115,7 @@ module.exports = class Usuario {
       .hash(this.password, 12)
       .then((password_cifrado) => {
         return db.query(
-          `INSERT INTO "Usuario"("idIVD", "nombreUsuario", password, "correoInstitucional", rol) VALUES ($1::text, $2::text, $3::text, $4::text, $5::text)`,
+          `INSERT INTO usuarios(id_ivd, nombre_usuario, password, correo_institucional, rol) VALUES ($1::text, $2::text, $3::text, $4::text, $5::text)`,
           [this.id, this.username, password_cifrado, this.correo, this.role]
         );
       })
@@ -125,11 +125,11 @@ module.exports = class Usuario {
   }
 
   static fetchAll() {
-    return db.query(`Select * from "Usuario";`);
+    return db.query(`Select * from usuarios;`);
   }
 
   static fetchOne(matricula) {
-    return db.query(`Select * from "Usuario" Where "idIVD" = $1::text;`, [
+    return db.query(`Select * from usuarios Where id_ivd = $1::text;`, [
       matricula,
     ]);
   }
@@ -144,16 +144,16 @@ module.exports = class Usuario {
 
   static getRol(id) {
     return db.query(
-      `SELECT p.nombre FROM "Accede" a, "Privilegio" p WHERE a."nombreRol" = 
-                (SELECT rol FROM "Usuario" WHERE "correoInstitucional" = $1::text) AND a."idPrivilegio" = p."idPrivilegio";`,
+      `SELECT p.nombre FROM accede a, privilegios p WHERE a.nombre_rol = 
+                (SELECT rol FROM usuarios WHERE correo_institucional = $1::text) AND a.id_privilegio = p.id_privilegio;`,
       [correo]
     );
   }
 
   static getPrivilegios(id) {
     return db.query(
-      `SELECT p.nombre FROM "Accede" a, "Privilegio" p WHERE a."nombreRol" = 
-                (SELECT rol FROM "Usuario" WHERE "idIVD" = $1::text) AND a."idPrivilegio" = p."idPrivilegio";`,
+      `SELECT p.nombre FROM accede a, privilegios p WHERE a.nombre_rol = 
+                (SELECT rol FROM usuarios WHERE id_ivd = $1::text) AND a.id_privilegio = p.id_privilegio;`,
       [id]
     );
   }

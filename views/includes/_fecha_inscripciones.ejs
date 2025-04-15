@@ -44,15 +44,15 @@
 
   <!-- Fechas actuales -->
   <div class="text-center mt-5">
-    <% if (ciclo.inicioInscripcion && ciclo.finInscripcion) { %>
+    <% if (ciclo.inicio_inscripcion && ciclo.fin_inscripcion) { %>
       <p class="text-muted">
         <i class="bi bi-info-circle me-2"></i>
         La fecha de inscripciones es del
         <strong>
-          <%= new Date(ciclo.inicioInscripcion).toLocaleDateString('es-MX', { day: 'numeric', month: 'long' }) %>
+          <%= new Date(ciclo.inicio_inscripcion).toLocaleDateString('es-MX', { day: 'numeric', month: 'long' }) %>
         </strong> al
         <strong>
-          <%= new Date(ciclo.finInscripcion).toLocaleDateString('es-MX', { day: 'numeric', month: 'long' }) %>
+          <%= new Date(ciclo.fin_inscripcion).toLocaleDateString('es-MX', { day: 'numeric', month: 'long' }) %>
         </strong>.
       </p>
     <% } else { %>

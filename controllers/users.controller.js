@@ -82,15 +82,15 @@ exports.post_login = (request, response, next) => {
           .compare(request.body.passwordInput, usuario.rows[0].password)
           .then((doMatch) => {
             if (doMatch) {
-              Usuario.getPrivilegios(usuario.rows[0].idIVD)
+              Usuario.getPrivilegios(usuario.rows[0].id_ivd)
                 .then((privilegios) => {
                   request.session.privilegios = privilegios.rows;
                   request.session.isLoggedIn = true;
                   request.session.matricula = request.body.matriculaInput;
-                  request.session.user_id = usuario.rows[0].idIVD;
+                  request.session.user_id = usuario.rows[0].id_ivd;
                   request.session.carrera = usuario.rows[0].carrera;
-                  request.session.username = usuario.rows[0].nombreUsuario;
-                  request.session.mail = usuario.rows[0].correoInstitucional;
+                  request.session.username = usuario.rows[0].nombre_usuario;
+                  request.session.mail = usuario.rows[0].correo_institucional;
                   request.session.rol = usuario.rows[0].rol;
 
                   return request.session.save((error) => {
@@ -99,7 +99,7 @@ exports.post_login = (request, response, next) => {
                         .then((ciclos) => {
                           request.session.ciclosEscolares = ciclos.rows;
                           response.redirect(
-                            "/inicio/" + ciclos.rows[0].idCicloEscolar
+                            "/inicio/" + ciclos.rows[0].id_ciclo_escolar
                           );
                         })
                         .catch((error) => {
@@ -110,7 +110,9 @@ exports.post_login = (request, response, next) => {
                         .then((ciclos) => {
                           request.session.ciclosEscolares = ciclos.rows;
                           request.session.cicloActual =
-                            ciclos.rows[ciclos.rows.length - 1].idCicloEscolar;
+                            ciclos.rows[
+                              ciclos.rows.length - 1
+                            ].id_ciclo_escolar;
                           response.redirect("/enlista/alumno/");
                         })
                         .catch((error) => {

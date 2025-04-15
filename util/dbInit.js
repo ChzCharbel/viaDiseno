@@ -6,10 +6,10 @@ const path = require('path');
 const pool = require('./database');
 
 // Archivos SQL para crear tablas e insertar datos
-const TABLES_SQL_FILE = 'crearTablas.sql';
+const TABLES_SQL_FILE = 'crearTablasnuevo.sql';
 const INSERTS_SQL_FILE = 'inserts.sql';
 const UPDATE_SQL_FILE = 'update1.sql';
-
+const SCHEME_SQL_FILE = 'nuevo_schema.sql';
 /**
  * Ejecuta un script SQL desde un archivo
  * Devuelve una promesa cuando la ejecucion sql es correcta.
@@ -39,9 +39,9 @@ const initializeDatabase = async () => {
     
     // Prueba la conexion a la base de datos
     await testConnection();
-    
+
     // Inserta datos iniciales
-    await executeSQL(UPDATE_SQL_FILE);
+    await executeSQL(INSERTS_SQL_FILE);
     
     console.log('Database initialization completed successfully.');
     return true;

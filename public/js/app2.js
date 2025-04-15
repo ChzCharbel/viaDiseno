@@ -132,25 +132,28 @@ document.addEventListener('DOMContentLoaded', function() {
   } else {
     console.error("No se encontró el contenedor de profesores o no contiene datos");
   }
-
   // Configurar cada modal de profesor
   profesores.forEach(profesor => {
-    let profModal = document.getElementById("profModal" + profesor.matriculaProfesor);
+    // Intentar con ambas convenciones de nombres para asegurar compatibilidad
+    const matriculaId = profesor.matricula_profesor;
+    const nombreProf = profesor.nombre_profesor;
+    
+    let profModal = document.getElementById("profModal" + matriculaId);
     if (profModal) {
-      console.log(`Configurando modal para profesor: ${profesor.nombreProfesor} (${profesor.matriculaProfesor})`);
+      console.log(`Configurando modal para profesor: ${nombreProf} (${matriculaId})`);
       
       // Cuando se abre el modal
       profModal.addEventListener("show.bs.modal", function (event) {
-        console.log(`Abriendo modal para profesor: ${profesor.nombreProfesor} (${profesor.matriculaProfesor})`);
+        console.log(`Abriendo modal para profesor: ${nombreProf} (${matriculaId})`);
         
         // Obtener matrícula del profesor desde el elemento del modal
-        const profId = profesor.matriculaProfesor;
+        const profId = matriculaId;
         
         // Cargar los horarios guardados para este profesor específico
         cargarHorarioProfesor(profId);
       });
     } else {
-      console.warn(`No se encontró el modal para el profesor ${profesor.nombreProfesor} (${profesor.matriculaProfesor})`);
+      console.warn(`No se encontró el modal para el profesor ${nombreProf} (${matriculaId})`);
     }
   });
 });
@@ -259,8 +262,8 @@ function guardarHorario2() {
     ];
   
     const disponibilidad = {
-      idCicloEscolar: cicloEscolar,
-      matriculaProfesor: profesorId,
+      id_ciclo_escolar: cicloEscolar,
+      matricula_profesor: profesorId,
       lunes: [],
       martes: [],
       miercoles: [],
