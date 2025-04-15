@@ -4,21 +4,21 @@ module.exports = class Enlista {
     static obtenerGruposDeAlumno(matricula) {
         return db.query(`
             SELECT 
-            g."idGrupo", 
-            g."lunesInicio", g."lunesFin", 
-            g."martesInicio", g."martesFin", 
-            g."miercolesInicio", g."miercolesFin", 
-            g."juevesInicio", g."juevesFin", 
-            g."viernesInicio", g."viernesFin",
-            m."idMateria", m."nombreMateria" AS "nombreMateria",
-            p."nombreProfesor" AS "nombreProfesor",
-            s."idSalon" AS "idSalon"
-            FROM "Grupo" g
-            JOIN "Materia" m ON g."idMateria" = m."idMateria"
-            JOIN "Profesor" p ON g."matriculaProfesor" = p."matriculaProfesor"
-            JOIN "Salon" s ON g."idSalon" = s."idSalon"
-            JOIN "Enlista" e ON g."idGrupo" = e."idGrupo"
-            WHERE e."matricula" = $1
+            g.id_grupo, 
+            g.lunes_inicio, g.lunes_fin, 
+            g.martes_inicio, g.martes_fin, 
+            g.miercoles_inicio, g.miercoles_fin, 
+            g.jueves_inicio, g.jueves_fin, 
+            g.viernes_inicio, g.viernes_fin,
+            m.id_materia, m.nombre_materia AS nombre_materia,
+            p.nombre_profesor AS nombre_profesor,
+            s.id_salon AS id_salon
+            FROM grupos g
+            JOIN materias m ON g.id_materia = m.id_materia
+            JOIN profesores p ON g.matricula_profesor = p.matricula_profesor
+            JOIN salones s ON g.id_salon = s.id_salon
+            JOIN enlista e ON g.id_grupo = e.id_grupo
+            WHERE e.matricula = $1
         `, [matricula]);
     }    
 };

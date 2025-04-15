@@ -9,20 +9,20 @@ module.exports = class CicloEscolar {
 
   save() {
     return db.query(`
-      UPDATE "CicloEscolar"
-      SET "inicioInscripcion" = $1::date, "finInscripcion" = $2::date
-      WHERE "idCicloEscolar" = $3::text
+      UPDATE ciclos_escolares
+      SET inicio_inscripcion = $1::date, fin_inscripcion = $2::date
+      WHERE id_ciclo_escolar = $3::text
     `, [this.fechaInicio, this.fechaFin, this.id]);
   }
 
   static fetchAll() {
-    return db.query(`SELECT * FROM "CicloEscolar"`);
+    return db.query(`SELECT * FROM ciclos_escolares`);
   }
 
   static fetchOne(id) {
     return db.query(`
-      SELECT * FROM "CicloEscolar"
-      WHERE "idCicloEscolar" = $1::text
+      SELECT * FROM ciclos_escolares
+      WHERE id_ciclo_escolar = $1::text
     `, [id]);
   }
 
@@ -34,12 +34,11 @@ module.exports = class CicloEscolar {
     }
   }
 
-  // ✅ Nuevo método para usar desde el controlador
   static updateInscripciones(id, fechaInicio, fechaFin) {
     return db.query(`
-      UPDATE "CicloEscolar"
-      SET "inicioInscripcion" = $1::date, "finInscripcion" = $2::date
-      WHERE "idCicloEscolar" = $3::text
+      UPDATE ciclos_escolares
+      SET inicio_inscripcion = $1::date, fin_inscripcion = $2::date
+      WHERE id_ciclo_escolar = $3::text
     `, [fechaInicio, fechaFin, id]);
   }
 };

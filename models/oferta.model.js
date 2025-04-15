@@ -9,7 +9,7 @@ module.exports = class OfertaAcademica {
 
     static fetchAll(idCicloE) {
         return db.query(`SELECT DISTINCT  m.*
-        FROM "Materia" m, "Ofrece" o
-        WHERE o."idCicloEscolar" = $1::text;`, [idCicloE]);
+        FROM materias m, ofrece o
+        WHERE o.id_cicl_escolar" = $1::text;`, [idCicloE]);
     }
 }

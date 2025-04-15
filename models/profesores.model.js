@@ -3,12 +3,12 @@ const {getAllUsers} = require('../util/admin.api.client');
 
 module.exports = class Profesor {
   static fetchAll() {
-    return db.query(`SELECT * FROM "Profesor" WHERE estatus = 'active'`);
+    return db.query(`SELECT * FROM profesores WHERE estatus = 'active'`);
   }
 
   static fetchOne(id) {
     return db.query(
-      `SELECT * FROM "Profesor" WHERE "matriculaProfesor" = $1::text`,
+      `SELECT * FROM profesores WHERE matricula_profesor = $1::text`,
       [id]
     );
   }
@@ -25,12 +25,12 @@ module.exports = class Profesor {
         if (profe.status == 'active') {
           const { ivd_id, name, first_surname, second_surname,  status} = profe;
           await db.query(`
-            INSERT INTO "Profesor" ("matriculaProfesor", "nombreProfesor")
+            INSERT INTO profesores (matricula_profesor, nombre_profesor)
             VALUES ($1::text, $2::text)
-            ON CONFLICT ("matriculaProfesor") DO NOTHING
+            ON CONFLICT (matricula_profesor) DO NOTHING
           `, [ivd_id, name + ' ' + first_surname + ' ' + second_surname]);
-          await db.query(`UPDATE "Profesor" SET estatus = $1::text WHERE 
-            "matriculaProfesor" = $2::text`, [status, ivd_id]);
+          await db.query(`UPDATE profesores SET estatus = $1::text WHERE 
+            matricula_profesor = $2::text`, [status, ivd_id]);
         }
       }
   
@@ -81,6 +81,6 @@ module.exports = class Profesor {
   }
 
   static fetchDisponibilidad(idProfe, idCicloE) {
-    return db.query(`SELECT * FROM "Disponible" WHERE "matriculaProfesor" = $1::text AND "idCicloEscolar" = $2::text`, [idProfe, idCicloE]);
+    return db.query(`SELECT * FROM disponible WHERE matricula_profesor = $1::text AND id_ciclo_escolar" = $2::text`, [idProfe, idCicloE]);
   }
 };
