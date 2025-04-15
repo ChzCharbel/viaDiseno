@@ -1,8 +1,12 @@
 const Profesor = require("../models/profesores.model");
+const Materia = require("../models/materias.model");
 
 exports.get_all_maestros = (request, response, next) => {
-  Profesor.sincronizarDesdeAPI().then((data) => {
-    console.log(data);
+  Promise.all([
+    Profesor.sincronizarDesdeAPI(),
+    Materia.getAllCourses()
+  ]).then(([profesoresData, materiasData]) => {
+    console.log(profesoresData);
     Profesor.fetchAll()
     .then((profesores) => {
       console.log(profesores.rows);
@@ -12,6 +16,7 @@ exports.get_all_maestros = (request, response, next) => {
         privilegios: request.session.privilegios || [],
         carrera: request.session.carrera || "",
         profesores: request.session.profesores || [],
+        materias: materiasData || [],
         ciclosEscolares: request.session.ciclosEscolares || [],
         cicloActual: request.params.idCiclo || "",
         username: request.session.username || "",
