@@ -1,5 +1,30 @@
 let materiasPorAgregar = [];
 
+function puedeCambiar(tabSemestre) {
+    if (materiasPorAgregar.length > 0) {
+        let semestreActual = materiasPorAgregar[0].plans_courses[0].semester;
+        if (semestreActual != tabSemestre) {
+            let confirmacion = window.confirm("Si cambias de semestre se eliminará tu selección. ¿Deseas continuar?");
+            if (confirmacion == true) {
+                materiasPorAgregar.length = 0;
+            }
+            $("#alertasOA").fadeOut(500, function(){
+            const alerta = document.getElementById("alertasOA");
+            alerta.className = "col-9 offset-2 alert alert-danger fw-semibold mb-4";
+            alerta.innerText = "Envía la oferta del semestre actual antes de cambiar a otro"
+            // animacion de alerta
+            $("#alertasOA").fadeIn(1500, function(){
+                $("#alertasOA").fadeOut(15000, function(){
+                alerta.className = "col-9 offset-2 alert alert-info fw-semibold mb-4";
+                alerta.innerText = "Nota: guarda la oferta por semestre";
+                $("#alertasOA").fadeIn(1000);
+                });
+            });
+            });
+        }
+    }
+}
+
 function agregar(stringMateria) {
     const materia = JSON.parse(stringMateria);
     const idMateria = materia.id;
@@ -117,4 +142,6 @@ function enviarSeleccion() {
     }
     // cambiar el valor del input a los ids de las materias
     inputIds.setAttribute('value',ids);
+    // vaciar el arreglo
+    materiasPorAgregar.length = 0;
 }

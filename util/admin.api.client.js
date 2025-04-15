@@ -205,6 +205,17 @@ async function getAllUsers(userType) {
     return parsedJson.data;
 }
 
+async function getAllDegrees() {
+    const token = await getToken();
+    const headers = getHeaders(token);
+    const response = await axiosAdminClient.get("/v1/degrees/index", {
+        headers,
+    })
+    const jsonString = JSON.stringify(response.data);
+    const parsedJson = JSON.parse(jsonString);
+    return parsedJson.data;
+}
+
 const grupo13 = (async () => {
     const cuarto = await getUserGroups(13, 100007);
     console.log(cuarto.room);
@@ -234,5 +245,6 @@ module.exports = {
     getAllUsers,
     getToken,
     getHeaders,
-    axiosAdminClient
+    axiosAdminClient,
+    getAllDegrees,
 };

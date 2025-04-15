@@ -1,22 +1,24 @@
 const db = require('../util/database');
-const Pool = require('pg-pool');
-const {getAllCourses} = require('../util/admin.api.client');
-
-const pool = new Pool();
+const {getAllCourses, getAllDegrees} = require('../util/admin.api.client');
 
 module.exports = class Grupo{
     static async getAllCourses() {
         return await getAllCourses();
     }
 
+    static async getAllDegrees() {
+        return await getAllDegrees();
+    }
+
+    static async syncMaterias() {
+
+    }
+
     /* Filtra las materias por la carrera
-    que reciba como parametro y las devuelve
-    junto con los IDs de los planes que existan
-    de las mismas */
+    que reciba como parametro */
     static async fetchByDegree(carrera) {
         return this.getAllCourses().then((materias) => {
             const arregloMaterias = [];
-            let agregar = true;
             for (let materia of materias) {
                 if (materia.plans[0].degree.name == carrera) {
                     arregloMaterias.push(materia);
@@ -28,9 +30,39 @@ module.exports = class Grupo{
             console.log(error);
         });
     }
+    
+    /* Filtra los planes de estudio por carrera */
+    static async fetchPlanesByDegree(carrera) {
+        return this.getAllDegrees().then((planes) => {
+            /* Carrera:
+            id: plan.id
+            nombre: plan.name
+            estatus: plan.status
 
-    static async fetchPlanes(carrera) {
-        
+            Plan de Estudio:
+            id: plan.plans[0].id
+            version: plan.plans[0].version
+            estatus: plan.plans[0].status
+        */
+        const arregloPlanes = [];
+        let plansLength = 0;
+        for (let plan of planes) {
+            if (plan.name == carrera) {
+                plansLength = plan.plans.length;
+                if (plansLength > 0) {
+                    for (let i = 0; i < plansLength; i++) {
+                        if (plan.plans[i].status == 'active') {
+                            arregloPlanes.push(plan.plans[i]);
+                        }
+                    }
+                }
+            }
+        }
+
+        return arregloPlanes;
+        }).catch((error) => {
+            console.log(error);
+        })
     }
 }
 
