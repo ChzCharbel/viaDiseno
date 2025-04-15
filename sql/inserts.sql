@@ -576,7 +576,7 @@ INSERT INTO public.solicitudes_cambio VALUES ('IVD87506', 'M014', true, 'Cambio 
 INSERT INTO public.solicitudes_cambio VALUES ('IVD87507', 'M015', false, 'El alumno desea cambiar a una materia más avanzada.', '2024-02-24', NULL);
 
 UPDATE profesores
-SET estatus = 'active'
+SET estatus = 'active';
 
 UPDATE grupos
 SET
