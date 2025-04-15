@@ -118,6 +118,7 @@ CREATE TABLE IF NOT EXISTS public."Profesor"
 (
     "matriculaProfesor" character varying COLLATE pg_catalog."default" NOT NULL,
     "nombreProfesor" character varying COLLATE pg_catalog."default",
+    estatus character varying COLLATE pg_catalog."default",
     CONSTRAINT "profesorPk" PRIMARY KEY ("matriculaProfesor")
 );
 
@@ -155,12 +156,6 @@ CREATE TABLE IF NOT EXISTS public."Usuario"
     "correoInstitucional" character varying COLLATE pg_catalog."default",
     rol character varying COLLATE pg_catalog."default",
     CONSTRAINT "usuarioPk" PRIMARY KEY ("idIVD")
-);
-
-CREATE TABLE IF NOT EXISTS public.gruposs
-(
-    nombre_profesor character varying(50) COLLATE pg_catalog."default",
-    salon_id character varying(50) COLLATE pg_catalog."default"
 );
 
 ALTER TABLE IF EXISTS public."Abre"
