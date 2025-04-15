@@ -575,10 +575,10 @@ INSERT INTO public.solicitudes_cambio VALUES ('IVD87505', 'M013', false, 'Cambio
 INSERT INTO public.solicitudes_cambio VALUES ('IVD87506', 'M014', true, 'Cambio solicitado debido a sugerencia de asesor académico.', '2024-02-23', '2024-02-25');
 INSERT INTO public.solicitudes_cambio VALUES ('IVD87507', 'M015', false, 'El alumno desea cambiar a una materia más avanzada.', '2024-02-24', NULL);
 
-UPDATE profesores
+UPDATE public.profesores
 SET estatus = 'active';
 
-UPDATE grupos
+UPDATE public.grupos
 SET
     lunes_inicio = '12:00',
     lunes_fin = '14:00',
@@ -586,7 +586,7 @@ SET
     miercoles_fin = '14:00'
 WHERE id_grupo = 'G003';
 
-UPDATE grupos
+UPDATE public.grupos
 SET
     martes_inicio = '12:00',
     martes_fin = '14:00',
