@@ -22,8 +22,8 @@
   
           grupos.forEach(grupo => {
             ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes'].forEach(dia => {
-              const inicio = grupo[dia.toLowerCase() + 'Inicio'];
-              const fin = grupo[dia.toLowerCase() + 'Fin'];
+              const inicio = grupo[dia.toLowerCase() + '_inicio'];
+              const fin = grupo[dia.toLowerCase() + '_fin'];
               if (inicio && fin) {
                 if (!materiasColor[grupo.materia.nombre]) {
                   materiasColor[grupo.materia.nombre] = colores[colorIndex % colores.length];

@@ -9,27 +9,27 @@ exports.get_enlista = (req, res, next) => {
     EnlistaModel.obtenerGruposDeAlumno(matricula)
     .then(result => {
         const grupos = result.rows.map(row => ({
-          idGrupo: row.idGrupo,
+          idGrupo: row.id_grupo,
           materia: {
-            nombre: row.nombreMateria
+            nombre: row.nombre_materia
           },
           profesor: {
-            nombre: row.nombreProfesor
+            nombre: row.nombre_profesor
           },
           salon: {
-            id: row.idSalon
+            id: row.id_salon
           },
           // horarios según SQL (en minúsculas)
-          lunesInicio: row.lunesInicio,
-          lunesFin: row.lunesFin,
-          martesInicio: row.martesInicio,
-          martesFin: row.martesFin,
-          miercolesInicio: row.miercolesInicio,
-          miercolesFin: row.miercolesFin,
-          juevesInicio: row.juevesInicio,
-          juevesFin: row.juevesFin,
-          viernesInicio: row.viernesInicio,
-          viernesFin: row.viernesFin
+          lunes_inicio: row.lunes_inicio,
+          lunes_fin: row.lunes_fin,
+          martes_inicio: row.martes_inicio,
+          martes_fin: row.martes_fin,
+          miercoles_inicio: row.miercoles_inicio,
+          miercoles_fin: row.miercoles_fin,
+          jueves_inicio: row.jueves_inicio,
+          jueves_fin: row.jueves_fin,
+          viernes_inicio: row.viernes_inicio,
+          viernes_fin: row.viernes_fin
         }));
             res.render('horario_alumnos_regulares', { 
               grupos, 

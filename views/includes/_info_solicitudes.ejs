@@ -49,18 +49,18 @@
         <% SolicitaCambio.forEach((solicitud, index) => { %>
         <tr data-estatus="<%= solicitud.resuelto === true ? 'Aprobado' : solicitud.resuelto === false ? 'Rechazado' : 'Pendiente' %>">
           <th scope="row"><%= index + 1 %></th>
-          <td><%= solicitud.nombreUsuario %></td>
-          <td><%= solicitud.correoInstitucional %></td>
+          <td><%= solicitud.nombre_usuario %></td>
+          <td><%= solicitud.correo_institucional %></td>
           <td><%= solicitud.matricula %></td>
           <td><%= solicitud.descripcion %></td>
           <td class="<%= solicitud.resuelto === true ? 'text-success fw-semibold' : solicitud.resuelto === false ? 'text-danger fw-semibold' : 'text-warning fw-semibold' %>">
             <%= solicitud.resuelto === true ? "Aprobado" : solicitud.resuelto === false ? "Rechazado" : "Pendiente" %>
           </td>
           <td>
-            <%= solicitud.fechaSolicitud ? solicitud.fechaSolicitud.toISOString().slice(0, 10) : "" %>
+            <%= solicitud.fecha_solicitud ? solicitud.fecha_solicitud.toISOString().slice(0, 10) : "" %>
           </td>
           <td>
-            <%= solicitud.fechaResolucion ? solicitud.fechaResolucion.toISOString().slice(0, 10) : "" %>
+            <%= solicitud.fecha_resolucion ? solicitud.fecha_resolucion.toISOString().slice(0, 10) : "" %>
           </td>
           <td class="text-center">
             <button type="button" class="btn btn-outline-success btn-sm btn-aprobar" data-id="<%= solicitud._id %>">
