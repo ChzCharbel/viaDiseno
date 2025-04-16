@@ -11,7 +11,7 @@ module.exports = class Alumno {
 
 	static find(nombreUsuario) {
         return db.query(
-            `SELECT * from usuarios u JOIN alumnos using(id_ivd)
+            `SELECT * from usuarios u JOIN alumnos using(id_ivd) JOIN carreras using(id_carrera)
 			WHERE u.nombre_usuario LIKE $1::text`,
             ['%' + nombreUsuario + '%']);
     }

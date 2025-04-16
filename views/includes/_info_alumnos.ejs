@@ -189,13 +189,13 @@
       
       html += `
         <tr>
-          <td><span class="fw-medium">${alumno.matricula}</span></td>
+          <td><span class="fw-medium">${alumno.id_ivd}</span></td>
           <td>${alumno.nombre_usuario}</td>
           <td>${alumno.semestre}</td>
           <td><span class="badge ${badgeClass}">${regularTexto}</span></td>
           <td>${alumno.carrera}</td>
           <td>
-            <button class="btn btn-sm btn-vino" data-bs-toggle="modal" data-bs-target="#modal${alumno.matricula}">
+            <button class="btn btn-sm btn-vino" data-bs-toggle="modal" data-bs-target="#modal${alumno.id_ivd}">
               <i class="bi bi-eye"></i>
             </button>
           </td>
