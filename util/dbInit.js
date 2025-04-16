@@ -7,7 +7,7 @@ const pool = require('./database');
 
 // Archivos SQL para crear tablas e insertar datos
 const TABLES_SQL_FILE = 'crearTablasnuevo.sql';
-const INSERTS_SQL_FILE = 'inserts.sql';
+const INSERTS_SQL_FILE = 'inserts_nuevas_tablas.sql';
 const UPDATE_SQL_FILE = 'update1.sql';
 const SCHEME_SQL_FILE = 'nuevo_schema.sql';
 /**
@@ -39,6 +39,12 @@ const initializeDatabase = async () => {
     
     // Prueba la conexion a la base de datos
     await testConnection();
+
+    // Elimina las tablas existentes
+    await executeSQL(SCHEME_SQL_FILE);
+
+    // Crea las tablas necesarias
+    await executeSQL(TABLES_SQL_FILE);
 
     // Inserta datos iniciales
     await executeSQL(INSERTS_SQL_FILE);
