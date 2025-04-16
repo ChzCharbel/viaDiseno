@@ -7,9 +7,8 @@ let profesores = [];
 // Función para cargar los horarios de un profesor específico
 async function cargarHorarioProfesor(matriculaProf) {
   try {
-    // Obtener el ciclo escolar actual
     const cicloActual = document.getElementById('cicloActualId')?.value || 
-                        localStorage.getItem('cicloActual') || '' ; // Usa el mismo valor por defecto que en guardarHorario1
+                        localStorage.getItem('cicloActual'); 
     
     console.log(`Cargando horario para profesor: ${matriculaProf}, ciclo: ${cicloActual}`);
     
@@ -57,6 +56,9 @@ function marcarHorarioProfesor(matriculaProf, disponibilidad) {
     return;
   }
   
+  // Limpiar todos los checkboxes del profesor primero
+  limpiarCheckboxesProfesor(matriculaProf);
+  
   dias.forEach(dia => {
     // Verificar si este día tiene horas guardadas
     if (disponibilidad[dia] && Array.isArray(disponibilidad[dia])) {
@@ -72,8 +74,20 @@ function marcarHorarioProfesor(matriculaProf, disponibilidad) {
         // Puede venir como '13:00', '[13:00]', '"13:00"', etc.
         let horaLimpia = horaGuardada.replace(/[\[\]\"]/g, '').trim();
         
-        // Formatear la hora para el ID del checkbox (7:00 -> 7-00)
-        const horaFormateada = horaLimpia.replace(':', '-');
+        // Para horas cortas como '7:00', asegurarnos de que tenga el formato '07:00'
+        let horaParts = horaLimpia.split(':');
+        if (horaParts[0].length === 1) {
+          horaLimpia = '0' + horaLimpia;
+        }
+        
+        // Formatear la hora para el ID del checkbox (07:00 -> 7-00)
+        // Primero normalizamos para eliminar el cero inicial si existe
+        let horaFormatted = horaLimpia;
+        if (horaLimpia.startsWith('0')) {
+          horaFormatted = horaLimpia.substring(1);
+        }
+        const horaFormateada = horaFormatted.replace(':', '-');
+        
         const checkboxId = `${dia}-${horaFormateada}-${matriculaProf}`;
         console.log(`Buscando checkbox con ID: ${checkboxId}`);
         
@@ -89,9 +103,11 @@ function marcarHorarioProfesor(matriculaProf, disponibilidad) {
           // Intentar varias posibilidades de formato
           const posiblesIds = [
             `${dia}-${horaFormateada}`, // Sin matrícula
-            `${dia}-${horaLimpia}`, // Sin reemplazar el : por -
+            `${dia}-${horaLimpia.replace(':', '-')}`, // Con formato completo (ej: 07-00)
             `${dia}-${horaFormateada}-${matriculaProf}`.toLowerCase(), // En minúsculas
-            `${dia}-${horaLimpia.split(':')[0]}-${horaLimpia.split(':')[1]}` // Formato diferente (ej: jueves-13-00)
+            `${dia}-${horaParts[0]}-${horaParts[1]}`, // Formato diferente (ej: lunes-7-00)
+            `${dia}-${parseInt(horaParts[0])}-${horaParts[1]}`, // Sin ceros iniciales
+            `${dia}-${horaParts[0].padStart(2, '0')}-${horaParts[1]}` // Con ceros iniciales
           ];
           
           let encontrado = false;
@@ -113,6 +129,28 @@ function marcarHorarioProfesor(matriculaProf, disponibilidad) {
     } else {
       console.log(`No hay horas guardadas para el día ${dia}`);
     }
+  });
+}
+
+// Función para limpiar todos los checkboxes de un profesor antes de marcar los nuevos
+function limpiarCheckboxesProfesor(matriculaProf) {
+  const dias = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes'];
+  const horas = [
+    '7:00', '7:30', '8:00', '8:30', '9:00', '9:30', '10:00', '10:30', '11:00',
+    '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30'
+  ];
+  
+  console.log(`Limpiando checkboxes para profesor ${matriculaProf}`);
+  
+  horas.forEach(hora => {
+    const horaFormatted = hora.replace(':', '-');
+    dias.forEach(dia => {
+      const checkboxId = `${dia}-${horaFormatted}-${matriculaProf}`;
+      const checkbox = document.getElementById(checkboxId);
+      if (checkbox) {
+        checkbox.checked = false;
+      }
+    });
   });
 }
 
@@ -141,8 +179,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let profModal = document.getElementById("profModal" + matriculaId);
     if (profModal) {
       console.log(`Configurando modal para profesor: ${nombreProf} (${matriculaId})`);
-      
-      // Cuando se abre el modal
+        // Cuando se abre el modal      
       profModal.addEventListener("show.bs.modal", function (event) {
         console.log(`Abriendo modal para profesor: ${nombreProf} (${matriculaId})`);
         
@@ -204,56 +241,19 @@ function guardarHorario2() {
     });
   });
 }); */
-
-// Cuando se presiona "Aceptar"
-/* function guardarHorario1() {
-    const profName = document.getElementById("profName").textContent; // Nombre del profesor
-    const profAvailability = {}; // Objeto para almacenar la nueva disponibilidad
-
-    // Días y horarios disponibles
-    const days = ["lunes", "martes", "miercoles", "jueves", "viernes"];
-    const times = [
-      "7-00",
-      "8-00",
-      "9-00",
-      "10-00",
-      "11-00",
-      "12-00",
-      "13-00",
-      "14-00",
-      "15-00",
-    ];
-
-    // Recolectar los horarios seleccionados
-    days.forEach((day) => {
-      profAvailability[day] = []; // Inicializar array para el día
-      times.forEach((time) => {
-        const checkboxId = `${day}-${time}`;
-        const checkbox = document.getElementById(checkboxId);
-        if (checkbox && checkbox.checked) {
-          profAvailability[day].push(time); // Añadir horario seleccionado
-        }
-      });
-      // Si no hay horarios seleccionados para el día, eliminar la entrada
-      if (profAvailability[day].length === 0) {
-        delete profAvailability[day];
-      }
-    });
-
-    // Actualizar la disponibilidad solo para este profesor
-    availability[profName] = profAvailability;
-    console.log(
-      `Disponibilidad actualizada para ${profName}:`,
-      availability[profName]
-    );
-    console.log(availability[profName][0]);
+  
+    function guardarHorario1(matriculaProfesor) {
+    // Verificar que la matrícula del profesor se pasó como argumento
+    if (!matriculaProfesor) {
+      console.error("Error: No se proporcionó la matrícula del profesor");
+      alert("Error al guardar horario: datos del profesor incompletos");
+      return;
+    }
+    console.log("Guardando horario para profesor con matrícula:", matriculaProfesor);
     
-  }; */
-  
-  
-  function guardarHorario1() {
-    const profesorId = document.getElementById("profId").textContent.trim();
-    const cicloEscolar = "FebJun21"; //  hacerlo dinámico 
+    // Obtener el ciclo escolar del elemento en el DOM o del localStorage como respaldo
+    const idCicloEscolar = document.getElementById('cicloActualId')?.value || 
+                           localStorage.getItem('cicloActual') || '1'; // Usar un valor por defecto si no hay nada
   
     const dias = ["lunes", "martes", "miercoles", "jueves", "viernes"];
     const horas = [
@@ -261,43 +261,74 @@ function guardarHorario2() {
       "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30"
     ];
   
-    const disponibilidad = {
-      id_ciclo_escolar: cicloEscolar,
-      matricula_profesor: profesorId,
-      lunes: [],
-      martes: [],
-      miercoles: [],
-      jueves: [],
-      viernes: []
-    };
+    // Preparamos un array para almacenar todas las disponibilidades individuales
+    const disponibilidades = [];
   
     horas.forEach(hora => {
       const horaFormatted = hora.replace(":", "-");
       dias.forEach(dia => {
-        const checkboxId = `${dia}-${horaFormatted}-${profesorId}`;
+        const checkboxId = `${dia}-${horaFormatted}-${matriculaProfesor}`;
         const checkbox = document.getElementById(checkboxId);
+        
         if (checkbox && checkbox.checked) {
-          disponibilidad[dia].push(hora);
+          // Creamos un objeto de disponibilidad individual para cada celda marcada
+          disponibilidades.push({
+            matriculaProfesor: matriculaProfesor,
+            idCicloEscolar: idCicloEscolar,
+            diaSemana: dia,
+            horaInicio: hora,
+            horaFin: calcularHoraFin(hora), // Función auxiliar que definimos abajo
+            disponible: true
+          });
         }
       });
     });
   
-    fetch("/disponible/guardar", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(disponibilidad),
-    })
-      .then(res => res.json())
-      .then(data => {
-        console.log("Disponibilidad guardada:", data);
-        alert("Horario guardado correctamente");
+    console.log("Enviando disponibilidades:", disponibilidades);
+    
+    // Enviar las disponibilidades una por una
+    const promesasGuardado = disponibilidades.map(disp => 
+      fetch("/disponible/guardar", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(disp),
+      })
+    );
+    
+    // Esperar a que todas las promesas se resuelvan
+    Promise.all(promesasGuardado)
+      .then(responses => {
+        // Verificar si todas las respuestas fueron exitosas
+        const todasExitosas = responses.every(res => res.ok);
+        if (todasExitosas) {
+          console.log("Todas las disponibilidades guardadas correctamente");
+          alert("Horario guardado correctamente");
+        } else {
+          console.error("Algunas disponibilidades no pudieron guardarse");
+          alert("Hubo errores al guardar el horario");
+        }
       })
       .catch(err => {
-        console.error("Error al guardar horario:", err);
+        console.error("Error al guardar horarios:", err);
         alert("Error al guardar horario");
       });
+  }
+  
+  // Función para calcular la hora de fin a partir de la hora de inicio
+  function calcularHoraFin(horaInicio) {
+    // Suponemos que cada sesión dura 30 minutos
+    const [horas, minutos] = horaInicio.split(':').map(Number);
+    let nuevosMinutos = minutos + 30;
+    let nuevasHoras = horas;
+    
+    if (nuevosMinutos >= 60) {
+      nuevosMinutos -= 60;
+      nuevasHoras += 1;
+    }
+    
+    return `${nuevasHoras}:${nuevosMinutos.toString().padStart(2, '0')}`;
   }
 
   const contenedor = document.getElementById("profContainer");
