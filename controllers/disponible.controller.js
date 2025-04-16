@@ -24,6 +24,7 @@ const Disponible = require("../models/disponible.model");
 
 exports.obtenerDisponibilidadProfesor = async (req, res) => {
   try {
+
     const idCicloEscolar = req.params.idCiclo || req.session.cicloActual;
     const matriculaProfesor = req.params.matriculaProfesor;
     
@@ -31,7 +32,18 @@ exports.obtenerDisponibilidadProfesor = async (req, res) => {
       return res.status(400).json({ message: "Matrícula de profesor requerida" });
     }
     
+    console.log(`Obteniendo disponibilidad para profesor ${matriculaProfesor} en ciclo ${idCicloEscolar}`);
+    
     const disponibilidad = await Disponible.obtenerDisponibilidad(idCicloEscolar, matriculaProfesor);
+    
+    if (!disponibilidad) {
+      console.log(`No se encontró disponibilidad para profesor ${matriculaProfesor}`);
+      return res.status(200).json({ 
+        lunes: [], martes: [], miercoles: [], jueves: [], viernes: [] 
+      });
+    }
+    
+    console.log(`Disponibilidad encontrada para profesor ${matriculaProfesor}:`, disponibilidad);
     res.status(200).json(disponibilidad);
   } catch (error) {
     console.error("Error al obtener disponibilidad del profesor:", error);
