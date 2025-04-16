@@ -84,6 +84,8 @@ app.get("/v1/students/academic_history/:ivd_id", async (req, res) => {
   }
 });
 
+app.use(express.static('public'));
+
 const enlistaRoutes = require("./routes/enlista.routes");
 app.use("/enlista", enlistaRoutes);
 

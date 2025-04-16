@@ -1,0 +1,45 @@
+<div
+  class="modal fade"
+  id="materiasModal<%= profesor.matriculaProfesor %>"
+  tabindex="-1"
+  aria-labelledby="materiasLabel<%= profesor.matriculaProfesor %>"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="materiasLabel<%= profesor.matriculaProfesor %>">
+          Materias a impartir
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <% if (materiasAdmin && materiasAdmin.length > 0) { %>
+          <form>
+            <div class="list-group">
+              <% materiasAdmin.forEach(m => { %>
+                <div class="form-check list-group-item">
+                  <input
+                    class="form-check-input me-2"
+                    type="checkbox"
+                    id="check_<%= profesor.matriculaProfesor %>_<%= m.idMateria %>"
+                    name="materias"
+                    value="<%= m.idMateria %>"
+                  />
+                  <label
+                    class="form-check-label"
+                    for="check_<%= profesor.matriculaProfesor %>_<%= m.idMateria %>"
+                  >
+                    <%= m.nombreMateria %>
+                  </label>
+                </div>
+              <% }) %>
+            </div>
+          </form>
+        <% } else { %>
+          <p class="text-muted">No hay materias disponibles.</p>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
