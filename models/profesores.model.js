@@ -3,7 +3,7 @@ const {getAllUsers} = require('../util/admin.api.client');
 
 module.exports = class Profesor {
   static fetchAll() {
-    return db.query(`SELECT * FROM profesores WHERE estatus = 'active'`);
+    return db.query(`SELECT * FROM profesores WHERE estatus_profesor = 'active'`);
   }
 
   static fetchOne(id) {
@@ -24,13 +24,22 @@ module.exports = class Profesor {
       for (let profe of profesores) {
         if (profe.status == 'active') {
           const { ivd_id, name, first_surname, second_surname,  status} = profe;
-          await db.query(`
-            INSERT INTO profesores (matricula_profesor, nombre_profesor)
+          const idExistente = await db.query(`SELECT * FROM profesores WHERE matricula_profesor = 
+            $1::text`, [ivd_id]);
+          console.log('PROFESOR: ' + idExistente.rows.length);
+          if (idExistente.rows.length == 0) {
+            console.log('no estaba en la tabla')
+            await db.query(`
+            INSERT INTO profesores (matricula_profesor, profesor)
             VALUES ($1::text, $2::text)
-            ON CONFLICT (matricula_profesor) DO NOTHING
           `, [ivd_id, name + ' ' + first_surname + ' ' + second_surname]);
-          await db.query(`UPDATE profesores SET estatus = $1::text WHERE 
+            await db.query(`UPDATE profesores SET estatus_profesor = $1::text WHERE 
+              matricula_profesor = $2::text`, [status, ivd_id]);
+          }
+          else {
+            await db.query(`UPDATE profesores SET estatus_profesor = $1::text WHERE 
             matricula_profesor = $2::text`, [status, ivd_id]);
+          }
         }
       }
   
@@ -81,6 +90,8 @@ module.exports = class Profesor {
   }
 
   static fetchDisponibilidad(idProfe, idCicloE) {
-    return db.query(`SELECT * FROM disponible WHERE matricula_profesor = $1::text AND id_ciclo_escolar" = $2::text`, [idProfe, idCicloE]);
+    return db.query(`SELECT * FROM profesores_disponibilidad pd JOIN profesores p using 
+      (id_profesor) JOIN ciclos_escolares ce using (id_ciclo_escolar) WHERE p.matricula_profesor = $1::text AND 
+      ce.ciclo_escolar = $2::text`, [idProfe, idCicloE]);
   }
 };
