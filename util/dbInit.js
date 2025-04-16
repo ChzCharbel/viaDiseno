@@ -40,11 +40,6 @@ const initializeDatabase = async () => {
     // Prueba la conexion a la base de datos
     await testConnection();
 
-    // Elimina las tablas existentes
-    await executeSQL(SCHEME_SQL_FILE);
-
-    // Crea las tablas necesarias
-    await executeSQL(TABLES_SQL_FILE);
 
     // Inserta datos iniciales
     await executeSQL(INSERTS_SQL_FILE);
