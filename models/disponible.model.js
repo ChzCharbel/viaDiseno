@@ -39,9 +39,11 @@ const pool = require("../util/database");
 // Función para obtener la disponibilidad guardada de un profesor
 exports.obtenerDisponibilidad = async (idCicloEscolar, matriculaProfesor) => {
   const query = `
-    SELECT lunes, martes, miercoles, jueves, viernes
-    FROM disponible
-    WHERE id_ciclo_escolar = $1 AND matricula_profesor = $2
+    SELECT *
+    FROM profesores_disponibilidad pd
+    JOIN ciclos_escolares ce using(id_ciclo_escolar)
+    JOIN profesores p using (id_profesor)
+    WHERE ciclo_escolar = $1 AND matricula_profesor = $2
   `;
   
   const result = await pool.query(query, [idCicloEscolar, matriculaProfesor]);
@@ -51,9 +53,11 @@ exports.obtenerDisponibilidad = async (idCicloEscolar, matriculaProfesor) => {
 // Función para obtener la disponibilidad de todos los profesores
 exports.obtenerTodasDisponibilidades = async (idCicloEscolar) => {
   const query = `
-    SELECT matricula_profesor, lunes, martes, miercoles, jueves, viernes
-    FROM disponible
-    WHERE id_ciclo_escolar = $1
+    SELECT *
+    FROM profesores_disponibilidad pd
+    JOIN ciclos_escolares ce using(id_ciclo_escolar)
+    JOIN profesores p using (id_profesor)
+    WHERE ciclo_escolar = $1
   `;
   
   const result = await pool.query(query, [idCicloEscolar]);
