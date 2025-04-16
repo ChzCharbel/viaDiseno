@@ -9,7 +9,7 @@ async function cargarHorarioProfesor(matriculaProf) {
   try {
     // Obtener el ciclo escolar actual
     const cicloActual = document.getElementById('cicloActualId')?.value || 
-                        localStorage.getItem('cicloActual') || "FebJun21"; // Usa el mismo valor por defecto que en guardarHorario1
+                        localStorage.getItem('cicloActual') || '' ; // Usa el mismo valor por defecto que en guardarHorario1
     
     console.log(`Cargando horario para profesor: ${matriculaProf}, ciclo: ${cicloActual}`);
     
