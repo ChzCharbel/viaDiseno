@@ -9,7 +9,6 @@ exports.get_all_maestros = (request, response, next) => {
     console.log(profesoresData);
     Profesor.fetchAll()
     .then((profesores) => {
-      console.log(profesores.rows);
       request.session.profesores = profesores.rows;
       response.render("profesores.ejs", {
         titulo: "maestros",

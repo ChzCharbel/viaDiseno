@@ -40,6 +40,7 @@
           <th>Matrícula</th>
           <th>Descripción</th>
           <th>Estatus</th>
+          <th>Mi respuesta</th>
           <th>Fecha solicitud</th>
           <th>Fecha resolución</th>
           <th colspan="2" class="text-center">Acciones</th>
@@ -47,15 +48,17 @@
       </thead>
       <tbody class="table-group-divider">
         <% SolicitaCambio.forEach((solicitud, index) => { %>
-        <tr data-estatus="<%= solicitud.resuelto === true ? 'Aprobado' : solicitud.resuelto === false ? 'Rechazado' : 'Pendiente' %>">
+        <tr data-estatus="<%= solicitud.aprobado === true ? 'Aprobado' : solicitud.aprobado === false ? 'Rechazado' :  'Pendiente' %>">
           <th scope="row"><%= index + 1 %></th>
           <td><%= solicitud.nombre_usuario %></td>
           <td><%= solicitud.correo_institucional %></td>
-          <td><%= solicitud.matricula %></td>
+          <td><%= solicitud.id_ivd %></td>
           <td><%= solicitud.descripcion %></td>
-          <td class="<%= solicitud.resuelto === true ? 'text-success fw-semibold' : solicitud.resuelto === false ? 'text-danger fw-semibold' : 'text-warning fw-semibold' %>">
-            <%= solicitud.resuelto === true ? "Aprobado" : solicitud.resuelto === false ? "Rechazado" : "Pendiente" %>
+
+          <td class="<%= solicitud.aprobado === true ? 'text-success fw-semibold' : solicitud.aprobado === false ? 'text-danger fw-semibold' : 'text-warning fw-semibold' %>">
+            <%= solicitud.aprobado === true ? "Aprobado" : solicitud.aprobado === false ? "Rechazado" : "Pendiente" %>
           </td>
+          <td><%=solicitud.mensaje%></td>
           <td>
             <%= solicitud.fecha_solicitud ? solicitud.fecha_solicitud.toISOString().slice(0, 10) : "" %>
           </td>
