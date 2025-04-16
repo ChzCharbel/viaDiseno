@@ -11,7 +11,7 @@ module.exports = class CicloEscolar {
     return db.query(`
       UPDATE ciclos_escolares
       SET inicio_inscripcion = $1::date, fin_inscripcion = $2::date
-      WHERE ciclo_escolar = $3::text
+      WHERE id_ciclo_escolar = $3::integer
     `, [this.fechaInicio, this.fechaFin, this.id]);
   }
 
@@ -22,7 +22,7 @@ module.exports = class CicloEscolar {
   static fetchOne(id) {
     return db.query(`
       SELECT * FROM ciclos_escolares
-      WHERE ciclo_escolar = $1::text
+      WHERE id_ciclo_escolar = $1::integer
     `, [id]);
   }
 
@@ -38,7 +38,7 @@ module.exports = class CicloEscolar {
     return db.query(`
       UPDATE ciclos_escolares
       SET inicio_inscripcion = $1::date, fin_inscripcion = $2::date
-      WHERE ciclo_escolar = $3::text
+      WHERE id_ciclo_escolar = $3::integer
     `, [fechaInicio, fechaFin, id]);
   }
 };

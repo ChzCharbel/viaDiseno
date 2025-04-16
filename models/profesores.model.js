@@ -91,7 +91,7 @@ module.exports = class Profesor {
 
   static fetchDisponibilidad(idProfe, idCicloE) {
     return db.query(`SELECT * FROM profesores_disponibilidad pd JOIN profesores p using 
-      (id_profesor) JOIN ciclos_escolares ce using (id_ciclo_escolar) WHERE p.matricula_profesor = $1::text AND 
-      ce.ciclo_escolar = $2::text`, [idProfe, idCicloE]);
+      (id_profesor) WHERE p.matricula_profesor = $1::text AND 
+      id_ciclo_escolar = $2::integer`, [idProfe, idCicloE]);
   }
 };

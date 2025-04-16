@@ -41,9 +41,8 @@ exports.obtenerDisponibilidad = async (idCicloEscolar, matriculaProfesor) => {
   const query = `
     SELECT *
     FROM profesores_disponibilidad pd
-    JOIN ciclos_escolares ce using(id_ciclo_escolar)
     JOIN profesores p using (id_profesor)
-    WHERE ciclo_escolar = $1 AND matricula_profesor = $2
+    WHERE id_ciclo_escolar = $1 AND matricula_profesor = $2
   `;
   
   const result = await pool.query(query, [idCicloEscolar, matriculaProfesor]);
@@ -55,9 +54,8 @@ exports.obtenerTodasDisponibilidades = async (idCicloEscolar) => {
   const query = `
     SELECT *
     FROM profesores_disponibilidad pd
-    JOIN ciclos_escolares ce using(id_ciclo_escolar)
     JOIN profesores p using (id_profesor)
-    WHERE ciclo_escolar = $1
+    WHERE id_ciclo_escolar = $1
   `;
   
   const result = await pool.query(query, [idCicloEscolar]);

@@ -14,7 +14,7 @@ module.exports = class OfertaAcademica {
         let i = 2;
         for (let id of stringIds) {
             if (id != '') {
-                consulta += `($1::text,$`;
+                consulta += `($1::integer,$`;
                 consulta += (i) + `::text),`;
                 i++;
             }
@@ -31,7 +31,7 @@ module.exports = class OfertaAcademica {
     static fetchAll(idCicloE) {
         return db.query(`SELECT DISTINCT  materias.*
         FROM materias, ofrece
-        WHERE ofrece.id_ciclo_escolar = $1::text AND
+        WHERE ofrece.id_ciclo_escolar = $1::integer AND
         materias.id_materia = ofrece.id_materia;`, [idCicloE]);
     }
 }
