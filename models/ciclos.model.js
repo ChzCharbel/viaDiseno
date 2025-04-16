@@ -11,7 +11,7 @@ module.exports = class CicloEscolar {
     return db.query(`
       UPDATE ciclos_escolares
       SET inicio_inscripcion = $1::date, fin_inscripcion = $2::date
-      WHERE id_ciclo_escolar = $3::text
+      WHERE ciclo_escolar = $3::text
     `, [this.fechaInicio, this.fechaFin, this.id]);
   }
 
