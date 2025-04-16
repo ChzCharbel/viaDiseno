@@ -123,7 +123,7 @@
                 <tbody id="tabla_alumnos_body">
                   <% for (let alumno of alumnos) { %>
                     <tr>
-                      <td><span class="fw-medium"><%= alumno.matricula %></span></td>
+                      <td><span class="fw-medium"><%= alumno.id_ivd %></span></td>
                       <td><%= alumno.nombre_usuario %></td>
                       <td><%= alumno.semestre %></td>
                       <td><span class="badge <%= alumno.regular ? 'bg-success' : 'bg-warning text-dark' %>">
