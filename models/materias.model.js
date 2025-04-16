@@ -73,7 +73,7 @@ module.exports = class Grupo{
                 const estatus = materia.plans[0].degree.status;
                 const { id, name, credits, hours_professor} = materia;
                 await db.query(`
-                    INSERT INTO materias (id_materia, nombre_materia, creditos, horas_profesor)
+                    INSERT INTO materias (id_materia, materia, creditos, horas_profesor)
                     VALUES ($1::text, $2::text, $3::integer, $4::integer)
                     ON CONFLICT (id_materia) DO NOTHING
                 `, [id, name, parseInt(credits), hours_professor]);
@@ -86,6 +86,35 @@ module.exports = class Grupo{
         return { mensaje: "Sincronización completada", total: materias.length };
         } catch (error) {
             console.error("Error al sincronizar materias:", error);
+            throw error;
+        }
+    }
+
+    static async sincronizarPlanesDesdeAPI() {
+        try {
+            const planes = await getAllCourses();
+            for (let plan of planes) {
+                if (plan.plans[0].degree.status == 'active') {
+                    const estatus = materia.plans[0].degree.status;
+                    const { id, name, credits, hours_professor} = materia;
+                    const carrera = plan.plans[0].degree.name;
+                    const idCarrera = await db.query(`SELECT id_carrera FROM carreras c
+                        WHERE c.carrera LIKE = $1::text`, [carrera]);
+                    await db.query(`
+                        INSERT INTO planes_estudios (id_plan, plan_estudio, id_carrera)
+                        VALUES ($1::text, $2::text, $3::integer, $4::integer)
+                        ON CONFLICT (id_plan) DO NOTHING
+                    `, [id, name, idCarrera]);
+                    await db.query(`UPDATE materias SET estatus = $1::text WHERE 
+                        id_materia = $2::text`, [estatus, id]);
+                    }
+            }
+        
+            console.log("Materias sincronizadas exitosamente.");
+            return { mensaje: "Sincronización completada", total: materias.length };
+        }
+        catch (error) {
+            console.error("Error al sincronizar planes:", error);
             throw error;
         }
     }
