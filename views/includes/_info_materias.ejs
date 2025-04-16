@@ -1,71 +1,91 @@
 <div class="container mt-5">
-    <!-- Buscador estilizado -->
-    <div class="row justify-content-center mb-4">
-      <div class="col-md-8">
-        <div class="card shadow-sm border-0 rounded-4 p-4">
-          <h5 class="mb-3 fw-semibold">Buscar materia</h5>
-          <form id="formBuscarMateria" class="d-flex" role="search" onsubmit="return false;">
-            <input
-              id="inputBuscarMateria"
-              class="form-control form-control-lg me-3 rounded-pill"
-              type="search"
-              placeholder="Materia"
-              aria-label="Search"
-            />
-            <button class="btn btn-outline-success rounded-pill px-4" type="submit">
-              Buscar
-            </button>
-          </form>          
-        </div>
+  <!-- Buscador estilizado -->
+  <div class="row justify-content-center mb-4">
+    <div class="col-md-8">
+      <div class="card shadow-sm border-0 rounded-4 p-4">
+        <h5 class="mb-3 fw-semibold">Buscar materia</h5>
+        <form id="formBuscarMateria" class="d-flex" role="search" onsubmit="return false;">
+          <input
+            id="inputBuscarMateria"
+            class="form-control form-control-lg me-3 rounded-pill"
+            type="search"
+            placeholder="Materia"
+            aria-label="Search"
+          />
+          <button class="btn btn-outline-success rounded-pill px-4" type="submit">
+            Buscar
+          </button>
+        </form>          
       </div>
     </div>
-  
-    <!-- Tabla estilizada -->
-    <div class="table-responsive">
-      <table class="table table-bordered align-middle text-center shadow-sm overflow-hidden">
-        <thead class="table-light">
-          <tr class="align-middle">
-            <th>Carrera</th>
-            <th>Materia</th>
-            <th>Salón</th>
-            <th>Acciones</th>
+  </div>
+
+  <!-- Tabla de materias -->
+  <div class="table-responsive">
+    <table class="table table-bordered align-middle text-center shadow-sm overflow-hidden">
+      <thead class="table-light">
+        <tr>
+          <th>Carrera</th>
+          <th>Materia</th>
+          <th>Salón</th>
+          <th>Horario</th>
+          <th>Estatus</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (materias.length === 0) { %>
+          <tr>
+            <td colspan="5" class="text-center py-3">No hay materias disponibles</td>
           </tr>
-        </thead>
-        <tbody>
-          <% if (materias.length === 0) { %>
+        <% } else { %>
+          <% for (let materia of materias) {
+               const nombreCarrera = materia.plans[0].degree.name;
+          %>
             <tr>
-              <td colspan="6" class="text-center py-3">No hay materias disponibles</td>
-            </tr>
-          <% } else { %>
-            <% for (let materia of materias) { %>
-              <% 
-                const nombreCarrera = materia.plans[0].degree.name;
-              %>
-              <tr>
-                <td><%= nombreCarrera %></td>
-                <td><%= materia.name %></td>
-                <td>
-                  <select class="form-select rounded-pill" name="salon_<%= materia.id %>">
-                    <option selected disabled class="texto-pequeno">Selecciona un salón</option>
-                    <% for (let salon of salones) { %>
-                      <option value="<%= salon.idSalon %>">
-                        <%= salon.id_salon %> (<%= salon.descripcion %>)
-                      </option>
-                    <% } %>
-                  </select>
-                </td>
-                <td>
-                  <button class="btn btn-primary btn-sm rounded-pill px-3">Guardar</button>
-                </td>
-              </tr>
-            <% } %>
-          <% } %>
-        </tbody>
-      </table>
-    </div>
+              <td><%= nombreCarrera %></td>
+              <td><%= materia.name %></td>
+              <td>
+                <!-- Botón para abrir modal -->
+                <button 
+                  type="button" 
+                  class="btn btn-outline-secondary btn-sm rounded-pill" 
+                  data-bs-toggle="modal" 
+                  data-bs-target="#modalSalones<%= materia.id %>">
+                  Seleccionar salón
+                </button>
+
+                <!-- Incluir modal -->
+                <%- include('_modal_salones.ejs', { materia: materia, salones: salones }) %>
+
+                <!-- Texto de salón seleccionado -->
+                <div id="salonSeleccionado_<%= materia.id %>" class="mt-2 text-muted small">No seleccionado</div>
+                <input type="hidden" name="salon_<%= materia.id %>" id="inputSalon_<%= materia.id %>">
+              </td>
+              <td>
   
-    <script src="/js/grupos.js"></script>
-    <script src="/js/scriptIVD.js"></script>
-    <script src="/js/buscadorMaterias.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  </div>  
+                <div id="horario_<%= materia.id %>" class="text-muted small">Sin asignar</div>
+              </td>
+
+              <td>
+                <button class="btn btn-primary btn-sm rounded-pill px-3">Guardar</button>
+              </td>
+            </tr>
+          <% } %>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    function seleccionarSalon(idMateria, idSalon, textoSalon) {
+      document.getElementById(`salonSeleccionado_${idMateria}`).innerText = textoSalon;
+      document.getElementById(`inputSalon_${idMateria}`).value = idSalon;
+    }
+  </script>
+
+  <script src="/js/grupos.js"></script>
+  <script src="/js/scriptIVD.js"></script>
+  <script src="/js/buscadorMaterias.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</div>
