@@ -26,9 +26,7 @@ module.exports = class Profesor {
           const { ivd_id, name, first_surname, second_surname,  status} = profe;
           const idExistente = await db.query(`SELECT * FROM profesores WHERE matricula_profesor = 
             $1::text`, [ivd_id]);
-          console.log('PROFESOR: ' + idExistente.rows.length);
           if (idExistente.rows.length == 0) {
-            console.log('no estaba en la tabla')
             await db.query(`
             INSERT INTO profesores (matricula_profesor, profesor)
             VALUES ($1::text, $2::text)
