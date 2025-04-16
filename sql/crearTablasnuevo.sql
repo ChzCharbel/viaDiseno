@@ -3,13 +3,6 @@
 BEGIN;
 
 
-CREATE TABLE IF NOT EXISTS public.abre
-(
-    id_ciclo_escolar text COLLATE pg_catalog."default" NOT NULL,
-    id_grupo text COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT abre_pk PRIMARY KEY (id_ciclo_escolar, id_grupo)
-);
-
 CREATE TABLE IF NOT EXISTS public.accede
 (
     nombre_rol text COLLATE pg_catalog."default" NOT NULL,
@@ -20,91 +13,108 @@ CREATE TABLE IF NOT EXISTS public.accede
 CREATE TABLE IF NOT EXISTS public.administradores
 (
     id_ivd text COLLATE pg_catalog."default" NOT NULL,
-    carrera text COLLATE pg_catalog."default",
+    estatus_administrador text COLLATE pg_catalog."default",
+    id_carrera integer,
     CONSTRAINT adminsitradores_pk PRIMARY KEY (id_ivd)
 );
 
 CREATE TABLE IF NOT EXISTS public.alumnos
 (
-    matricula text COLLATE pg_catalog."default" NOT NULL,
+    id_ivd text COLLATE pg_catalog."default" NOT NULL,
     semestre text COLLATE pg_catalog."default",
     regular boolean,
+    estatus_alumno text COLLATE pg_catalog."default",
+    id_carrera integer,
+    CONSTRAINT alumnos_pk PRIMARY KEY (id_ivd)
+);
+
+CREATE TABLE IF NOT EXISTS public.carreras
+(
+    id_carrera serial NOT NULL,
     carrera text COLLATE pg_catalog."default",
-    CONSTRAINT alumnos_pk PRIMARY KEY (matricula)
+    CONSTRAINT carreras_pkey PRIMARY KEY (id_carrera)
 );
 
 CREATE TABLE IF NOT EXISTS public.ciclos_escolares
 (
-    id_ciclo_escolar text COLLATE pg_catalog."default" NOT NULL,
+    id_ciclo_escolar serial NOT NULL,
+    ciclo_escolar text COLLATE pg_catalog."default",
     fecha_inicio date,
     fecha_fin date,
     inicio_inscripcion date,
     fin_inscripcion date,
-    CONSTRAINT ciclos_escolares_pk PRIMARY KEY (id_ciclo_escolar)
+    CONSTRAINT ciclos_escolares_pkey PRIMARY KEY (id_ciclo_escolar)
 );
 
-CREATE TABLE IF NOT EXISTS public.disponible
+CREATE TABLE IF NOT EXISTS public.ciclos_escolares_materias
 (
-    id_ciclo_escolar text COLLATE pg_catalog."default" NOT NULL,
-    matricula_profesor text COLLATE pg_catalog."default" NOT NULL,
-    lunes time without time zone[],
-    martes time without time zone[],
-    miercoles time without time zone[],
-    jueves time without time zone[],
-    viernes time without time zone[],
-    CONSTRAINT disponible_pk PRIMARY KEY (id_ciclo_escolar, matricula_profesor)
+    id_ciclo_escolar_materia serial NOT NULL,
+    id_ciclo_escolar integer,
+    id_plan_materia integer,
+    CONSTRAINT ciclos_escolares_materias_pkey PRIMARY KEY (id_ciclo_escolar_materia)
 );
 
 CREATE TABLE IF NOT EXISTS public.enlista
 (
-    id_grupo text COLLATE pg_catalog."default" NOT NULL,
-    matricula text COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT enlista_pk PRIMARY KEY (id_grupo, matricula)
+    id_enlista serial NOT NULL,
+    id_grupo integer,
+    id_ivd text COLLATE pg_catalog."default",
+    CONSTRAINT enlista_pkey PRIMARY KEY (id_enlista)
 );
 
 CREATE TABLE IF NOT EXISTS public.grupos
 (
-    id_grupo text COLLATE pg_catalog."default" NOT NULL,
-    id_materia text COLLATE pg_catalog."default",
-    matricula_profesor text COLLATE pg_catalog."default",
-    id_salon text COLLATE pg_catalog."default",
-    lunes_inicio time without time zone,
-    lunes_fin time without time zone,
-    martes_inicio time without time zone,
-    martes_fin time without time zone,
-    miercoles_inicio time without time zone,
-    miercoles_fin time without time zone,
-    jueves_inicio time without time zone,
-    jueves_fin time without time zone,
-    viernes_inicio time without time zone,
-    viernes_fin time without time zone,
-    CONSTRAINT grupos_pk PRIMARY KEY (id_grupo)
+    id_grupo serial NOT NULL,
+    id_profesor integer,
+    id_salon integer,
+    cupo_maximo integer,
+    cupo_disponible integer,
+    CONSTRAINT grupos_pkey PRIMARY KEY (id_grupo)
+);
+
+CREATE TABLE IF NOT EXISTS public.grupos_ciclos_materias
+(
+    id_grupo_ciclo_materia serial NOT NULL,
+    id_grupo integer,
+    id_ciclo_escolar_materia integer,
+    CONSTRAINT grupos_ciclos_materias_pkey PRIMARY KEY (id_grupo_ciclo_materia)
+);
+
+CREATE TABLE IF NOT EXISTS public.grupos_horarios
+(
+    id_grupo_horario serial NOT NULL,
+    id_grupo integer,
+    dia_semana text COLLATE pg_catalog."default",
+    hora_inicio time without time zone,
+    hora_fin time without time zone,
+    CONSTRAINT grupos_horarios_pkey PRIMARY KEY (id_grupo_horario)
 );
 
 CREATE TABLE IF NOT EXISTS public.materias
 (
-    id_materia text COLLATE pg_catalog."default" NOT NULL,
-    nombre_materia text COLLATE pg_catalog."default",
-    id_plan text COLLATE pg_catalog."default",
+    id_materia serial NOT NULL,
+    materia text COLLATE pg_catalog."default",
     creditos integer,
     horas_profesor integer,
-    equipamiento text COLLATE pg_catalog."default",
-    CONSTRAINT materias_pk PRIMARY KEY (id_materia)
+    CONSTRAINT materias_pkey PRIMARY KEY (id_materia)
 );
 
-CREATE TABLE IF NOT EXISTS public.ofrece
+CREATE TABLE IF NOT EXISTS public.planes_estudios
 (
-    id_ciclo_escolar text COLLATE pg_catalog."default" NOT NULL,
-    id_materia text COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT ofrece_pk PRIMARY KEY (id_ciclo_escolar, id_materia)
+    id_plan_estudio serial NOT NULL,
+    plan_estudio text COLLATE pg_catalog."default",
+    id_carrera integer,
+    CONSTRAINT planes_estudios_pkey PRIMARY KEY (id_plan_estudio)
 );
 
-CREATE TABLE IF NOT EXISTS public.planes
+CREATE TABLE IF NOT EXISTS public.planes_materias
 (
-    id_plan text COLLATE pg_catalog."default" NOT NULL,
-    nombre text COLLATE pg_catalog."default",
-    carrera text COLLATE pg_catalog."default",
-    CONSTRAINT planes_pk PRIMARY KEY (id_plan)
+    id_plan_materia serial NOT NULL,
+    id_plan integer,
+    id_materia integer,
+    semestre integer,
+    estatus_plan_materia text COLLATE pg_catalog."default",
+    CONSTRAINT planes_materias_pkey PRIMARY KEY (id_plan_materia)
 );
 
 CREATE TABLE IF NOT EXISTS public.privilegios
@@ -116,36 +126,69 @@ CREATE TABLE IF NOT EXISTS public.privilegios
 
 CREATE TABLE IF NOT EXISTS public.profesores
 (
-    matricula_profesor text COLLATE pg_catalog."default" NOT NULL,
-    nombre_profesor text COLLATE pg_catalog."default",
-    estatus text COLLATE pg_catalog."default",
-    CONSTRAINT profesores_pk PRIMARY KEY (matricula_profesor)
+    id_profesor serial NOT NULL,
+    matricula_profesor text COLLATE pg_catalog."default",
+    profesor text COLLATE pg_catalog."default",
+    estatus_profesor text COLLATE pg_catalog."default",
+    CONSTRAINT profesores_pkey PRIMARY KEY (id_profesor)
 );
 
-CREATE TABLE IF NOT EXISTS public.requisito
+CREATE TABLE IF NOT EXISTS public.profesores_disponibilidad
 (
-    id_materia text COLLATE pg_catalog."default" NOT NULL,
-    requisito text COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT materias_seriadas_pk PRIMARY KEY (id_materia, requisito)
+    id_profesor_disponibilidad serial NOT NULL,
+    id_profesor integer,
+    id_ciclo_escolar integer,
+    dia_semana text COLLATE pg_catalog."default",
+    hora_inicio time without time zone,
+    hora_fin time without time zone,
+    disponible boolean,
+    CONSTRAINT profesores_disponibilidad_pkey PRIMARY KEY (id_profesor_disponibilidad)
+);
+
+CREATE TABLE IF NOT EXISTS public.requisitos
+(
+    id_requisito serial NOT NULL,
+    id_materia integer NOT NULL,
+    requisito integer NOT NULL,
+    CONSTRAINT requisitos_pkey PRIMARY KEY (id_requisito)
 );
 
 CREATE TABLE IF NOT EXISTS public.salones
 (
-    id_salon text COLLATE pg_catalog."default" NOT NULL,
-    cupo integer,
+    id_salon serial NOT NULL,
+    numero integer,
+    capacidad integer,
+    tipo text COLLATE pg_catalog."default",
     descripcion text COLLATE pg_catalog."default",
-    CONSTRAINT salon_pk PRIMARY KEY (id_salon)
+    CONSTRAINT salones_pkey PRIMARY KEY (id_salon)
+);
+
+CREATE TABLE IF NOT EXISTS public.salones_disponibilidad
+(
+    id_salon_disponibilidad serial NOT NULL,
+    id_salon integer,
+    id_ciclo_escolar integer,
+    dia_semana text COLLATE pg_catalog."default",
+    hora_inicio time without time zone,
+    hora_fin time without time zone,
+    disponible boolean,
+    CONSTRAINT salones_disponibilidad_pkey PRIMARY KEY (id_salon_disponibilidad)
 );
 
 CREATE TABLE IF NOT EXISTS public.solicitudes_cambio
 (
-    matricula text COLLATE pg_catalog."default" NOT NULL,
-    id_materia text COLLATE pg_catalog."default" NOT NULL,
-    resuelto boolean,
+    id_solicitud serial NOT NULL,
+    id_ivd text COLLATE pg_catalog."default",
+    id_ciclo_escolar integer,
+    id_materia integer,
+    tipo text COLLATE pg_catalog."default",
     descripcion text COLLATE pg_catalog."default",
+    mensaje text COLLATE pg_catalog."default",
     fecha_solicitud date,
     fecha_resolucion date,
-    CONSTRAINT solicitudes_cambio_pk PRIMARY KEY (matricula, id_materia)
+    aprobado boolean,
+    resuelto boolean,
+    CONSTRAINT solicitudes_cambio_pkey PRIMARY KEY (id_solicitud)
 );
 
 CREATE TABLE IF NOT EXISTS public.usuarios
@@ -157,20 +200,6 @@ CREATE TABLE IF NOT EXISTS public.usuarios
     rol text COLLATE pg_catalog."default",
     CONSTRAINT usuarios_pk PRIMARY KEY (id_ivd)
 );
-
-ALTER TABLE IF EXISTS public.abre
-    ADD CONSTRAINT abre_fk FOREIGN KEY (id_ciclo_escolar)
-    REFERENCES public.ciclos_escolares (id_ciclo_escolar) MATCH SIMPLE
-    ON UPDATE CASCADE
-    ON DELETE CASCADE;
-
-
-ALTER TABLE IF EXISTS public.abre
-    ADD CONSTRAINT abre_fk_2 FOREIGN KEY (id_grupo)
-    REFERENCES public.grupos (id_grupo) MATCH SIMPLE
-    ON UPDATE CASCADE
-    ON DELETE CASCADE;
-
 
 ALTER TABLE IF EXISTS public.accede
     ADD CONSTRAINT accede_fk FOREIGN KEY (id_privilegio)
@@ -189,107 +218,149 @@ CREATE INDEX IF NOT EXISTS adminsitradores_pk
 
 
 ALTER TABLE IF EXISTS public.alumnos
-    ADD CONSTRAINT alumno_fk FOREIGN KEY (matricula)
+    ADD CONSTRAINT alumno_fk FOREIGN KEY (id_ivd)
     REFERENCES public.usuarios (id_ivd) MATCH SIMPLE
     ON UPDATE CASCADE
     ON DELETE CASCADE;
 CREATE INDEX IF NOT EXISTS alumnos_pk
-    ON public.alumnos(matricula);
+    ON public.alumnos(id_ivd);
 
 
-ALTER TABLE IF EXISTS public.disponible
-    ADD CONSTRAINT disponible_fk FOREIGN KEY (id_ciclo_escolar)
+ALTER TABLE IF EXISTS public.ciclos_escolares_materias
+    ADD CONSTRAINT ciclos_escolares_materias_id_ciclo_escolar_fkey FOREIGN KEY (id_ciclo_escolar)
     REFERENCES public.ciclos_escolares (id_ciclo_escolar) MATCH SIMPLE
     ON UPDATE CASCADE
     ON DELETE CASCADE;
 
 
-ALTER TABLE IF EXISTS public.disponible
-    ADD CONSTRAINT disponible_fk_2 FOREIGN KEY (matricula_profesor)
-    REFERENCES public.profesores (matricula_profesor) MATCH SIMPLE
+ALTER TABLE IF EXISTS public.ciclos_escolares_materias
+    ADD CONSTRAINT ciclos_escolares_materias_id_plan_materia_fkey FOREIGN KEY (id_plan_materia)
+    REFERENCES public.planes_materias (id_plan_materia) MATCH SIMPLE
     ON UPDATE CASCADE
     ON DELETE CASCADE;
 
 
 ALTER TABLE IF EXISTS public.enlista
-    ADD CONSTRAINT enlista_fk FOREIGN KEY (id_grupo)
+    ADD CONSTRAINT enlista_id_grupo_fkey FOREIGN KEY (id_grupo)
     REFERENCES public.grupos (id_grupo) MATCH SIMPLE
     ON UPDATE CASCADE
     ON DELETE CASCADE;
 
 
 ALTER TABLE IF EXISTS public.enlista
-    ADD CONSTRAINT enlista_fk_2 FOREIGN KEY (matricula)
-    REFERENCES public.alumnos (matricula) MATCH SIMPLE
+    ADD CONSTRAINT enlista_id_ivd_fkey FOREIGN KEY (id_ivd)
+    REFERENCES public.alumnos (id_ivd) MATCH SIMPLE
     ON UPDATE CASCADE
     ON DELETE CASCADE;
 
 
 ALTER TABLE IF EXISTS public.grupos
-    ADD CONSTRAINT grupo_id_materia_fkey FOREIGN KEY (id_materia)
-    REFERENCES public.materias (id_materia) MATCH SIMPLE
+    ADD CONSTRAINT grupos_id_profesor_fkey FOREIGN KEY (id_profesor)
+    REFERENCES public.profesores (id_profesor) MATCH SIMPLE
     ON UPDATE CASCADE
     ON DELETE CASCADE;
 
 
 ALTER TABLE IF EXISTS public.grupos
-    ADD CONSTRAINT grupo_id_salon_fkey FOREIGN KEY (id_salon)
+    ADD CONSTRAINT grupos_id_salon_fkey FOREIGN KEY (id_salon)
     REFERENCES public.salones (id_salon) MATCH SIMPLE
     ON UPDATE CASCADE
     ON DELETE CASCADE;
 
 
-ALTER TABLE IF EXISTS public.grupos
-    ADD CONSTRAINT grupo_matricula_profesor_fkey FOREIGN KEY (matricula_profesor)
-    REFERENCES public.profesores (matricula_profesor) MATCH SIMPLE
+ALTER TABLE IF EXISTS public.grupos_ciclos_materias
+    ADD CONSTRAINT grupos_ciclos_materias_id_ciclo_escolar_materia_fkey FOREIGN KEY (id_ciclo_escolar_materia)
+    REFERENCES public.ciclos_escolares_materias (id_ciclo_escolar_materia) MATCH SIMPLE
     ON UPDATE CASCADE
     ON DELETE CASCADE;
 
 
-ALTER TABLE IF EXISTS public.materias
-    ADD CONSTRAINT materias_fk FOREIGN KEY (id_plan)
-    REFERENCES public.planes (id_plan) MATCH SIMPLE
+ALTER TABLE IF EXISTS public.grupos_ciclos_materias
+    ADD CONSTRAINT grupos_ciclos_materias_id_grupo_fkey FOREIGN KEY (id_grupo)
+    REFERENCES public.grupos (id_grupo) MATCH SIMPLE
     ON UPDATE CASCADE
     ON DELETE CASCADE;
 
 
-ALTER TABLE IF EXISTS public.ofrece
-    ADD CONSTRAINT ofrece_fk FOREIGN KEY (id_ciclo_escolar)
-    REFERENCES public.ciclos_escolares (id_ciclo_escolar) MATCH SIMPLE
+ALTER TABLE IF EXISTS public.grupos_horarios
+    ADD CONSTRAINT grupos_horarios_id_grupo_fkey FOREIGN KEY (id_grupo)
+    REFERENCES public.grupos (id_grupo) MATCH SIMPLE
     ON UPDATE CASCADE
     ON DELETE CASCADE;
 
 
-ALTER TABLE IF EXISTS public.ofrece
-    ADD CONSTRAINT ofrece_fk_2 FOREIGN KEY (id_materia)
+ALTER TABLE IF EXISTS public.planes_estudios
+    ADD CONSTRAINT planes_estudios_id_carrera_fkey FOREIGN KEY (id_carrera)
+    REFERENCES public.carreras (id_carrera) MATCH SIMPLE
+    ON UPDATE CASCADE
+    ON DELETE CASCADE;
+
+
+ALTER TABLE IF EXISTS public.planes_materias
+    ADD CONSTRAINT planes_materias_id_materia_fkey FOREIGN KEY (id_materia)
     REFERENCES public.materias (id_materia) MATCH SIMPLE
     ON UPDATE CASCADE
     ON DELETE CASCADE;
 
 
-ALTER TABLE IF EXISTS public.requisito
+ALTER TABLE IF EXISTS public.planes_materias
+    ADD CONSTRAINT planes_materias_id_plan_fkey FOREIGN KEY (id_plan)
+    REFERENCES public.planes_estudios (id_plan_estudio) MATCH SIMPLE
+    ON UPDATE CASCADE
+    ON DELETE CASCADE;
+
+
+ALTER TABLE IF EXISTS public.profesores_disponibilidad
+    ADD CONSTRAINT profesores_disponibilidad_id_ciclo_escolar_fkey FOREIGN KEY (id_ciclo_escolar)
+    REFERENCES public.ciclos_escolares (id_ciclo_escolar) MATCH SIMPLE
+    ON UPDATE CASCADE
+    ON DELETE CASCADE;
+
+
+ALTER TABLE IF EXISTS public.profesores_disponibilidad
+    ADD CONSTRAINT profesores_disponibilidad_id_profesor_fkey FOREIGN KEY (id_profesor)
+    REFERENCES public.profesores (id_profesor) MATCH SIMPLE
+    ON UPDATE CASCADE
+    ON DELETE CASCADE;
+
+
+ALTER TABLE IF EXISTS public.requisitos
     ADD CONSTRAINT materia_fk_2 FOREIGN KEY (requisito)
     REFERENCES public.materias (id_materia) MATCH SIMPLE
     ON UPDATE CASCADE
     ON DELETE CASCADE;
 
 
-ALTER TABLE IF EXISTS public.requisito
-    ADD CONSTRAINT requisito_fk FOREIGN KEY (id_materia)
-    REFERENCES public.materias (id_materia) MATCH SIMPLE
+ALTER TABLE IF EXISTS public.salones_disponibilidad
+    ADD CONSTRAINT salones_disponibilidad_id_ciclo_escolar_fkey FOREIGN KEY (id_ciclo_escolar)
+    REFERENCES public.ciclos_escolares (id_ciclo_escolar) MATCH SIMPLE
+    ON UPDATE CASCADE
+    ON DELETE CASCADE;
+
+
+ALTER TABLE IF EXISTS public.salones_disponibilidad
+    ADD CONSTRAINT salones_disponibilidad_id_salon_fkey FOREIGN KEY (id_salon)
+    REFERENCES public.salones (id_salon) MATCH SIMPLE
     ON UPDATE CASCADE
     ON DELETE CASCADE;
 
 
 ALTER TABLE IF EXISTS public.solicitudes_cambio
-    ADD CONSTRAINT solicita_cambio_fk FOREIGN KEY (matricula)
-    REFERENCES public.alumnos (matricula) MATCH SIMPLE
+    ADD CONSTRAINT solicitudes_cambio_id_ciclo_escolar_fkey FOREIGN KEY (id_ciclo_escolar)
+    REFERENCES public.ciclos_escolares (id_ciclo_escolar) MATCH SIMPLE
     ON UPDATE CASCADE
     ON DELETE CASCADE;
 
 
 ALTER TABLE IF EXISTS public.solicitudes_cambio
-    ADD CONSTRAINT solicita_cambio_fk2 FOREIGN KEY (id_materia)
+    ADD CONSTRAINT solicitudes_cambio_id_ivd_fkey FOREIGN KEY (id_ivd)
+    REFERENCES public.alumnos (id_ivd) MATCH SIMPLE
+    ON UPDATE CASCADE
+    ON DELETE CASCADE;
+
+
+ALTER TABLE IF EXISTS public.solicitudes_cambio
+    ADD CONSTRAINT solicitudes_cambio_id_materia_fkey FOREIGN KEY (id_materia)
     REFERENCES public.materias (id_materia) MATCH SIMPLE
     ON UPDATE CASCADE
     ON DELETE CASCADE;
