@@ -56,11 +56,17 @@
             Horario de Clases
         <% } %>
         </span>
-        <span>
-          <a class="navbar-brand material-symbols-outlined fs-2">
+
+        <% if (typeof cicloActual !== 'undefined' && cicloActual) { %>
+          <a href="/solicitudes/<%= cicloActual %>/" class="navbar-brand">
+        <% } else { %>
+          <a href="#" class="navbar-brand" title="Ciclo no definido">
+        <% } %>
+          <span class="material-symbols-outlined fs-2" style="color: white; cursor: pointer;">
             notifications
-          </a>
-        </span>
+          </span>
+
+
         <span
           ><a class="navbar-brand material-symbols-outlined fs-1"
             ><%- include('./_perfil_user') %></a
