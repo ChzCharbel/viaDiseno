@@ -13,4 +13,10 @@ router.get(
   solicitudesController.get_solicitudes
 );
 
+router.post(
+  "/cambio",
+  isAuth,
+  solicitudesController.enviarSolicitud
+);
+
 module.exports = router;
