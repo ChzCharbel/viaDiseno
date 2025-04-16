@@ -2,7 +2,7 @@ const Materia = require('../models/materias.model');
 const Oferta = require('../models/oferta.model');
 
 exports.get_oferta = (request, response, next) => {
-    Oferta.fetchAll(request.params.idCiclo).then((materiasOfertadas) => {
+    Oferta.fetchAll(request.params.idCiclo, request.session.carrera).then((materiasOfertadas) => {
         response.render('oferta_academica.ejs',{
         titulo: 'oferta_academica',
         privilegios: request.session.privilegios || [],

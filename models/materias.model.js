@@ -74,11 +74,11 @@ module.exports = class Grupo{
                 const { id, name, credits, hours_professor} = materia;
                 await db.query(`
                     INSERT INTO materias (id_materia, materia, creditos, horas_profesor)
-                    VALUES ($1::text, $2::text, $3::integer, $4::integer)
+                    VALUES ($1::integer, $2::text, $3::integer, $4::integer)
                     ON CONFLICT (id_materia) DO NOTHING
                 `, [id, name, parseInt(credits), hours_professor]);
-                await db.query(`UPDATE materias SET estatus = $1::text WHERE 
-                    id_materia = $2::text`, [estatus, id]);
+                /*await db.query(`UPDATE materias SET estatus = $1::text WHERE 
+                    id_materia = $2::text`, [estatus, id]);*/
                 }
         }
     
@@ -101,7 +101,7 @@ module.exports = class Grupo{
                     const idCarrera = await db.query(`SELECT id_carrera FROM carreras c
                         WHERE c.carrera LIKE = $1::text`, [carrera]);
                     await db.query(`
-                        INSERT INTO planes_estudios (id_plan, plan_estudio, id_carrera)
+                        INSERT INTO planes_estudios (id_plan_estudio, plan_estudio, id_carrera)
                         VALUES ($1::text, $2::text, $3::integer, $4::integer)
                         ON CONFLICT (id_plan) DO NOTHING
                     `, [id, name, idCarrera]);

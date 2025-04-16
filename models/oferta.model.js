@@ -28,10 +28,13 @@ module.exports = class OfertaAcademica {
         return db.query(consulta, parametros);
     }
 
-    static fetchAll(idCicloE) {
-        return db.query(`SELECT DISTINCT  materias.*
-        FROM materias, ofrece
-        WHERE ofrece.id_ciclo_escolar = $1::integer AND
-        materias.id_materia = ofrece.id_materia;`, [idCicloE]);
+    static fetchAll(idCicloE, carrera) {
+        return db.query(`SELECT * FROM ciclos_escolares_materias cem
+            JOIN ciclos_escolares ce using (id_ciclo_escolar)
+            JOIN planes_materias pm using (id_plan_materia)
+            JOIN materias m using (id_materia)
+            JOIN planes_estudios pe using (id_plan_estudio)
+            JOIN carreras c using (id_carrera)
+            WHERE id_ciclo_escolar = $1::integer  AND carrera = $2::text`, [idCicloE, carrera]);
     }
 }
