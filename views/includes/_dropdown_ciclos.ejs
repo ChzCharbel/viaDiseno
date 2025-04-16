@@ -12,10 +12,15 @@
   <ul class="dropdown-menu" id="dropdown-menu">
     <div class="dropdown-items-container overflow-auto" style="max-height: 100px">
       <% for (ciclo of ciclosEscolares) { %>
-      <li>
-        <a class="dropdown-item" href="/<%= titulo %>/<%= ciclo.id_ciclo_escolar %>"> <%= ciclo.ciclo_escolar %> </a>
-      </li>
-      <% } %>
+        <% if (ciclo.id_ciclo_escolar == cicloActual) { %>
+          <li>
+            <a class="dropdown-item active" href="/<%= titulo %>/<%= ciclo.id_ciclo_escolar %>"> <%= ciclo.ciclo_escolar %> </a>
+          </li>
+        <% } else { %>
+          <li>
+            <a class="dropdown-item" href="/<%= titulo %>/<%= ciclo.id_ciclo_escolar %>"> <%= ciclo.ciclo_escolar %> </a>
+          </li>
+      <% } } %>
     </div>
     <li><hr class="dropdown-divider" /></li>
     <li>

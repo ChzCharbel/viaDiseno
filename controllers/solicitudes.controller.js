@@ -1,7 +1,7 @@
 const SolicitaCambio = require("../models/solicitudes.model");
 
 exports.get_solicitudes = (request, response, next) => {
-  SolicitaCambio.fetchAll()
+  SolicitaCambio.fetchAll(request.params.idCiclo)
     .then((solicitudes) => {
       request.session.solicitudes = solicitudes.rows;
 
@@ -26,6 +26,7 @@ exports.get_solicitudes = (request, response, next) => {
 
 exports.enviarSolicitud = async (request, response, next) => {
   try {
+    
     const { matricula, id_materia, descripcion, tipo, nombre_materia } = request.body;
 
     let descripcionFinal = "";
@@ -38,9 +39,12 @@ exports.enviarSolicitud = async (request, response, next) => {
       descripcionFinal = descripcion; // respaldo si no se envía tipo
     }
 
+    const idCiclo = request.params.idCiclo;
+
     await SolicitaCambio.crearSolicitud({
       matricula,
       id_materia,
+      idCiclo,
       descripcion: descripcionFinal,
     });
 
