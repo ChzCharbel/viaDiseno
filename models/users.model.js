@@ -128,10 +128,20 @@ module.exports = class Usuario {
     return db.query(`Select * from usuarios;`);
   }
 
-  static fetchOne(matricula) {
+  static async fetchOne(matricula) {
+    const rolUsuario = await db.query(`SELECT rol FROM usuarios WHERE id_ivd = $1::text`, [matricula]);
+    if (rolUsuario.rows[0].rol) {
+      console.log(rolUsuario.rows[0].rol);
+      if (rolUsuario.rows[0].rol == 'student') {
+        return db.query(`Select  * from public.consulta_info_alumnos($1::text)`, [matricula]);
+      }
+      else if (rolUsuario.rows[0].rol == 'admin') {
+        return db.query(`Select * from public.consulta_info_admin($1::text)`, [matricula]);
+      }
+    };/*
     return db.query(`Select * from usuarios Where id_ivd = $1::text;`, [
       matricula,
-    ]);
+    ]);*/
   }
 
   static fetch(id) {
