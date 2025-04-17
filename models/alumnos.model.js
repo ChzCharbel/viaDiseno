@@ -17,13 +17,13 @@ module.exports = class Alumno {
 						semester, degree_name, regular
 					} = alumno;
 					await db.query(`
-						CALL sincronizar_alumnos('XP300', 
-						'Xime', 
-						'xime@xime.com', 
-						'Diseño de la Moda e Industria del Vestido', 
-						true, 
-						'4', 
-						'active');
+						CALL sincronizar_alumnos($1::text, 
+						$2::text, 
+						$3::text, 
+						$4::text, 
+						$5::boolean, 
+						$6::text, 
+						$7::text);
 					`, [ivd_id, name + ' ' + first_surname + ' ' + 
 						second_surname, email, degree_name, regular, semester, status]);
 					/*await db.query(`UPDATE materias SET estatus = $1::text WHERE 
