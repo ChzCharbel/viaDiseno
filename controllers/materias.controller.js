@@ -66,7 +66,8 @@ exports.post_guardar_horario = (req, res) => {
 };
 
 exports.guardarHorario = async (req, res) => {
-    const id_grupo = req.params.id_grupo;
+    const id_grupo = 1;
+    const id_ciclo_escolar = 1
     const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
   
     try {
@@ -77,7 +78,7 @@ exports.guardarHorario = async (req, res) => {
   
         // Si ambas horas están definidas, guardar
         if (hora_inicio && hora_fin) {
-          await GrupoHorario.guardarHoras(id_grupo, dia, hora_inicio, hora_fin);
+          await GrupoHorario.guardarHoras(id_grupo, id_ciclo_escolar, dia, hora_inicio, hora_fin);
         }
       }
   

@@ -4,14 +4,15 @@ module.exports = class GrupoHorario{
     static fetchAll() {
         return db.query(`SELECT * FROM grupos_horarios`);
       }
-      static async guardarHoras(id_grupo, dia_semana, hora_inicio, hora_fin) {
-        return db.query(
-          `INSERT INTO grupos_horarios (id_grupo, dia_semana, hora_inicio, hora_fin)
-           VALUES ($1, $2, $3, $4)
-           RETURNING id_grupo_horario`, // <- ESTA LÍNEA
-          [id_grupo, dia_semana, hora_inicio, hora_fin]
+
+      static async guardarHoras(id_salon, id_ciclo_escolar_materia, dia_semana, hora_inicio, hora_fin) {
+        console.log("Salon:" + id_salon, "Ciclo:" +  id_ciclo_escolar_materia, "Dia:" + dia_semana, "HI:" + hora_inicio,  "HF" + hora_fin);
+        const result = await db.query(
+          `SELECT crear_grupo_completo_ivd($1, $2, $3, $4, $5) AS id_grupo`,
+          [id_salon, id_ciclo_escolar_materia, dia_semana, hora_inicio, hora_fin] // El orden debe coincidir con la función SQL
         );
+        return result.rows[0].id_grupo;
       }
       
-      
+
 }
