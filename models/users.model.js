@@ -8,13 +8,17 @@ const {
 } = require("../util/admin.api.client");
 
 module.exports = class Usuario {
-  constructor(mi_id, mi_correo, mi_password, mi_rol, mi_username, mi_carrera) {
+  constructor(mi_id, mi_correo, mi_password, mi_rol, mi_username,
+    mi_carrera, mi_estatus, mi_regular, mi_semestre) {
     this.id = mi_id;
     this.password = mi_password;
     this.correo = mi_correo;
     this.role = mi_rol;
     this.username = mi_username;
     this.carrera = mi_carrera;
+    this.estatus = mi_estatus;
+    this.regular = mi_regular;
+    this.semestre = mi_semestre;
   }
 
   static isUser(idIVD) {
@@ -58,14 +62,20 @@ module.exports = class Usuario {
       if (usuario.ivd_id == id) {
         console.log("nombre: " + usuario.name);
         console.log("carrera dentro del model: " + usuario.degree_name);
-        const nombre =
-          usuario.name +
-          " " +
-          usuario.first_surname +
-          " " +
+        const rolUsuario = usuario.role.name;
+        const nombre = usuario.name + " " + usuario.first_surname + " " +
           usuario.second_surname;
-
-        return [nombre, usuario.email, usuario.role.name, usuario.degree_name];
+          
+        if (rolUsuario == 'student') {
+          
+          return [nombre, usuario.email, usuario.role.name, usuario.degree_name, 
+            usuario.regular, usuario.semester, usuario.status];
+        }
+        else if (rolUsuario == 'admin') {
+          return [nombre, usuario.email, usuario.role.name, 
+            'Diseño de la Moda e Industria del Vestido', 
+            usuario.status, '', ''];
+        }
       }
     }
   }
@@ -114,10 +124,20 @@ module.exports = class Usuario {
     return bcrypt
       .hash(this.password, 12)
       .then((password_cifrado) => {
-        return db.query(
-          `INSERT INTO usuarios(id_ivd, nombre_usuario, password, correo_institucional, rol) VALUES ($1::text, $2::text, $3::text, $4::text, $5::text)`,
-          [this.id, this.username, password_cifrado, this.correo, this.role]
-        );
+        if (this.role == 'admin') {
+          return db.query(`CALL registrar_admin($1::text, 
+            $2::text, $3::text, $4::text, 
+            $5::text, 
+            $6::text);`, [this.id, this.username, password_cifrado, this.correo,
+              this.carrera, this.estatus
+            ]);
+        }
+        else if (this.role == 'student') {
+          return db.query(`CALL registrar_alumno($1::text, $2::text, $3::text, 
+            $4::text, $5::text, $6::boolean, $7::text, $8::text)`, [this.id, 
+              this.username, this.correo, password_cifrado, this.carrera, this.regular,
+            this.semestre, this.estatus]);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -128,6 +148,7 @@ module.exports = class Usuario {
     return db.query(`Select * from usuarios;`);
   }
 
+  /* De acuerdo al rol se ejecuta la función que le corresponda para obtener los atributos de su tabla */
   static async fetchOne(matricula) {
     const rolUsuario = await db.query(`SELECT rol FROM usuarios WHERE id_ivd = $1::text`, [matricula]);
     if (rolUsuario.rows[0].rol) {
@@ -138,15 +159,12 @@ module.exports = class Usuario {
       else if (rolUsuario.rows[0].rol == 'admin') {
         return db.query(`Select * from public.consulta_info_admin($1::text)`, [matricula]);
       }
-    };/*
-    return db.query(`Select * from usuarios Where id_ivd = $1::text;`, [
-      matricula,
-    ]);*/
+    };
   }
 
   static fetch(id) {
     if (id) {
-      return this.fetchOne(correo);
+      return this.fetchOne(id);
     } else {
       return this.fetchAll();
     }
