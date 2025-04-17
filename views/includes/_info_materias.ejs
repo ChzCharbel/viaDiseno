@@ -4,7 +4,7 @@
     <div class="col-md-8">
       <div class="card shadow-sm border-0 rounded-4 p-4">
         <h5 class="mb-3 fw-semibold">Buscar materia</h5>
-        <form id="formBuscarMateria" class="d-flex" role="search" onsubmit="return false;">
+        <form id="editForm" class="d-flex" role="search" onsubmit="return false;">
           <input
             id="inputBuscarMateria"
             class="form-control form-control-lg me-3 rounded-pill"
@@ -20,6 +20,8 @@
     </div>
   </div>
 
+  <input type="hidden" id="cicloActualId" value="<%= cicloActual %>">
+
   <!-- Tabla de materias -->
   <div class="table-responsive">
     <table class="table table-bordered align-middle text-center shadow-sm overflow-hidden">
@@ -33,33 +35,33 @@
         </tr>
       </thead>
       <tbody>
-        <% if (materias.length === 0) { %>
+        <% if (materias && materias.length === 0) { %>
           <tr>
             <td colspan="5" class="text-center py-3">No hay materias disponibles</td>
           </tr>
-        <% } else { %>
-          <% for (let materia of materias) {
-               const nombreCarrera = materia.plans[0].degree.name;
-          %>
+        <% } else if (materias) { %>
+          <% for (let materia of materias) { %>
             <tr>
-              <td><%= nombreCarrera %></td>
-              <td><%= materia.name %></td>
+              <td>—</td> <!-- No viene la carrera en el query actual -->
+              <td><%= materia.nombre_materia %></td>
               <td>
                 <!-- Botón para abrir modal -->
-                <button 
-                  type="button" 
-                  class="btn btn-outline-secondary btn-sm rounded-pill" 
-                  data-bs-toggle="modal" 
-                  data-bs-target="#modalSalones<%= materia.id %>">
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary btn-sm rounded-pill"
+                  data-bs-toggle="modal"
+                  data-bs-target="#modalSalones<%= materia.id_ciclo_escolar_materia %>">
                   Seleccionar salón
                 </button>
-
+      
                 <!-- Incluir modal -->
                 <%- include('_modal_salones.ejs', { materia: materia, salones: salones }) %>
-
+      
                 <!-- Texto de salón seleccionado -->
-                <div id="salonSeleccionado_<%= materia.id %>" class="mt-2 text-muted small">No seleccionado</div>
-                <input type="hidden" name="salon_<%= materia.id %>" id="inputSalon_<%= materia.id %>">
+                <div id="salonSeleccionado_<%= materia.id_ciclo_escolar_materia %>" class="mt-2 text-muted small">
+                  No seleccionado
+                </div>
+                <input type="hidden" name="salon_<%= materia.id_ciclo_escolar_materia %>" id="inputSalon_<%= materia.id_ciclo_escolar_materia %>">
               </td>
               
               <td>
@@ -136,12 +138,13 @@
               
 
               <td>
-                <button class="btn btn-primary btn-sm rounded-pill px-3">Guardar</button>
+                <button class="btn btn-primary btn-sm rounded-pill px-3"
+                  onclick="guardarSalonSeleccionado('<%= materia.id_ciclo_escolar_materia %>')">Guardar</button>
               </td>
             </tr>
           <% } %>
         <% } %>
-      </tbody>
+      </tbody>      
     </table>
   </div>
 

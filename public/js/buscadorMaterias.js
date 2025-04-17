@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     const input = document.getElementById('inputBuscarMateria');
-    const form = document.getElementById('formBuscarMateria');
+    const form = document.getElementById('editForm');
     const filas = document.querySelectorAll('tbody tr');
   
     function filtrarMaterias() {

@@ -6,7 +6,7 @@ const { getAllCourses } = require('../util/admin.api.client');
 
 exports.get_materias = (request, response, next) => {
     Promise.all([
-        Materia.getAllCourses(),
+        Materia.getMateriasPorCiclo(request.params.idCiclo),
         Profesor.fetchAll(),
         Salon.fetchAll(),
 
