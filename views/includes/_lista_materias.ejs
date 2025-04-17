@@ -14,25 +14,19 @@
           colorIndex++;
         }
       });
-    %>
-
-    <% grupos.forEach((grupo, index) => { %>
+    %>          
+    <% grupos.forEach((grupo, index) => { %>        
       <div class="card mb-3">
-        <div class="card-body">
+        <div class="card-body position-relative">          
           <h5 class="card-title"><%= grupo.materia.nombre %></h5>
           <p class="card-text">Profesor: <%= grupo.profesor.nombre %></p>
           <p class="card-text">Salón: <%= grupo.salon.id %></p>
 
-          <h6>Horario:</h6>
-          <ul>
-            <% grupo.horarios.forEach(h => { %>
-              <li><%= h.dia %>: <%= h.hora_inicio %> - <%= h.hora_fin %></li>
-            <% }) %>
-          </ul>
-
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal<%= index %>">
+          <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#modal<%= index %>">
             Ver más
           </button>
+          
+          <div class="position-absolute top-0 end-0 bottom-0 <%= materiasColor[grupo.materia.nombre] %>" style="width: 30px; border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem;"></div>
         </div>
       </div>
 
@@ -50,12 +44,27 @@
                 <dd class="col-sm-9"><%= grupo.profesor.nombre %></dd>
 
                 <dt class="col-sm-9">Salón:</dt>
-                <dd class="col-sm-9"><%= grupo.salon.id %></dd>
-
+                <dd class="col-sm-9"><%= grupo.salon.id %></dd>                
                 <dt class="col-sm-9">Horario:</dt>
                 <dd class="col-sm-9">
                   <ul>
-                    <% grupo.horarios.forEach(h => { %>
+                    <% 
+                    // Definir el orden de los días
+                    const ordenDias = {
+                      'lunes': 1,
+                      'martes': 2,
+                      'miércoles': 3,
+                      'jueves': 4,
+                      'viernes': 5,
+                    };
+                    
+                    // Ordenar los horarios por día
+                    const horariosOrdenados = [...grupo.horarios].sort((a, b) => {
+                      return (ordenDias[a.dia] || 999) - (ordenDias[b.dia] || 999);
+                    });
+                    
+                    horariosOrdenados.forEach(h => { 
+                    %>
                       <li><%= h.dia %>: <%= h.hora_inicio %> - <%= h.hora_fin %></li>
                     <% }) %>
                   </ul>
