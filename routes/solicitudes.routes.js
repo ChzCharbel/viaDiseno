@@ -6,6 +6,7 @@ const canView = require("../util/canViewSolicitudes");
 
 const solicitudesController = require("../controllers/solicitudes.controller");
 
+
 router.get(
   "/:idCiclo/",
   isAuth,

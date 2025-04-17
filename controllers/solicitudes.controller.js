@@ -26,8 +26,16 @@ exports.get_solicitudes = (request, response, next) => {
 
 exports.enviarSolicitud = async (request, response, next) => {
   try {
-    
-    const { matricula, id_materia, descripcion, tipo, nombre_materia } = request.body;
+    const isJson = request.headers["content-type"]?.includes("application/json");
+    const datos = isJson ? request.body : request.body;
+
+    const {
+      matricula,
+      id_materia,
+      descripcion,
+      tipo,
+      nombre_materia
+    } = datos;
 
     let descripcionFinal = "";
 
@@ -36,10 +44,10 @@ exports.enviarSolicitud = async (request, response, next) => {
     } else if (tipo === "eliminar") {
       descripcionFinal = `El alumno solicita eliminar la materia ${nombre_materia}. Descripción del cambio: ${descripcion}`;
     } else {
-      descripcionFinal = descripcion; // respaldo si no se envía tipo
+      descripcionFinal = descripcion;
     }
 
-    const idCiclo = request.params.idCiclo;
+    const idCiclo = request.session.cicloActual || request.params.idCiclo;
 
     await SolicitaCambio.crearSolicitud({
       matricula,
@@ -48,10 +56,17 @@ exports.enviarSolicitud = async (request, response, next) => {
       descripcion: descripcionFinal,
     });
 
-    response.redirect("/enlista/alumno/");
+    if (isJson) {
+      return response.status(200).json({ mensaje: "Solicitud enviada correctamente." });
+    } else {
+      return response.redirect("/enlista/alumno/");
+    }
   } catch (error) {
     console.error("Error al guardar la solicitud:", error);
-    response.status(500).render("error.ejs");
+    if (request.headers["content-type"]?.includes("application/json")) {
+      return response.status(500).json({ mensaje: "Error interno del servidor" });
+    } else {
+      return response.status(500).render("error.ejs");
+    }
   }
 };
-
