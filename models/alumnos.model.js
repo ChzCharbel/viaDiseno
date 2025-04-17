@@ -11,7 +11,7 @@ module.exports = class Alumno {
 		try {
 			const alumnos = await this.getAllUsers();
 			for (let alumno of alumnos) {
-				if (alumno.status == 'active') {
+				if (alumno.status == 'active' && alumno.degree_id) {
 					const { ivd_id, name, first_surname, 
 						second_surname, email, status, 
 						semester, degree_name, regular
@@ -26,14 +26,12 @@ module.exports = class Alumno {
 						$7::text);
 					`, [ivd_id, name + ' ' + first_surname + ' ' + 
 						second_surname, email, degree_name, regular, semester, status]);
-					/*await db.query(`UPDATE materias SET estatus = $1::text WHERE 
-						id_materia = $2::text`, [estatus, id]);*/
-					
 				}
 			}
 		}
 		catch (error) {
-
+			console.error("Error al sincronizar alumnos:", error);
+            throw error;
 		}
 	}
 
