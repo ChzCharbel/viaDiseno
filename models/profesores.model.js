@@ -94,4 +94,43 @@ module.exports = class Profesor {
       (id_profesor) WHERE p.matricula_profesor = $1::text AND 
       id_ciclo_escolar = $2::integer`, [idProfe, idCicloE]);
   }
+
+  static async asignarMateria(id_profesor, id_ciclo_escolar_materia) {
+    return db.query(
+      `INSERT INTO profesores_materias (id_profesor, id_ciclo_escolar_materia)
+       VALUES ($1, $2) ON CONFLICT DO NOTHING`,
+      [id_profesor, id_ciclo_escolar_materia]
+    );
+  }
+  
+  static async eliminarMateriasAsignadas(id_profesor) {
+    return db.query(
+      `DELETE FROM profesores_materias WHERE id_profesor = $1`,
+      [id_profesor]
+    );
+  }
+
+  static async obtenerMateriasAsignadas(id_profesor, id_ciclo_escolar) {
+    try {
+      const result = await db.query(`
+        SELECT id_ciclo_escolar_materia 
+        FROM profesores_materias 
+        WHERE id_profesor = $1 AND id_ciclo_escolar_materia IN (
+          SELECT id_ciclo_escolar_materia 
+          FROM ciclos_escolares_materias 
+          WHERE id_ciclo_escolar = $2
+        )
+      `, [id_profesor, id_ciclo_escolar]);
+  
+      return result.rows.map(row => row.id_ciclo_escolar_materia);
+    } catch (error) {
+      console.error('Error al obtener materias asignadas:', error);
+      return [];
+    }
+  }
+  
+  
+  
+  
+  
 };
