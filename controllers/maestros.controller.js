@@ -4,12 +4,24 @@ const Materia = require("../models/materias.model");
 exports.get_all_maestros = (request, response, next) => {
   Promise.all([
     Profesor.sincronizarDesdeAPI(),
-    Materia.getAllCourses()
+    Materia.getMateriasPorCiclo(request.params.idCiclo)
   ]).then(([profesoresData, materiasData]) => {
-    console.log(profesoresData);
     Profesor.fetchAll()
-    .then((profesores) => {
-      request.session.profesores = profesores.rows;
+    .then(async (profesoresData) => {
+      const profesores = profesoresData.rows;
+  
+      // Cargar las materias asignadas para cada profesor en este ciclo
+      for (let profesor of profesores) {
+        const materiasAsignadas = await Profesor.obtenerMateriasAsignadas(
+          profesor.id_profesor,
+          request.params.idCiclo
+        );
+        profesor.materias_asignadas = materiasAsignadas || [];
+      }
+
+      request.session.profesores = profesores;
+      request.session.cicloActual = request.params.idCiclo;
+
       response.render("profesores.ejs", {
         titulo: "maestros",
         privilegios: request.session.privilegios || [],
@@ -21,6 +33,8 @@ exports.get_all_maestros = (request, response, next) => {
         username: request.session.username || "",
         mail: request.session.mail || "",
         rol: request.session.rol || "",
+        csrfToken: request.csrfToken()
+
       });
     })
     .catch((error) => {
@@ -32,3 +46,30 @@ exports.get_all_maestros = (request, response, next) => {
   })
   
 };
+exports.post_asignar_materias = async (req, res, next) => {
+  const id_profesor = req.body.id_profesor;
+  let materias = req.body["materias[]"];
+
+  if (!Array.isArray(materias)) {
+    materias = [materias]; // convierte en arreglo si es solo una
+  }
+
+
+  try {
+    await Profesor.eliminarMateriasAsignadas(id_profesor);
+
+    if (Array.isArray(materias)) {
+      for (const id_cem of materias) {
+        await Profesor.asignarMateria(id_profesor, id_cem);
+      }
+    }
+
+    // Redirige a la vista principal del ciclo actual
+    res.redirect(`/maestros/${req.session.cicloActual}`);
+  } catch (error) {
+    console.error("Error al asignar materias:", error);
+    res.render("error.ejs");
+  }
+};
+
+
