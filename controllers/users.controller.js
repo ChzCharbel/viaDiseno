@@ -113,6 +113,10 @@ exports.post_login = (request, response, next) => {
                             ciclos.rows[
                               ciclos.rows.length - 1
                             ].id_ciclo_escolar;
+                            request.session.nombreCicloActual = 
+                            ciclos.rows[
+                              ciclos.rows.length - 1
+                            ].ciclo_escolar;
                           response.redirect("/enlista/alumno/");
                         })
                         .catch((error) => {
