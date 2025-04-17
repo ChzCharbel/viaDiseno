@@ -29,7 +29,7 @@ exports.get_agregar = (request, response, next) => {
         ]).then(([data, planVersiones, materias]) => {
             console.log(data);
             response.render('oferta_agregar.ejs',{
-                titulo: 'oferta_academica',
+                titulo: 'oferta_academica_agregar',
                 privilegios: request.session.privilegios || [],
                 csrfToken: request.csrfToken(),
                 materias: materias,
