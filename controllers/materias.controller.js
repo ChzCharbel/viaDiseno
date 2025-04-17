@@ -25,6 +25,7 @@ exports.get_materias = (request, response, next) => {
             username: request.session.username || '',
             mail: request.session.mail || '',
             rol: request.session.rol || '',
+            csrfToken: request.csrfToken()
         });
     }).catch((error) => {
         console.log(error);
@@ -63,3 +64,27 @@ exports.post_guardar_horario = (req, res) => {
             res.status(500).send('Error al guardar los horarios');
         });
 };
+
+exports.guardarHorario = async (req, res) => {
+    const id_grupo = req.params.id_grupo;
+    const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+  
+    try {
+      for (let i = 0; i < dias.length; i++) {
+        const dia = req.body[`dia_${i}`];
+        const hora_inicio = req.body[`hora_inicio_${i}`];
+        const hora_fin = req.body[`hora_fin_${i}`];
+  
+        // Si ambas horas están definidas, guardar
+        if (hora_inicio && hora_fin) {
+          await GrupoHorario.guardarHoras(id_grupo, dia, hora_inicio, hora_fin);
+        }
+      }
+  
+      res.redirect('/ruta-donde-quieras-ir');
+    } catch (err) {
+      console.error('Error al guardar horarios:', err);
+      res.status(500).send("Error al guardar horarios");
+    }
+  };
+  

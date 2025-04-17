@@ -75,7 +75,8 @@
                 <!-- Modal de horario -->
                 <div class="modal fade" id="modalHorario<%= materia.id %>" tabindex="-1" aria-labelledby="modalHorarioLabel<%= materia.id %>" aria-hidden="true">
                   <div class="modal-dialog">
-                    <form action="/grupos_horarios/guardar" method="POST">
+                    <form action="/materias/guardar-horario/<%= materia.id %>" method="POST">
+                      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                       <input type="hidden" name="id_grupo" value="<%= materia.id %>">
                       <div class="modal-content">
                         <div class="modal-header">
@@ -91,7 +92,8 @@
                             <div class="mb-3">
                               <label><strong><%= dia %></strong></label>
                               <div class="input-group">
-                                <select name="hora_inicio" class="form-select">
+                                <select name="hora_inicio_<%= index %>" class="form-select" >
+                                  <option value="">N/A</option> <!-- Opción N/A -->
                                   <% for (let h = 7; h <= 16; h++) {
                                        let horaStr = h < 10 ? '0' + h : '' + h;
                                   %>
@@ -101,19 +103,21 @@
                                     <% } %>
                                   <% } %>
                                 </select>
-
-                                <select name="hora_fin" class="form-select">
-                                   <% for (let h = 7; h <= 16; h++) {
-                                          let horaStr = h < 10 ? '0' + h : '' + h
-                                    ; %>
+                                
+                                <select name="hora_fin_<%= index %>" class="form-select">
+                                  <option value="">N/A</option> <!-- Opción N/A -->
+                                  <% for (let h = 7; h <= 16; h++) {
+                                       let horaStr = h < 10 ? '0' + h : '' + h;
+                                  %>
                                     <option value="<%= horaStr %>:00"><%= horaStr %>:00</option>
-                                      <% if (h < 16) { %>
-                                        <option value="<%= horaStr %>:30"><%= horaStr %>:30</option>
-                                      <% } %>
+                                    <% if (h < 16) { %>
+                                      <option value="<%= horaStr %>:30"><%= horaStr %>:30</option>
                                     <% } %>
+                                  <% } %>
                                 </select>
-
+                                
                                 <input type="hidden" name="dia_<%= index %>" value="<%= dia %>">
+                                
                               </div>
                             </div>
                           <% }) %>
