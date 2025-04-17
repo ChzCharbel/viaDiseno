@@ -61,10 +61,79 @@
                 <div id="salonSeleccionado_<%= materia.id %>" class="mt-2 text-muted small">No seleccionado</div>
                 <input type="hidden" name="salon_<%= materia.id %>" id="inputSalon_<%= materia.id %>">
               </td>
+              
               <td>
-  
-                <div id="horario_<%= materia.id %>" class="text-muted small">Sin asignar</div>
+                <!-- Botón para abrir modal -->
+                <button 
+                  type="button" 
+                  class="btn btn-outline-secondary btn-sm rounded-pill" 
+                  data-bs-toggle="modal" 
+                  data-bs-target="#modalHorario<%= materia.id %>">
+                  Seleccionar horario
+                </button>
+              
+                <!-- Modal de horario -->
+                <div class="modal fade" id="modalHorario<%= materia.id %>" tabindex="-1" aria-labelledby="modalHorarioLabel<%= materia.id %>" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <form action="/materias/guardar-horario/<%= materia.id %>" method="POST">
+                      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                      <input type="hidden" name="id_grupo" value="<%= materia.id %>">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="modalHorarioLabel<%= materia.id %>">Asignar horario para <%= materia.name %></h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+
+                        
+
+                        <div class="modal-body">
+                          <% const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes']; %>
+                          <% dias.forEach((dia, index) => { %>
+                            <div class="mb-3">
+                              <label><strong><%= dia %></strong></label>
+                              <div class="input-group">
+                                <select name="hora_inicio_<%= index %>" class="form-select" >
+                                  <option value="">N/A</option> <!-- Opción N/A -->
+                                  <% for (let h = 7; h <= 16; h++) {
+                                       let horaStr = h < 10 ? '0' + h : '' + h;
+                                  %>
+                                    <option value="<%= horaStr %>:00"><%= horaStr %>:00</option>
+                                    <% if (h < 16) { %>
+                                      <option value="<%= horaStr %>:30"><%= horaStr %>:30</option>
+                                    <% } %>
+                                  <% } %>
+                                </select>
+                                
+                                <select name="hora_fin_<%= index %>" class="form-select">
+                                  <option value="">N/A</option> <!-- Opción N/A -->
+                                  <% for (let h = 7; h <= 16; h++) {
+                                       let horaStr = h < 10 ? '0' + h : '' + h;
+                                  %>
+                                    <option value="<%= horaStr %>:00"><%= horaStr %>:00</option>
+                                    <% if (h < 16) { %>
+                                      <option value="<%= horaStr %>:30"><%= horaStr %>:30</option>
+                                    <% } %>
+                                  <% } %>
+                                </select>
+                                
+                                <input type="hidden" name="dia_<%= index %>" value="<%= dia %>">
+                                
+                              </div>
+                            </div>
+                          <% }) %>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="submit" class="btn btn-primary">Guardar horario</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              
+                <!-- Vista del horario asignado -->
+                <div id="horario_<%= materia.id %>" class="text-muted small mt-2">Sin asignar</div>
               </td>
+              
 
               <td>
                 <button class="btn btn-primary btn-sm rounded-pill px-3">Guardar</button>
