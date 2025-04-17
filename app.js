@@ -54,6 +54,8 @@ const planesRoutes = require("./routes/planes.routes");
 const ofertaRoutes = require("./routes/oferta.routes");
 const solicitudesRoutes = require("./routes/solicitudes.routes");
 const disponibleRoutes = require("./routes/disponible.routes");
+const cicloRoutes = require('./routes/ciclo.routes');
+
 
 const gruposRoutes = require("./routes/grupos.routes"); 
 app.use("/grupos", gruposRoutes);
@@ -68,6 +70,7 @@ app.use("/planes", planesRoutes);
 app.use("/oferta_academica", ofertaRoutes);
 app.use("/solicitudes", solicitudesRoutes);
 app.use("/disponible", disponibleRoutes);
+app.use('/ciclo', cicloRoutes);
 
 app.get("/v1/users/find_one/:id", async (req, res) => {
   try {

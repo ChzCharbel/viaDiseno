@@ -58,7 +58,7 @@ exports.post_guardar_horario = (req, res) => {
     });
 
     Promise.all(inserciones)
-        .then(() => res.redirect('/materias')) // o redirige según convenga
+        .then(() => res.redirect('/materias'))
         .catch(err => {
             console.error('Error guardando horarios:', err);
             res.status(500).send('Error al guardar los horarios');
@@ -88,4 +88,3 @@ exports.guardarHorario = async (req, res) => {
       res.status(500).send("Error al guardar horarios");
     }
   };
-  
