@@ -17,9 +17,11 @@ exports.get_horario_alumnos_regulares = (request, response, next) => {
 
 exports.get_alumnos = (request, response, next) => {
     console.log(request.session.matricula);
-    console.log(request.session.privilegios);
-    Alumno.fetchAll().then((alumnos) => {
-        console.log(alumnos.rows);
+    Promise.all([
+        Alumno.sincronizarDesdeAPI(),
+        Alumno.fetchAll(),
+    ]).then(([data, alumnos]) => {
+        console.log(data);
         
         // Si es una petición AJAX, devolver JSON
         if (request.xhr || request.headers['x-requested-with'] === 'XMLHttpRequest') {
@@ -39,12 +41,9 @@ exports.get_alumnos = (request, response, next) => {
             grupos: [],
             rol: request.session.rol || '',
         });
-
     }).catch((error) => {
         console.log(error);
-        response.render('error.ejs');
     })
-    
 }; 
 
 exports.get_buscar = (request, response, next) => {
