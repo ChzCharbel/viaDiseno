@@ -1,3 +1,8 @@
 <%- include('includes/_header') %>
 <%- include('includes/_offcanvas') %>
-<%- include('includes/_fecha_inscripciones') %>
+
+<% if (!editar && cicloEscolar.inicio_inscripcion && cicloEscolar.fin_inscripcion) { %>
+    <%- include('includes/_fechas_inscritas') %>
+  <% } else { %>
+    <%- include('includes/_fecha_inscripciones') %>
+  <% } %>  

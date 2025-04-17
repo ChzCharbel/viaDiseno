@@ -11,6 +11,8 @@ exports.get_inscripciones_form = (req, res, next) => {
                 res.render('fecha_inscripciones.ejs', {
                     cicloEscolar: cicloEscolar,
                     csrfToken: req.csrfToken(),
+                    cicloActual: idCiclo, 
+                    username: req.user?.nombre || 'Usuario'
                 });
             } else {
                 res.status(404).send('Ciclo escolar no encontrado');
@@ -24,25 +26,34 @@ exports.get_inscripciones_form = (req, res, next) => {
 
 // Función POST para guardar las fechas de inscripción
 exports.post_inscripciones = (req, res, next) => {
+    console.log('Entrando a post_inscripciones');
+
     const { fechaInicioInscripcion, fechaFinInscripcion } = req.body;
     const idCiclo = req.params.idCiclo;
 
+    console.log('Datos recibidos:');
+    console.log('Inicio Inscripción:', fechaInicioInscripcion);
+    console.log('Fin Inscripción:', fechaFinInscripcion);
+    console.log('ID Ciclo:', idCiclo);
+
     if (!fechaInicioInscripcion || !fechaFinInscripcion) {
-        return res.status(400).send('Las fechas son requeridas');
+        console.warn('Fechas de inscripción no proporcionadas');
+        return res.status(400).send('Las fechas de inscripción son requeridas');
     }
 
     CicloEscolar.updateInscripciones(idCiclo, fechaInicioInscripcion, fechaFinInscripcion)
         .then(() => {
-            // Redirigir a la vista donde se muestran las fechas guardadas en grande
-            res.redirect(`/inicio/inscripciones/${idCiclo}`);
+            const destino = `/inicio/${idCiclo}`;
+            console.log('Redirigiendo a:', destino);
+            res.redirect(destino);
         })
         .catch(err => {
-            console.log(err);
-            res.status(500).send('Error al guardar las fechas');
+            console.error('Error al guardar inscripción:', err);
+            res.status(500).send('Error al guardar inscripción');
         });
 };
 
-// NUEVA función GET para mostrar las fechas guardadas en grande
+// Función GET para mostrar las fechas guardadas en grande
 exports.get_inscripciones_guardadas = (req, res, next) => {
     const idCiclo = req.params.idCiclo;
 
@@ -50,9 +61,10 @@ exports.get_inscripciones_guardadas = (req, res, next) => {
         .then(result => {
             if (result.rows.length > 0) {
                 const cicloEscolar = result.rows[0];
-                res.render('inscripcionGuardada.ejs', {
+                res.render('includes/_fechas_inscritas.ejs', {
                     ciclo: cicloEscolar,
-                    username: req.user?.nombre || 'Usuario' // cambia esto según cómo guardes el usuario
+                    cicloActual: idCiclo,
+                    username: req.user?.nombre || 'Usuario'
                 });
             } else {
                 res.status(404).send('Ciclo escolar no encontrado');
