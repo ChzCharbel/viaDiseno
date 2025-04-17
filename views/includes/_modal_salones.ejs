@@ -22,19 +22,21 @@
        <% salones.forEach(salon => { %>
          <button
            class="btn btn-light w-100 my-1 text-start border"
-           onclick="seleccionarSalon('<%= materia.id_ciclo_escolar_materia %>', '<%= salon.idSalon %>', '<%= salon.id_salon %> (<%= salon.descripcion %>)')">
+           data-salon-id="<%= salon.id_salon %>"
+           onclick="seleccionarSalon('<%= materia.id_ciclo_escolar_materia %>', '<%= salon.id_salon %>', '<%= salon.id_salon %> (<%= salon.descripcion %>)')">
            <%= salon.id_salon %> (<%= salon.descripcion %>)
          </button>
        <% }) %>
-
        <input type="hidden" id="inputSalon_<%= materia.id_ciclo_escolar_materia %>">
+       <input type="hidden" id="csrfToken_<%= materia.id_ciclo_escolar_materia %>" value="<%= csrfToken %>">
      </div>
      <div class="modal-footer">
        <button
          type="button"
          class="btn btn-primary rounded-pill px-4"
          onclick="guardarSalonSeleccionado('<%= materia.id_ciclo_escolar_materia %>')"
-         data-bs-dismiss="modal">
+         data-bs-dismiss="modal"
+         id="btnGuardar<%= materia.id_ciclo_escolar_materia %>">
          Guardar
        </button>
      </div>

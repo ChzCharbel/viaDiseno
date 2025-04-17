@@ -24,7 +24,6 @@ const Disponible = require("../models/disponible.model");
 
 exports.obtenerDisponibilidadProfesor = async (req, res) => {
   try {
-
     const idCicloEscolar = req.params.idCiclo || req.session.cicloActual;
     const matriculaProfesor = req.params.matriculaProfesor;
     
