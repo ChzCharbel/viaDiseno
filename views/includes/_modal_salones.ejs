@@ -1,33 +1,43 @@
 <!-- Modal de salones por materia -->
-<div 
-  class="modal fade" 
-  id="modalSalones<%= materia.id %>" 
-  tabindex="-1" 
-  aria-labelledby="labelSalones<%= materia.id %>" 
-  aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="labelSalones<%= materia.id %>">
-          Selecciona un salón para <%= materia.name %>
-        </h5>
-        <button 
-          type="button" 
-          class="btn-close" 
-          data-bs-dismiss="modal" 
-          aria-label="Cerrar">
-        </button>
-      </div>
-      <div class="modal-body">
-        <% salones.forEach(salon => { %>
-          <button 
-            class="btn btn-light w-100 my-1 text-start border"
-            onclick="seleccionarSalon('<%= materia.id %>', '<%= salon.idSalon %>', '<%= salon.id_salon %> (<%= salon.descripcion %>)')"
-            data-bs-dismiss="modal">
-            <%= salon.id_salon %> (<%= salon.descripcion %>)
-          </button>
-        <% }) %>
-      </div>
-    </div>
-  </div>
+<div
+ class="modal fade"
+ id="modalSalones<%= materia.id_ciclo_escolar_materia %>"
+ tabindex="-1"
+ aria-labelledby="labelSalones<%= materia.id_ciclo_escolar_materia %>"
+ aria-hidden="true">
+ <div class="modal-dialog modal-dialog-centered">
+   <div class="modal-content">
+     <div class="modal-header">
+       <h5 class="modal-title" id="labelSalones<%= materia.id_ciclo_escolar_materia %>">
+         Selecciona un salón para <%= materia.nombre_materia %>
+       </h5>
+       <button
+         type="button"
+         class="btn-close"
+         data-bs-dismiss="modal"
+         aria-label="Cerrar">
+       </button>
+     </div>
+     <div class="modal-body">
+       <% salones.forEach(salon => { %>
+         <button
+           class="btn btn-light w-100 my-1 text-start border"
+           onclick="seleccionarSalon('<%= materia.id_ciclo_escolar_materia %>', '<%= salon.idSalon %>', '<%= salon.id_salon %> (<%= salon.descripcion %>)')">
+           <%= salon.id_salon %> (<%= salon.descripcion %>)
+         </button>
+       <% }) %>
+
+       <input type="hidden" id="inputSalon_<%= materia.id_ciclo_escolar_materia %>">
+     </div>
+     <div class="modal-footer">
+       <button
+         type="button"
+         class="btn btn-primary rounded-pill px-4"
+         onclick="guardarSalonSeleccionado('<%= materia.id_ciclo_escolar_materia %>')"
+         data-bs-dismiss="modal">
+         Guardar
+       </button>
+     </div>
+   </div>
+ </div>
 </div>
