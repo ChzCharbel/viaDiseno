@@ -150,16 +150,25 @@ module.exports = class Usuario {
 
   /* De acuerdo al rol se ejecuta la función que le corresponda para obtener los atributos de su tabla */
   static async fetchOne(matricula) {
-    const rolUsuario = await db.query(`SELECT rol FROM usuarios WHERE id_ivd = $1::text`, [matricula]);
-    if (rolUsuario.rows[0].rol) {
-      console.log(rolUsuario.rows[0].rol);
-      if (rolUsuario.rows[0].rol == 'student') {
-        return db.query(`Select  * from public.consulta_info_alumnos($1::text)`, [matricula]);
+    const existe = await db.query(`Select * from usuarios where id_ivd = $1::text;`, [matricula]);
+    console.log(existe)
+    if (existe.rowCount != 0) {
+      let rolUsuario = await db.query(`SELECT rol FROM usuarios WHERE id_ivd = $1::text`, [matricula]) || 'no encontrado';
+      if (rolUsuario.rows[0].rol != 'no encontrado') {
+        console.log(rolUsuario.rows[0].rol);
+        if (rolUsuario.rows[0].rol == 'student') {
+          return db.query(`Select  * from public.consulta_info_alumnos($1::text)`, [matricula]);
+        }
+        else if (rolUsuario.rows[0].rol == 'admin') {
+          return db.query(`Select * from public.consulta_info_admin($1::text)`, [matricula]);
+        }
       }
-      else if (rolUsuario.rows[0].rol == 'admin') {
-        return db.query(`Select * from public.consulta_info_admin($1::text)`, [matricula]);
-      }
-    };
+    }
+    else {
+      return db.query(`Select * from usuarios where id_ivd = $1::text;`, [matricula]);
+    }
+    
+    
   }
 
   static fetch(id) {

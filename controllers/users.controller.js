@@ -79,7 +79,7 @@ exports.get_login = (request, response, next) => {
 exports.post_login = (request, response, next) => {
   Usuario.fetchOne(request.body.matriculaInput)
     .then((usuario) => {
-      if (usuario.rows.length > 0) {
+      if (usuario.rowCount > 0) {
         const bcrypt = require("bcryptjs");
         bcrypt
           .compare(request.body.passwordInput, usuario.rows[0].password)
