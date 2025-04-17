@@ -1,6 +1,42 @@
 const db = require('../util/database');
+const {getAllUsers} = require('../util/admin.api.client');
 
 module.exports = class Alumno {
+
+	static async getAllUsers() {
+		return await getAllUsers('Users::Student');
+	}
+
+	static async sincronizarDesdeAPI() {
+		try {
+			const alumnos = await this.getAllUsers();
+			for (let alumno of alumnos) {
+				if (alumno.status == 'active') {
+					const { ivd_id, name, first_surname, 
+						second_surname, email, status, 
+						semester, degree_name, regular
+					} = alumno;
+					await db.query(`
+						CALL sincronizar_alumnos('XP300', 
+						'Xime', 
+						'xime@xime.com', 
+						'Diseño de la Moda e Industria del Vestido', 
+						true, 
+						'4', 
+						'active');
+					`, [ivd_id, name + ' ' + first_surname + ' ' + 
+						second_surname, email, degree_name, regular, semester, status]);
+					/*await db.query(`UPDATE materias SET estatus = $1::text WHERE 
+						id_materia = $2::text`, [estatus, id]);*/
+					
+				}
+			}
+		}
+		catch (error) {
+
+		}
+	}
+
     static fetchAll() {
 		return db.query(`SELECT * from usuarios JOIN alumnos using (id_ivd) JOIN carreras using(id_carrera)`);
 	}
