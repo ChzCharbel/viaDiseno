@@ -118,5 +118,24 @@ module.exports = class Grupo{
             throw error;
         }
     }
+    static async getMateriasPorCiclo(idCicloEscolar) {
+        try {
+          const resultado = await db.query(`
+            SELECT cem.id_ciclo_escolar_materia, m.materia AS nombre_materia
+            FROM ciclos_escolares_materias cem
+            JOIN planes_materias pm ON cem.id_plan_materia = pm.id_plan_materia
+            JOIN materias m ON pm.id_materia = m.id_materia
+            WHERE pm.estatus_plan_materia = 'active'
+              AND cem.id_ciclo_escolar = $1
+            ORDER BY m.materia ASC
+          `, [idCicloEscolar]);
+          return resultado.rows;
+        } catch (error) {
+          console.error("Error al obtener materias del ciclo actual:", error);
+          return [];
+        }
+      }
+      
+      
 }
 

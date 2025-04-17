@@ -6,6 +6,11 @@ const canView = require("../util/canViewProfesores");
 
 const maestrosController = require("../controllers/maestros.controller");
 
+router.post("*", (req, res, next) => {
+  next();
+});
+
+
 // GET /maestros
 router.get("/:idCiclo/agregar", isAuth, canView, (request, response, next) => {
   response.render("agregar_maestros");
@@ -23,5 +28,8 @@ router.post("/:idCiclo/agregar", isAuth, canView, (request, response, next) => {
 });
 
 router.get("/:idCiclo/", isAuth, canView, maestrosController.get_all_maestros);
+
+router.post("/:idCiclo/asignar-materias", isAuth, canView, maestrosController.post_asignar_materias);
+
 
 module.exports = router;
