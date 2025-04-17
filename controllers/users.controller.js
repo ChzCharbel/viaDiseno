@@ -39,7 +39,10 @@ exports.post_reset_password = (request, response, next) => {
             request.body.passwordInput,
             arreglo[2],
             arreglo[0],
-            arreglo[3]
+            arreglo[3],
+            arreglo[6],
+            arreglo[4],
+            arreglo[5],
           );
           usuario
             .save()
