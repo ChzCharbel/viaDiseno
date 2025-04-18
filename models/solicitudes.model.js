@@ -29,6 +29,27 @@ module.exports = class SolicitaCambio {
   }
   
   
+
+  static actualizarEstatus(idSolicitud, aprobado, fechaResolucion) {
+    return db.query(
+      `UPDATE solicitudes_cambio
+       SET aprobado = $1, fecha_resolucion = $2
+       WHERE id_solicitud = $3;`,
+      [aprobado, fechaResolucion, idSolicitud]
+    );
+  }
+
+  static actualizarEstatusConRespuesta(idSolicitud, aprobado, respuesta) {
+    return db.query(
+      `UPDATE solicitudes_cambio
+       SET aprobado = $1, mensaje = $2, fecha_resolucion = NOW()
+       WHERE id_solicitud = $3;`,
+      [aprobado, respuesta, idSolicitud]
+    );
+  }
+  
 };
+
+
 
 

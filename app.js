@@ -31,6 +31,7 @@ const multer = require("multer");
 
 const csrf = require("csurf");
 const csrfProtection = csrf();
+
 app.use((req, res, next) => {
   if (req.path.startsWith("/disponible")) {
     return next();

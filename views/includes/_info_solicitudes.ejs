@@ -32,8 +32,8 @@
   <!-- Tabla -->
   <div class="table-responsive">
     <table class="table table-hover align-middle shadow-sm">
-      <thead class="table-light">
-        <tr>
+      <thead class="table-light" className="bg-gray-100 border-b">
+        <tr className="bg-white hover:bg-gray-50">
           <th>#</th>
           <th>Nombre</th>
           <th>Correo</th>
@@ -46,9 +46,9 @@
           <th colspan="2" class="text-center">Acciones</th>
         </tr>
       </thead>
-      <tbody class="table-group-divider">
+      <tbody class="table-group-divider" className="divide-y divide-gray-200">
         <% SolicitaCambio.forEach((solicitud, index) => { %>
-        <tr data-estatus="<%= solicitud.aprobado === true ? 'Aprobado' : solicitud.aprobado === false ? 'Rechazado' :  'Pendiente' %>">
+        <tr className="bg-white hover:bg-gray-50" data-estatus="<%= solicitud.aprobado === true ? 'Aprobado' : solicitud.aprobado === false ? 'Rechazado' :  'Pendiente' %>">
           <th scope="row"><%= index + 1 %></th>
           <td><%= solicitud.nombre_usuario %></td>
           <td><%= solicitud.correo_institucional %></td>
@@ -66,14 +66,21 @@
             <%= solicitud.fecha_resolucion ? solicitud.fecha_resolucion.toISOString().slice(0, 10) : "" %>
           </td>
           <td class="text-center">
-            <button type="button" class="btn btn-outline-success btn-sm btn-aprobar" data-id="<%= solicitud._id %>">
-              <i class="bi bi-check-circle"></i> Aprobar
-            </button>
-          </td>
-          <td class="text-center">
-            <button type="button" class="btn btn-outline-danger btn-sm btn-rechazar" data-id="<%= solicitud._id %>">
-              <i class="bi bi-x-circle"></i> Rechazar
-            </button>
+            <td class="text-center" colspan="2">
+              <button type="button" class="btn btn-primary btn-sm btn-acciones" 
+                      data-id="<%= solicitud.id_solicitud %>"
+                      data-nombre="<%= solicitud.nombre_usuario %>"
+                      data-correo="<%= solicitud.correo_institucional %>"
+                      data-matricula="<%= solicitud.id_ivd %>"
+                      data-descripcion="<%= solicitud.descripcion %>"
+                      data-estatus="<%= solicitud.aprobado %>"
+                      data-fecha="<%= solicitud.fecha_solicitud %>"
+                      data-mensaje="<%= solicitud.mensaje %>" 
+                >
+                <i class="bi bi-three-dots-vertical"></i> Acciones
+              </button>
+            </td>
+            
           </td>
         </tr>
         <% }) %>
@@ -81,6 +88,54 @@
     </table>
   </div>
 </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="modalAcciones" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <input type="hidden" id="csrfToken" value="<%= csrfToken %>">
+      <div class="modal-header">
+        <h5 class="modal-title">Detalles de la Solicitud</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      
+      <div class="modal-body px-4 py-3">
+        <div class="row g-3">
+          <div class="col-md-6"><strong>Nombre:</strong> <span id="modal-nombre"></span></div>
+          <div class="col-md-6"><strong>Correo:</strong> <span id="modal-correo"></span></div>
+          <div class="col-md-6"><strong>Matrícula:</strong> <span id="modal-matricula"></span></div>
+          <div class="col-md-6"><strong>Fecha Solicitud:</strong> <span id="modal-fecha"></span></div>
+          <div class="col-md-6"><strong>Fecha resolución:</strong> <span id="modal-fecha-resolucion"></span></div>
+        </div>
+
+        <div class="mb-3 mt-4"><strong>Descripción:</strong>
+          <p id="modal-descripcion" class="border rounded p-2 bg-light"></p>
+        </div>
+
+        <div class="mb-3">
+          <label for="modal-respuesta" class="form-label"><strong>Mi respuesta:</strong></label>
+          <textarea class="form-control" id="modal-respuesta" rows="3" placeholder="Escribe tu respuesta aquí..."></textarea>
+        </div>
+
+        <div class="mb-3"><strong>Estatus actual:</strong> <span id="modal-estatus"></span></div>
+
+        <div class="mb-3">
+          <strong>Horario:</strong><br>
+          <img src="https://www.calendarpedia.com/images-large/espana/horario/horario.png" class="img-fluid rounded border shadow">
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button id="btn-aprobar" class="btn btn-success">Aprobar</button>
+        <button id="btn-rechazar" class="btn btn-danger">Rechazar</button>
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
 <script>
   const filtroEstatus = document.getElementById("filtroEstatus");
@@ -100,3 +155,101 @@
     });
   });
 </script>
+
+<script>
+  const csrfToken = document.getElementById("csrfToken").value;
+  const modal = new bootstrap.Modal(document.getElementById('modalAcciones'));
+  let solicitudActualId = null;
+
+  document.querySelectorAll('.btn-acciones').forEach(button => {
+    button.addEventListener('click', () => {
+      solicitudActualId = button.dataset.id;
+      document.getElementById('modal-nombre').textContent = button.dataset.nombre;
+      document.getElementById('modal-correo').textContent = button.dataset.correo;
+      document.getElementById('modal-matricula').textContent = button.dataset.matricula;
+      document.getElementById('modal-fecha').textContent = button.dataset.fecha;
+      document.getElementById('modal-descripcion').textContent = button.dataset.descripcion;
+      document.getElementById('modal-fecha-resolucion').textContent = button.closest("tr").querySelector("td:nth-child(9)").textContent || "";
+      const estatus = button.dataset.estatus === "true" ? "Aprobado" : button.dataset.estatus === "false" ? "Rechazado" : "Pendiente";
+      document.getElementById('modal-estatus').textContent = estatus;
+      modal.show();
+    });
+  });
+
+
+  function enviarRespuesta(aprobado) {
+  const form = document.getElementById("form-respuesta");
+  const idSolicitud = form.getAttribute("data-id-solicitud");
+  const respuesta = document.getElementById("respuesta").value;
+
+  fetch(`/solicitudes/solicitud/${idSolicitud}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      estatus: aprobado,
+      respuesta: respuesta,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log("Respuesta actualizada:", data);
+ 
+      location.reload(); 
+    })
+    .catch((err) => {
+      console.error("Error:", err);
+      alert("Hubo un problema al actualizar la solicitud");
+    });
+}
+
+
+async function actualizarEstatus(nuevoEstatus) {
+  const respuestaTexto = document.getElementById("modal-respuesta").value;
+  
+  try {
+    const res = await fetch(`/solicitudes/solicitud/${solicitudActualId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'CSRF-Token': csrfToken 
+      },
+      body: JSON.stringify({
+        estatus: nuevoEstatus,
+        respuesta: respuestaTexto
+      })
+    });
+
+    if (res.ok) {
+      const updated = await res.json();
+
+      document.getElementById("modal-fecha-resolucion").textContent = updated.fecha_resolucion;
+
+      const fila = document.querySelector(`.btn-acciones[data-id="${solicitudActualId}"]`).closest("tr");
+
+      const estatusCell = fila.querySelector("td:nth-child(6)");
+      const nuevoTextoEstatus = nuevoEstatus === true ? "Aprobado" : "Rechazado";
+      const claseEstatus = nuevoEstatus === true ? "text-success fw-semibold" : "text-danger fw-semibold";
+      estatusCell.textContent = nuevoTextoEstatus;
+      estatusCell.className = claseEstatus;
+
+      fila.querySelector("td:nth-child(7)").textContent = respuestaTexto;
+      fila.querySelector("td:nth-child(9)").textContent = updated.fecha_resolucion;
+      fila.setAttribute("data-estatus", nuevoTextoEstatus);
+
+      modal.hide();
+    } else {
+      alert("Error al actualizar solicitud");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Error de red al actualizar");
+  }
+}
+
+
+  document.getElementById("btn-aprobar").addEventListener("click", () => actualizarEstatus(true));
+  document.getElementById("btn-rechazar").addEventListener("click", () => actualizarEstatus(false));
+</script>
+
