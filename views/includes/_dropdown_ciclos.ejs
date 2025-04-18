@@ -1,4 +1,5 @@
 <!--dropdown de ciclo escolar-->
+<!-- Dropdown de ciclo escolar -->
 <div class="dropdown me-auto">
   <a
     class="nav-link dropdown-toggle text-light"
@@ -9,19 +10,18 @@
   >
     Ciclo escolar
   </a>
-  <ul class="dropdown-menu" id="dropdown-menu">
-    <div class="dropdown-items-container overflow-auto" style="max-height: 100px">
-      <% for (ciclo of ciclosEscolares) { %>
-        <% if (ciclo.id_ciclo_escolar == cicloActual) { %>
-          <li>
-            <a class="dropdown-item active" href="/<%= titulo %>/<%= ciclo.id_ciclo_escolar %>"> <%= ciclo.ciclo_escolar %> </a>
-          </li>
-        <% } else { %>
-          <li>
-            <a class="dropdown-item" href="/<%= titulo %>/<%= ciclo.id_ciclo_escolar %>"> <%= ciclo.ciclo_escolar %> </a>
-          </li>
-      <% } } %>
-    </div>
+  <ul class="dropdown-menu overflow-auto" style="max-height: 200px;" id="dropdown-menu">
+    <% for (ciclo of ciclosEscolares) { %>
+      <% if (ciclo.id_ciclo_escolar == cicloActual) { %>
+        <li>
+          <a class="dropdown-item active" href="/<%= titulo %>/<%= ciclo.id_ciclo_escolar %>"> <%= ciclo.ciclo_escolar %> </a>
+        </li>
+      <% } else { %>
+        <li>
+          <a class="dropdown-item" href="/<%= titulo %>/<%= ciclo.id_ciclo_escolar %>"> <%= ciclo.ciclo_escolar %> </a>
+        </li>
+      <% } %>
+    <% } %>
     <li><hr class="dropdown-divider" /></li>
     <li>
       <a class="dropdown-item text-dark fw-bold" href="#" id="add-cycle">
