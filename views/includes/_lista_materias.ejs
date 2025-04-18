@@ -77,6 +77,7 @@
               <!-- Formulario de eliminación -->
               <form action="/solicitudes/cambio" method="POST" id="formEliminar<%= index %>" class="form-eliminar-materia" style="display: none;">
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <input type="hidden" data-field="id_ciclo_escolar" value="<%= cicloActual %>">
                 <input type="hidden" data-field="matricula" value="<%= matricula %>">
                 <input type="hidden" data-field="id_materia" value="<%= grupo.materia.id %>">
                 <input type="hidden" data-field="tipo" value="eliminar">
@@ -94,20 +95,26 @@
 
               <input class="btn btn-primary btn-cambiar-materia" type="button" value="Cambiar materia" data-form-id="formulario<%= index %>">
 
+              
               <!-- Formulario de cambio -->
               <form action="/solicitudes/cambio" method="POST" id="formulario<%= index %>" class="form-cambio-materia" style="display: none;">
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                <input type="hidden" name="matricula" value="<%= matricula %>">
-                <input type="hidden" name="id_materia" value="<%= grupo.materia.id %>">
-                <input type="hidden" name="tipo" value="cambio">
-                <input type="hidden" name="nombre_materia" value="<%= grupo.materia.nombre %>">
+                <input type="hidden" name="matricula" data-field="matricula" value="<%= matricula %>">
+                <input type="hidden" name="id_materia" data-field="id_materia" value="<%= grupo.materia.id %>">
+                <input type="hidden" name="tipo" data-field="tipo" value="cambio">
+                <input type="hidden" name="nombre_materia" data-field="nombre_materia" value="<%= grupo.materia.nombre %>">
+                <input type="hidden" name="id_ciclo_escolar" data-field="id_ciclo_escolar" value="<%= cicloActual %>">
+
                 <div class="mb-3">
                   <label for="materia<%= index %>" class="form-label">Materia por la que se solicita cambiar:</label>
-                  <input type="text" class="form-control input-materia" id="materia<%= index %>" name="descripcion" required>
+                  <input type="text" name="descripcion" class="form-control" id="materia<%= index %>" data-field="descripcion" required>
                   <div class="form-text">Se enviará la información a coordinadores, esperar respuesta.</div>
                 </div>
-                <button type="submit" class="btn btn-primary">Enviar</button>
+
+                <button type="button" class="btn btn-primary btn-enviar-cambio" data-form-id="formulario<%= index %>">Enviar</button>
               </form>
+
+
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Aceptar</button>

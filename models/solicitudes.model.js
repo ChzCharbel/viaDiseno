@@ -16,14 +16,19 @@ module.exports = class SolicitaCambio {
     );
   }
 
-  static crearSolicitud ({ matricula, id_materia, descripcion, idCiclo}) {
-    const fecha_solicitud = new Date().toISOString().split('T')[0];
+  
 
-    return db.query(
-      `INSERT INTO solicitudes_cambio
-      (id_ivd, id_materia, id_ciclo_escolar, resuelto, descripcion, fecha_solicitud, fecha_resolucion)
-      VALUES ($1, $2, $3, $4, $5, $6, $7);`,
-      [matricula, id_materia, idCiclo, null, descripcion, fecha_solicitud, null]
-    );
+  static async crearSolicitud({ id_ivd, id_ciclo_escolar, id_materia, tipo, descripcion, mensaje }) {
+    const query = `
+      INSERT INTO solicitudes_cambio
+      (id_ivd, id_ciclo_escolar, id_materia, tipo, descripcion, mensaje, fecha_solicitud, aprobado, resuelto)
+      VALUES ($1, $2, $3, $4, $5, $6, CURRENT_DATE, null, false)
+    `;
+    const values = [id_ivd, id_ciclo_escolar, id_materia, tipo, descripcion, mensaje];
+    return db.query(query, values);
   }
+  
+  
 };
+
+
