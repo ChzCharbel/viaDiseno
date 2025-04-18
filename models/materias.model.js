@@ -1,5 +1,5 @@
 const db = require('../util/database');
- const {getAllCourses, getAllDegrees} = require('../util/admin.api.client');
+const {getAllCourses, getAllDegrees} = require('../util/admin.api.client');
  
  module.exports = class Grupo{
      static async getAllCourses() {
@@ -135,6 +135,7 @@ const db = require('../util/database');
            return [];
          }
        }
+      
        
        
  }
