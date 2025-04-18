@@ -1,177 +1,222 @@
 <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-        <h3 class="text-center mt-5">Materias</h3>
-  
-        <% if (grupos && grupos.length > 0) { %>
-          <% const colores = ['bg-primary', 'bg-success', 'bg-warning', 'bg-danger', 'bg-info', 'bg-secondary', 'bg-dark'];
-          const materiasColor = {};
-          let colorIndex = 0;
+  <h3 class="text-center mt-5">Materias</h3>
 
-          grupos.forEach(grupo => {
-            const nombre = grupo.materia.nombre;
-            if (!materiasColor[nombre]) {
-              materiasColor[nombre] = colores[colorIndex % colores.length];
-              colorIndex++;
-            }
-          });
-        %>
-          <% grupos.forEach((grupo, index) => { %>
-            <!-- Tarjeta de la materia -->
-            <div class="card m-3">
-              <div class="card-body">
-                <div class="row">
-                  <div class="col">
-                    <h5 class="card-title"><%= grupo.materia.nombre %></h5>
-                    <p class="card-text">Profesor <%= grupo.profesor.nombre %></p>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal<%= index %>">
-                      Ver más
-                    </button>
-                  </div>
-                  <% const color = materiasColor[grupo.materia.nombre] || 'bg-light'; %>
-                  <div class="col-1 <%= color %> rounded-start"></div>
-                </div>
-              </div>
-            </div>
-  
-            <!-- Modal de detalles -->
-            <div class="modal fade" id="modal<%= index %>" tabindex="-1" aria-labelledby="modalLabel<%= index %>" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="modalLabel<%= index %>"><%= grupo.materia.nombre %></h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
-                    <dl class="row">
-                        <dt class="col-sm-9">Nombre de Profesor:</dt>
-                        <dd class="col-sm-9"><%= grupo.profesor.nombre %></dd>
-                      
-                        <dt class="col-sm-9">Salón:</dt>
-                        <dd class="col-sm-9"><%= grupo.salon.id %></dd>
-                      
-                        <dt class="col-sm-9">Horario:</dt>
-                        <dd class="col-sm-9">
-                          <ul class="list-group list-group-flush">
-                            <% if (grupo.lunesInicio && grupo.lunesFin) { %>
-                              <li class="list-group-item">Lunes: <%= grupo.lunesInicio %> - <%= grupo.lunesFin %></li>
-                            <% } %>
-                            <% if (grupo.martesInicio && grupo.martesFin) { %>
-                              <li class="list-group-item">Martes: <%= grupo.martesInicio %> - <%= grupo.martesFin %></li>
-                            <% } %>
-                            <% if (grupo.miercolesInicio && grupo.miercolesFin) { %>
-                              <li class="list-group-item">Miercoles: <%= grupo.miercolesInicio %> - <%= grupo.miercolesFin %></li>
-                            <% } %>
-                            <% if (grupo.juevesInicio && grupo.juevesFin) { %>
-                              <li class="list-group-item">Jueves: <%= grupo.juevesInicio %> - <%= grupo.juevesFin %></li>
-                            <% } %>
-                            <% if (grupo.viernesInicio && grupo.viernesFin) { %>
-                              <li class="list-group-item">Viernes: <%= grupo.viernesInicio %> - <%= grupo.viernesFin %></li>
-                            <% } %>
-                          </ul>
-                        </dd>
-                      </dl>
-                      
-  
-                    <!-- Botones de acción -->
-                    <input class="btn btn-danger btn-eliminar-materia" type="button" value="Eliminar Materia" data-form-id="formEliminar<%= index %>">
+  <% if (grupos && grupos.length > 0) { %>
+    <% 
+      const colores = ['bg-primary', 'bg-success', 'bg-warning', 'bg-danger', 'bg-info', 'bg-secondary', 'bg-dark'];
+      const materiasColor = {};
+      let colorIndex = 0;
 
-                    <!-- Formulario de eliminación -->
-                    <form action="/solicitudes/cambio" method="POST" id="formEliminar<%= index %>" class="form-eliminar-materia" style="display: none;">
-                      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                      <input type="hidden" name="matricula" value="<%= matricula %>">
-                      <input type="hidden" name="id_materia" value="<%= grupo.materia.id %>">
-                      <input type="hidden" name="tipo" value="eliminar">
-                      <input type="hidden" name="nombre_materia" value="<%= grupo.materia.nombre %>">
+      grupos.forEach(grupo => {
+        const nombre = grupo.materia.nombre;
+        if (!materiasColor[nombre]) {
+          materiasColor[nombre] = colores[colorIndex % colores.length];
+          colorIndex++;
+        }
+      });
+    %>          
+    <% grupos.forEach((grupo, index) => { %>        
+      <div class="card mb-3">
+        <div class="card-body position-relative">          
+          <h5 class="card-title"><%= grupo.materia.nombre %></h5>
+          <p class="card-text">Profesor: <%= grupo.profesor.nombre %></p>
+          <p class="card-text">Salón: <%= grupo.salon.id %></p>
 
-                      <div class="mb-3">
-                        <label for="motivo<%= index %>" class="form-label">Motivo de eliminación:</label>
-                        <input type="text" class="form-control" id="motivo<%= index %>" name="descripcion" required>
-                        <div class="form-text">Tu solicitud será revisada por el área correspondiente.</div>
-                      </div>
-                      <button type="submit" class="btn btn-danger">Enviar</button>
-                    </form>
-                    
-
-  
-                    <br><br>
-  
-                    <input class="btn btn-primary btn-cambiar-materia" type="button" value="Cambiar materia" data-form-id="formulario<%= index %>">
-  
-                    <!-- Formulario de cambio -->
-                    <form action="/solicitudes/cambio" method="POST" id="formulario<%= index %>" class="form-cambio-materia" style="display: none;">
-                      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                      <input type="hidden" name="matricula" value="<%= matricula %>">
-                      <input type="hidden" name="id_materia" value="<%= grupo.materia.id %>">
-                      <input type="hidden" name="tipo" value="cambio">
-                      <input type="hidden" name="nombre_materia" value="<%= grupo.materia.nombre %>">
-                      <div class="mb-3">
-                        <label for="materia<%= index %>" class="form-label">Materia por la que se solicita cambiar:</label>
-                        <input type="text" class="form-control input-materia" id="materia<%= index %>" name="descripcion" required>
-                        <div class="form-text">Se enviará la información a coordinadores, esperar respuesta.</div>
-                      </div>
-                      <button type="submit" class="btn btn-primary">Enviar</button>
-                    </form>
-                    
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Aceptar</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-  
-            <!-- Modal de Confirmación -->
-            <div class="modal fade" id="modalEliminar<%= index %>" tabindex="-1" aria-labelledby="modalEliminarLabel<%= index %>" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="modalEliminarLabel<%= index %>">Confirmar Eliminación</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
-                    ¿Estás seguro de que quieres eliminar la materia <strong><%= grupo.materia.nombre %></strong> de tu horario?
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-danger">Eliminar</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          <% }) %>
-        <% } else { %>
-          <p class="text-center">No estás inscrito en ningún grupo.</p>
-        <% } %>
+          <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#modal<%= index %>">
+            Ver más
+          </button>
+          
+          <div class="position-absolute top-0 end-0 bottom-0 <%= materiasColor[grupo.materia.nombre] %>" style="width: 30px; border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem;"></div>
+        </div>
       </div>
-  
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      let botones = document.querySelectorAll(".btn-cambiar-materia");
-  
-      botones.forEach(boton => {
-        boton.addEventListener("click", function () {
-          let formId = this.getAttribute("data-form-id");
-          let formulario = document.getElementById(formId);
-          formulario.style.display = (formulario.style.display === "none" || formulario.style.display === "") 
-            ? "block" : "none";
-        });
+
+      <!-- Modal de detalles -->
+      <div class="modal fade" id="modal<%= index %>" tabindex="-1" aria-labelledby="modalLabel<%= index %>" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="modalLabel<%= index %>"><%= grupo.materia.nombre %></h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <dl class="row">
+                <dt class="col-sm-9">Nombre de Profesor:</dt>
+                <dd class="col-sm-9"><%= grupo.profesor.nombre %></dd>
+
+                <dt class="col-sm-9">Salón:</dt>
+                <dd class="col-sm-9"><%= grupo.salon.id %></dd>                
+                <dt class="col-sm-9">Horario:</dt>
+                <dd class="col-sm-9">
+                  <ul>
+                    <% 
+                    // Definir el orden de los días
+                    const ordenDias = {
+                      'lunes': 1,
+                      'martes': 2,
+                      'miércoles': 3,
+                      'jueves': 4,
+                      'viernes': 5,
+                    };
+                    
+                    // Ordenar los horarios por día
+                    const horariosOrdenados = [...grupo.horarios].sort((a, b) => {
+                      return (ordenDias[a.dia] || 999) - (ordenDias[b.dia] || 999);
+                    });
+                    
+                    horariosOrdenados.forEach(h => { 
+                    %>
+                      <li><%= h.dia %>: <%= h.hora_inicio %> - <%= h.hora_fin %></li>
+                    <% }) %>
+                  </ul>
+                </dd>
+              </dl>
+
+              <!-- Botones de acción -->
+              <input class="btn btn-danger btn-eliminar-materia" type="button" value="Eliminar Materia" data-form-id="formEliminar<%= index %>">
+
+              <!-- Formulario de eliminación -->
+              <form action="/solicitudes/cambio" method="POST" id="formEliminar<%= index %>" class="form-eliminar-materia" style="display: none;">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <input type="hidden" data-field="matricula" value="<%= matricula %>">
+                <input type="hidden" data-field="id_materia" value="<%= grupo.materia.id %>">
+                <input type="hidden" data-field="tipo" value="eliminar">
+                <input type="hidden" data-field="nombre_materia" value="<%= grupo.materia.nombre %>">
+              
+                <div class="mb-3">
+                  <label for="motivo<%= index %>" class="form-label">Motivo de eliminación:</label>
+                  <input type="text" class="form-control" id="motivo<%= index %>" data-field="descripcion" required>
+                  <div class="form-text">Tu solicitud será revisada por el área correspondiente.</div>
+                </div>
+                <button type="button" class="btn btn-danger btn-enviar-eliminar" data-form-id="formEliminar<%= index %>">Enviar</button>
+              </form>              
+
+              <br><br>
+
+              <input class="btn btn-primary btn-cambiar-materia" type="button" value="Cambiar materia" data-form-id="formulario<%= index %>">
+
+              <!-- Formulario de cambio -->
+              <form action="/solicitudes/cambio" method="POST" id="formulario<%= index %>" class="form-cambio-materia" style="display: none;">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <input type="hidden" name="matricula" value="<%= matricula %>">
+                <input type="hidden" name="id_materia" value="<%= grupo.materia.id %>">
+                <input type="hidden" name="tipo" value="cambio">
+                <input type="hidden" name="nombre_materia" value="<%= grupo.materia.nombre %>">
+                <div class="mb-3">
+                  <label for="materia<%= index %>" class="form-label">Materia por la que se solicita cambiar:</label>
+                  <input type="text" class="form-control input-materia" id="materia<%= index %>" name="descripcion" required>
+                  <div class="form-text">Se enviará la información a coordinadores, esperar respuesta.</div>
+                </div>
+                <button type="submit" class="btn btn-primary">Enviar</button>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Aceptar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal de Confirmación -->
+      <div class="modal fade" id="modalEliminar<%= index %>" tabindex="-1" aria-labelledby="modalEliminarLabel<%= index %>" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalEliminarLabel<%= index %>">Confirmar Eliminación</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              ¿Estás segura de que quieres eliminar la materia <strong><%= grupo.materia.nombre %></strong> de tu horario?
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button type="button" class="btn btn-danger">Eliminar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% }) %>
+  <% } else { %>
+    <p class="text-center">No estás inscrita en ningún grupo.</p>
+  <% } %>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Mostrar/ocultar formularios
+    document.querySelectorAll(".btn-cambiar-materia, .btn-eliminar-materia").forEach(boton => {
+      boton.addEventListener("click", function () {
+        const formId = this.getAttribute("data-form-id");
+        const form = document.getElementById(formId);
+        form.style.display = form.style.display === "none" || form.style.display === "" ? "block" : "none";
       });
     });
-  </script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      let botonesEliminar = document.querySelectorAll(".btn-eliminar-materia");
-  
-      botonesEliminar.forEach((boton) => {
-        boton.addEventListener("click", function () {
-          let formId = this.getAttribute("data-form-id");
-          let formulario = document.getElementById(formId);
-          formulario.style.display =
-            formulario.style.display === "none" || formulario.style.display === ""
-              ? "block"
-              : "none";
+
+    // Envío con fetch de formularios de eliminar
+    document.querySelectorAll(".btn-enviar-eliminar").forEach(boton => {
+      boton.addEventListener("click", async function () {
+        const formId = this.getAttribute("data-form-id");
+        const form = document.getElementById(formId);
+        const data = {};
+
+        form.querySelectorAll("[data-field]").forEach(input => {
+          data[input.getAttribute("data-field")] = input.value;
         });
+
+        const csrfToken = form.querySelector('input[name="_csrf"]').value;
+
+        try {
+          const response = await fetch(form.action, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "CSRF-Token": csrfToken
+            },
+            body: JSON.stringify(data)
+          });
+
+          if (!response.ok) throw new Error("Error al enviar solicitud");
+
+          const result = await response.json();
+          alert(result.mensaje || "Solicitud enviada correctamente.");
+        } catch (err) {
+          alert("Error al enviar la solicitud.");
+          console.error(err);
+        }
       });
     });
-  </script>
-  
-  
+
+    // Envío con fetch de formularios de cambio
+    document.querySelectorAll(".btn-enviar-cambio").forEach(boton => {
+      boton.addEventListener("click", async function () {
+        const formId = this.getAttribute("data-form-id");
+        const form = document.getElementById(formId);
+        const data = {};
+
+        form.querySelectorAll("[data-field]").forEach(input => {
+          data[input.getAttribute("data-field")] = input.value;
+        });
+
+        const csrfToken = form.querySelector('input[name="_csrf"]').value;
+
+        try {
+          const response = await fetch(form.action, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "CSRF-Token": csrfToken
+            },
+            body: JSON.stringify(data)
+          });
+
+          if (!response.ok) throw new Error("Error al enviar solicitud");
+
+          const result = await response.json();
+          alert(result.mensaje || "Solicitud enviada correctamente.");
+        } catch (err) {
+          alert("Error al enviar la solicitud.");
+          console.error(err);
+        }
+      });
+    });
+  });
+</script>

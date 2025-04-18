@@ -24,7 +24,7 @@
            class="btn btn-light w-100 my-1 text-start border"
            data-salon-id="<%= salon.id_salon %>"
            onclick="seleccionarSalon('<%= materia.id_ciclo_escolar_materia %>', '<%= salon.id_salon %>', '<%= salon.id_salon %> (<%= salon.descripcion %>)')">
-           <%= salon.id_salon %> (<%= salon.descripcion %>)
+           <%= salon.id_salon %>.-  <b><%= salon.tipo %></b> <br>(<%= salon.descripcion %>)
          </button>
        <% }) %>
        <input type="hidden" id="inputSalon_<%= materia.id_ciclo_escolar_materia %>">

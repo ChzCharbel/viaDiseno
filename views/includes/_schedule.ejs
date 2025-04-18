@@ -18,30 +18,33 @@
           const materiasColor = {};
           let colorIndex = 0;
   
-          const horario = { Lunes: {}, Martes: {}, Miercoles: {}, Jueves: {}, Viernes: {} };
+          const horario = { Lunes: {}, Martes: {}, Miércoles: {}, Jueves: {}, Viernes: {} };
   
           grupos.forEach(grupo => {
-            ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes'].forEach(dia => {
-              const inicio = grupo[dia.toLowerCase() + '_inicio'];
-              const fin = grupo[dia.toLowerCase() + '_fin'];
-              if (inicio && fin) {
+            grupo.horarios.forEach(h => {
+              const dia = h.dia.charAt(0).toUpperCase() + h.dia.slice(1);
+              
+              if (['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'].includes(dia)) {
                 if (!materiasColor[grupo.materia.nombre]) {
                   materiasColor[grupo.materia.nombre] = colores[colorIndex % colores.length];
                   colorIndex++;
                 }
-  
-                const [hi, mi] = inicio.split(':').map(Number);
-                const [hf, mf] = fin.split(':').map(Number);
-  
+                
+                // Convertimos las horas de inicio y fin a bloques
+                const [hi, mi] = h.hora_inicio.split(':').map(Number);
+                const [hf, mf] = h.hora_fin.split(':').map(Number);
+                
                 const inicioBloque = hi * 2 + (mi >= 30 ? 1 : 0); // cada hora = 2 bloques
                 const finBloque = hf * 2 + (mf >= 30 ? 1 : 0);
-  
+                
                 horario[dia][inicioBloque] = {
                   rowspan: finBloque - inicioBloque,
                   nombre: grupo.materia.nombre,
-                  color: materiasColor[grupo.materia.nombre]
+                  color: materiasColor[grupo.materia.nombre],
+                  profesor: grupo.profesor.nombre,
+                  salon: grupo.salon.id
                 };
-  
+                
                 for (let b = inicioBloque + 1; b < finBloque; b++) {
                   horario[dia][b] = 'ocupar';
                 }
@@ -56,7 +59,7 @@
           %>
             <tr>
               <th class="hour text-center align-middle"><%= hora %>:<%= minutos %></th>
-              <% ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes'].forEach(dia => { %>
+              <% ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'].forEach(dia => { %>
                 <% if (horario[dia][bloque] === 'ocupar') return; %>
                 <% if (horario[dia][bloque]) { %>
                   <td class="text-white text-center align-middle <%= horario[dia][bloque].color %>" rowspan="<%= horario[dia][bloque].rowspan %>">
