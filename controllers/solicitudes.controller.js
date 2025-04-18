@@ -32,13 +32,19 @@ exports.enviarSolicitud = async (request, response, next) => {
     const datos = isJson ? request.body : request.body;
 
     const {
-      matricula, // esto ahora es id_ivd
-      id_materia,
-      descripcion,
+      matricula,
+      id_ciclo_escolar,
       tipo,
-      nombre_materia,
-      id_ciclo_escolar
+      mensaje,
+      descripcion,
+      id_ciclo_escolar_materia // 👈 esto debe coincidir con el name del select en el EJS
     } = datos;
+
+    if (!id_ciclo_escolar_materia) {
+      throw new Error("No se recibió id_ciclo_escolar_materia");
+    }
+
+    const id_materia = id_ciclo_escolar_materia; 
 
     console.log("Datos recibidos:", datos); // <-- Agrega esto para depurar
 
@@ -47,10 +53,13 @@ exports.enviarSolicitud = async (request, response, next) => {
     if (tipo === "cambio") {
       descripcionFinal = `El alumno solicita cambiar la materia ${nombre_materia}. Por la materia: ${descripcion}`;
     } else if (tipo === "eliminar") {
-      descripcionFinal = `El alumno solicita eliminar la materia ${nombre_materia}. Descripción del cambio: ${descripcion}`;
+      descripcionFinal = `El alumno solicita eliminar la materia ${nombre_materia}. Motivo: ${descripcion}`;
+    } else if (tipo === "agregar") {
+      descripcionFinal = `El alumno solicita agregar la materia seleccionada. Motivo: ${descripcion}`;
     } else {
       descripcionFinal = descripcion;
     }
+    
 
     const idCiclo = request.session.cicloActual || request.params.idCiclo;
 

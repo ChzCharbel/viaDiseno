@@ -76,8 +76,98 @@
     </div>
   
     <div class="d-flex justify-content-end mt-3">
-      <button class="btn btn-secondary me-2">Agregar materia</button>
+      <button class="btn btn-secondary me-2" data-bs-toggle="modal" data-bs-target="#modalAgregarMateria">Agregar materia</button>
       <button class="btn btn-primary">Confirmar</button>
     </div>
+    <!-- Modal Agregar Materia -->
+    <div class="modal fade" id="modalAgregarMateria" tabindex="-1" aria-labelledby="modalAgregarMateriaLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form id="formAgregarMateria">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalAgregarMateriaLabel">Agregar Materia</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+              <input type="hidden" name="matricula" value="<%= matricula %>">
+              <input type="hidden" name="id_ciclo_escolar" value="<%= cicloActual %>">
+              <input type="hidden" name="tipo" value="agregar">
+              <input type="hidden" name="mensaje" value="">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+              <div class="mb-3">
+                <label for="id_materia" class="form-label">Selecciona una materia:</label>
+
+                <select name="id_ciclo_escolar_materia" class="form-select" id="id_materia_dropdown" required>
+                  <% materiasDisponibles.forEach(m => { %>
+                    <option value="<%= m.id_ciclo_escolar_materia %>"><%= m.nombre_materia %></option>
+                  <% }) %>
+                </select>
+
+              </div>
+
+              <div class="mb-3">
+                <p class="text-muted">Materia seleccionada: <strong id="materiaSeleccionadaTexto"><%= materiasDisponibles[0]?.nombre || '' %></strong></p>
+              </div>
+
+              <div class="mb-3">
+                <label for="descripcion" class="form-label">Motivo de solicitud:</label>
+                <input type="text" class="form-control" name="descripcion" id="descripcion" required>
+                <div class="form-text">Explica por qué deseas agregar esta materia.</div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Enviar solicitud</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const dropdown = document.getElementById("id_materia_dropdown");
+    const textoMateria = document.getElementById("materiaSeleccionadaTexto");
+
+    if (dropdown && textoMateria) {
+      textoMateria.textContent = dropdown.options[dropdown.selectedIndex]?.text;
+
+      dropdown.addEventListener("change", () => {
+        textoMateria.textContent = dropdown.options[dropdown.selectedIndex]?.text;
+      });
+    }
+
+    document.getElementById("formAgregarMateria").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = {};
+
+      [...form.elements].forEach(input => {
+        if (input.name) data[input.name] = input.value;
+      });
+
+      try {
+        const response = await fetch("/solicitudes/cambio", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "CSRF-Token": form.querySelector('input[name="_csrf"]')?.value || ""
+          },
+          body: JSON.stringify(data)
+        });
+
+        if (!response.ok) throw new Error("Error al enviar solicitud");
+
+        const result = await response.json();
+        alert(result.mensaje || "Solicitud enviada correctamente.");
+        form.reset();
+        bootstrap.Modal.getInstance(document.getElementById("modalAgregarMateria")).hide();
+      } catch (error) {
+        console.error(error);
+        alert("Ocurrió un error al enviar la solicitud.");
+      }
+    });
+  });
+</script>
+
   
