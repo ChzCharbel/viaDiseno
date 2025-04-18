@@ -4,9 +4,9 @@ const Oferta = require('../models/oferta.model');
 exports.get_oferta = (request, response, next) => {
     Promise.all([
         Materia.sincronizarCarrerasDesdeAPI(),
-        Materia.sincronizarPlanesDesdeAPI(),
-    ]).then(([dataCarreras,dataPlanes]) => {
-        Oferta.fetchAll(request.params.idCiclo, request.session.carrera).then((materiasOfertadas) => {
+    ]).then(([dataCarreras]) => {
+        Materia.sincronizarPlanesDesdeAPI().then((dataPlanes) => {
+            Oferta.fetchAll(request.params.idCiclo, request.session.carrera).then((materiasOfertadas) => {
             console.log(dataCarreras + '\n' + dataPlanes);
             response.render('oferta_academica.ejs',{
             titulo: 'oferta_academica',
@@ -21,9 +21,12 @@ exports.get_oferta = (request, response, next) => {
             planActual: request.params.idPlan || '',
             rol: request.session.rol || '',
             });
+            }).catch((error) => {
+                console.log(error);
+            })
         }).catch((error) => {
             console.log(error);
-        })
+        });
         
     }).catch((error) => {
         console.log(error);
