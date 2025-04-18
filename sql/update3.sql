@@ -1,1 +1,1 @@
-DELETE From enlista WHERE id_grupo = 2;
+DELETE From grupos_horario WHERE id_grupo_horario = 6;
