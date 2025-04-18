@@ -75,6 +75,7 @@
                       data-descripcion="<%= solicitud.descripcion %>"
                       data-estatus="<%= solicitud.aprobado %>"
                       data-fecha="<%= solicitud.fecha_solicitud %>"
+                      data-mensaje="<%= solicitud.mensaje %>" 
                 >
                 <i class="bi bi-three-dots-vertical"></i> Acciones
               </button>
@@ -93,29 +94,38 @@
 <div class="modal fade" id="modalAcciones" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-xl modal-dialog-scrollable">
     <div class="modal-content">
+      <input type="hidden" id="csrfToken" value="<%= csrfToken %>">
       <div class="modal-header">
         <h5 class="modal-title">Detalles de la Solicitud</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-      <div class="modal-body">
+      
+      <div class="modal-body px-4 py-3">
+        <div class="row g-3">
           <div class="col-md-6"><strong>Nombre:</strong> <span id="modal-nombre"></span></div>
           <div class="col-md-6"><strong>Correo:</strong> <span id="modal-correo"></span></div>
           <div class="col-md-6"><strong>Matrícula:</strong> <span id="modal-matricula"></span></div>
           <div class="col-md-6"><strong>Fecha Solicitud:</strong> <span id="modal-fecha"></span></div>
           <div class="col-md-6"><strong>Fecha resolución:</strong> <span id="modal-fecha-resolucion"></span></div>
         </div>
-        <div class="mb-3"><strong>Descripción:</strong>
-          <p id="modal-descripcion"></p>
+
+        <div class="mb-3 mt-4"><strong>Descripción:</strong>
+          <p id="modal-descripcion" class="border rounded p-2 bg-light"></p>
         </div>
+
         <div class="mb-3">
           <label for="modal-respuesta" class="form-label"><strong>Mi respuesta:</strong></label>
           <textarea class="form-control" id="modal-respuesta" rows="3" placeholder="Escribe tu respuesta aquí..."></textarea>
         </div>
+
         <div class="mb-3"><strong>Estatus actual:</strong> <span id="modal-estatus"></span></div>
-        <div class="mb-3"><strong>Horario:</strong><br>
+
+        <div class="mb-3">
+          <strong>Horario:</strong><br>
           <img src="/mnt/data/58cfa86c-c59f-466c-9537-09b3a545e587.png" class="img-fluid rounded border shadow">
         </div>
       </div>
+
       <div class="modal-footer">
         <button id="btn-aprobar" class="btn btn-success">Aprobar</button>
         <button id="btn-rechazar" class="btn btn-danger">Rechazar</button>
@@ -147,6 +157,7 @@
 </script>
 
 <script>
+  const csrfToken = document.getElementById("csrfToken").value;
   const modal = new bootstrap.Modal(document.getElementById('modalAcciones'));
   let solicitudActualId = null;
 
@@ -165,15 +176,44 @@
     });
   });
 
-  async function actualizarEstatus(nuevoEstatus) {
-  const respuestaTexto = document.getElementById("modal-respuesta").value;
-  document.getElementById("modal-fecha-resolucion").textContent = updated.fecha_resolucion;
 
+  function enviarRespuesta(aprobado) {
+  const form = document.getElementById("form-respuesta");
+  const idSolicitud = form.getAttribute("data-id-solicitud");
+  const respuesta = document.getElementById("respuesta").value;
+
+  fetch(`/solicitudes/solicitud/${idSolicitud}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      estatus: aprobado,
+      respuesta: respuesta,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log("Respuesta actualizada:", data);
+      // Refresca la tabla o actualiza solo esa fila
+      location.reload(); // opción simple
+    })
+    .catch((err) => {
+      console.error("Error:", err);
+      alert("Hubo un problema al actualizar la solicitud");
+    });
+}
+
+
+async function actualizarEstatus(nuevoEstatus) {
+  const respuestaTexto = document.getElementById("modal-respuesta").value;
+  
   try {
     const res = await fetch(`/solicitudes/solicitud/${solicitudActualId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        'CSRF-Token': csrfToken 
       },
       body: JSON.stringify({
         estatus: nuevoEstatus,
@@ -184,26 +224,21 @@
     if (res.ok) {
       const updated = await res.json();
 
-      // Encuentra la fila
+      document.getElementById("modal-fecha-resolucion").textContent = updated.fecha_resolucion;
+
       const fila = document.querySelector(`.btn-acciones[data-id="${solicitudActualId}"]`).closest("tr");
 
-      // Actualiza estatus
       const estatusCell = fila.querySelector("td:nth-child(6)");
       const nuevoTextoEstatus = nuevoEstatus === true ? "Aprobado" : "Rechazado";
       const claseEstatus = nuevoEstatus === true ? "text-success fw-semibold" : "text-danger fw-semibold";
       estatusCell.textContent = nuevoTextoEstatus;
       estatusCell.className = claseEstatus;
 
-      // Actualiza respuesta
       fila.querySelector("td:nth-child(7)").textContent = respuestaTexto;
-
-      // Actualiza fecha de resolución
       fila.querySelector("td:nth-child(9)").textContent = updated.fecha_resolucion;
-
-      // Actualiza el atributo para el filtro
       fila.setAttribute("data-estatus", nuevoTextoEstatus);
 
-      modal.hide(); // Cierra el modal
+      modal.hide();
     } else {
       alert("Error al actualizar solicitud");
     }

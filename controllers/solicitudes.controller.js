@@ -1,5 +1,5 @@
 const SolicitaCambio = require("../models/solicitudes.model");
-const pool = require('../util/database'); // Asegúrate de importar pool aquí si usas db directa
+const pool = require('../util/database'); 
 
 exports.get_solicitudes = (request, response, next) => {
   SolicitaCambio.fetchAll(request.params.idCiclo)
@@ -7,6 +7,7 @@ exports.get_solicitudes = (request, response, next) => {
       request.session.solicitudes = solicitudes.rows;
 
       response.render("solicitudes.ejs", {
+        csrfToken: request.csrfToken(),
         titulo: "solicitudes",
         privilegios: request.session.privilegios || [],
         carrera: request.session.carrera || "",
@@ -16,7 +17,7 @@ exports.get_solicitudes = (request, response, next) => {
         mail: request.session.mail || "",
         rol: request.session.rol || "",
         SolicitaCambio: solicitudes.rows,
-        matricula: request.session.matricula
+        matricula: request.session.matricula,
       });
     })
     .catch((error) => {

@@ -6,9 +6,17 @@ const canView = require("../util/canViewSolicitudes");
 
 const solicitudesController = require("../controllers/solicitudes.controller");
 
-router.get('/solicitudes', isAuth, solicitudesController.mostrarSolicitudes);
-router.get("/:idCiclo/", isAuth, canView, solicitudesController.get_solicitudes);
-router.post("/cambio", isAuth, solicitudesController.enviarSolicitud);
-router.put('/solicitud/:id', isAuth, solicitudesController.actualizarSolicitud);
+const csrf = require("csurf");
+const csrfProtection = csrf(); 
 
+
+
+router.get("/:idCiclo/", isAuth, canView,solicitudesController.get_solicitudes);
+
+
+router.post("/cambio", isAuth, csrfProtection, solicitudesController.enviarSolicitud);
+router.put("/solicitud/:id", isAuth, csrfProtection, solicitudesController.actualizarSolicitud);
+
+
+router.get("/solicitudes", isAuth, solicitudesController.mostrarSolicitudes);
 module.exports = router;
