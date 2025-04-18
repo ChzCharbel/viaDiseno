@@ -1,16 +1,20 @@
 const Materia = require('../models/materias.model');
+const Salon = require('../models/salones.model');
 
 exports.getMateriasCiclo = async (req, res) => {
   const idCiclo = req.params.idCiclo;
 
   try {
-    const materias = await Materia.getMateriasConProfesorPorCiclo(idCiclo);
+    const [materias, salonesResult] = await Promise.all([
+      Materia.getMateriasConProfesorPorCiclo(idCiclo),
+      Salon.fetchAll()
+    ]);
 
     console.log("Materias recuperadas con profesor:", materias);
 
     res.render('materias.ejs', {
         materias,
-        salones: [],
+        salones: salonesResult.rows || [],
         cicloActual: idCiclo,
         csrfToken: req.csrfToken(),
         rol: req.session.rol || "",

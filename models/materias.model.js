@@ -73,13 +73,9 @@ const db = require('../util/database');
                  const estatus = materia.plans[0].degree.status;
                  const { id, name, credits, hours_professor} = materia;
                  await db.query(`
-                     INSERT INTO materias (id_materia, materia, creditos, horas_profesor)
-                     VALUES ($1::text, $2::text, $3::integer, $4::integer)
-                     ON CONFLICT (id_materia) DO NOTHING
+                    CALL sincronizar_materias($1::integer, $2::text, $3::integer, $4::integer);
                  `, [id, name, parseInt(credits), hours_professor]);
-                 await db.query(`UPDATE materias SET estatus = $1::text WHERE 
-                     id_materia = $2::text`, [estatus, id]);
-                 }
+             }
          }
  
          console.log("Materias sincronizadas exitosamente.");
@@ -90,51 +86,96 @@ const db = require('../util/database');
          }
      }
  
-     static async sincronizarPlanesDesdeAPI() {
-         try {
-             const planes = await getAllCourses();
-             for (let plan of planes) {
-                 if (plan.plans[0].degree.status == 'active') {
-                     const estatus = materia.plans[0].degree.status;
-                     const { id, name, credits, hours_professor} = materia;
-                     const carrera = plan.plans[0].degree.name;
-                     const idCarrera = await db.query(`SELECT id_carrera FROM carreras c
-                         WHERE c.carrera LIKE = $1::text`, [carrera]);
-                     await db.query(`
-                         INSERT INTO planes_estudios (id_plan, plan_estudio, id_carrera)
-                         VALUES ($1::text, $2::text, $3::integer, $4::integer)
-                         ON CONFLICT (id_plan) DO NOTHING
-                     `, [id, name, idCarrera]);
-                     await db.query(`UPDATE materias SET estatus = $1::text WHERE 
-                         id_materia = $2::text`, [estatus, id]);
-                     }
-             }
- 
-             console.log("Materias sincronizadas exitosamente.");
-             return { mensaje: "Sincronización completada", total: materias.length };
-         }
-         catch (error) {
-             console.error("Error al sincronizar planes:", error);
-             throw error;
-         }
-     }
-     static async getMateriasPorCiclo(idCicloEscolar) {
-         try {
-           const resultado = await db.query(`
-             SELECT cem.id_ciclo_escolar_materia, m.materia AS nombre_materia
-             FROM ciclos_escolares_materias cem
-             JOIN planes_materias pm ON cem.id_plan_materia = pm.id_plan_materia
-             JOIN materias m ON pm.id_materia = m.id_materia
-             WHERE pm.estatus_plan_materia = 'active'
-               AND cem.id_ciclo_escolar = $1
-             ORDER BY m.materia ASC
-           `, [idCicloEscolar]);
-           return resultado.rows;
-         } catch (error) {
-           console.error("Error al obtener materias del ciclo actual:", error);
-           return [];
-         }
-       }
-       
-       
+     static async sincronizarCarrerasDesdeAPI() {
+        try {
+            const carreras = await getAllDegrees();
+            for (let carrera of carreras) {
+                if (carrera.status == 'active') {
+                    const {id, name} = carrera;
+                    await db.query(`
+                        CALL sincronizar_carreras($1::integer,$2::text);
+                    `, [id, name]);
+                }
+            }
+            console.log("Carreras sincronizadas exitosamente.");
+            return { mensaje: "Sincronización completada", total: carreras.length };
+        }
+        catch (error) {
+            console.error("Error al sincronizar carreras:", error);
+            throw error;
+        }
+    }
+
+    static async sincronizarPlanesDesdeAPI() {
+        try {
+            const planes = await getAllDegrees();
+            for (let carrera of planes) {
+                for (let plan of carrera.plans) {
+                    if (plan.status == 'active') {
+                        const name = carrera.name + ' ' + plan.version;
+                        const id = plan.id;
+                        const nombreCarrera = carrera.name;
+                        await db.query(`
+                        CALL sincronizar_planes($1::integer,$2::text, 
+                        $3::text);
+                    `, [id, name, nombreCarrera]);
+                    }
+                }
+            }
+        
+            console.log("Planes sincronizadas exitosamente.");
+            return { mensaje: "Sincronización completada", total: planes.length };
+        }
+        catch (error) {
+            console.error("Error al sincronizar planes:", error);
+            throw error;
+        }
+    }
+
+      static async getMateriasPorCiclo(idCicloEscolar) {
+        try {
+            const resultado = await db.query(`
+            SELECT cem.id_ciclo_escolar_materia, m.materia AS nombre_materia
+            FROM ciclos_escolares_materias cem
+            JOIN planes_materias pm ON cem.id_plan_materia = pm.id_plan_materia
+            JOIN materias m ON pm.id_materia = m.id_materia
+            WHERE pm.estatus_plan_materia = 'active'
+            AND cem.id_ciclo_escolar = $1
+            ORDER BY m.materia ASC
+        `, [idCicloEscolar]);
+            return resultado.rows;
+        } catch (error) {
+            console.error("Error al obtener materias del ciclo actual:", error);
+            return [];
+        }
+      }
+
+      static async getMateriasConProfesorPorCiclo(idCicloEscolar) {
+        try {
+          const resultado = await db.query(`
+            SELECT
+              m.materia AS nombre_materia,
+              p.profesor AS profesor,
+              pm.id_profesor_materia,
+              p.id_profesor,
+              m.id_materia,
+              cem.id_ciclo_escolar_materia,
+              g.id_grupo AS id
+            FROM profesores_materias pm
+            JOIN profesores p ON p.id_profesor = pm.id_profesor
+            JOIN ciclos_escolares_materias cem ON cem.id_ciclo_escolar_materia = pm.id_ciclo_escolar_materia
+            JOIN planes_materias plm ON plm.id_plan_materia = cem.id_plan_materia
+            JOIN materias m ON m.id_materia = plm.id_materia
+            LEFT JOIN grupos_ciclos_materias gcm ON gcm.id_ciclo_escolar_materia = cem.id_ciclo_escolar_materia
+            LEFT JOIN grupos g ON gcm.id_grupo = g.id_grupo
+            WHERE cem.id_ciclo_escolar = $1
+            ORDER BY m.materia ASC
+          `, [idCicloEscolar]);
+      
+          return resultado.rows;
+        } catch (error) {
+          console.error("Error al obtener materias con profesor:", error);
+          return [];
+        }
+      }
  }

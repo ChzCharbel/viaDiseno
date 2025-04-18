@@ -2,7 +2,7 @@ const db = require("../util/database");
 
 module.exports = class Salon {
   static fetchAll() {
-    return db.query(`SELECT * FROM salones`);
+    return db.query(`SELECT * FROM public.salones`);
   }
 
   static fetchOne(id) {
