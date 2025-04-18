@@ -4,7 +4,7 @@ const Materia = require("../models/materias.model");
 exports.get_all_maestros = (request, response, next) => {
   Promise.all([
     Profesor.sincronizarDesdeAPI(),
-    Materia.getMateriasPorCiclo(request.params.idCiclo)
+    Materia.getMateriasPorCiclo(request.params.idCiclo),
   ]).then(([profesoresData, materiasData]) => {
     Profesor.fetchAll()
     .then(async (profesoresData) => {
@@ -41,11 +41,15 @@ exports.get_all_maestros = (request, response, next) => {
       console.log(error);
       response.render("error.ejs");
     });
-  }).catch((error) => {
-    console.log(error);
-  })
-  
-};
+
+
+    }).catch((error) => {
+      console.log(error);
+    })
+  }
+
+
+
 exports.post_asignar_materias = async (req, res, next) => {
   const id_profesor = req.body.id_profesor;
   let materias = req.body["materias[]"];
@@ -71,5 +75,3 @@ exports.post_asignar_materias = async (req, res, next) => {
     res.render("error.ejs");
   }
 };
-
-
