@@ -160,3 +160,21 @@
   font-size: 1.2rem;
   font-weight: 500;
 }
+
+.dropdown-item.active,
+.dropdown-item:active {
+  background-color: #655d5e; 
+  color: white !important;         
+}
+
+.alert-info {
+  background-color: #e2ecf3 !important;
+  color: rgb(61, 66, 84) !important;
+  border-color: #a6bada;
+}
+
+.alert-danger {
+  background-color: #f3e2e2 ;
+  color: rgb(184, 13, 13) !important;
+  border-color: #daa6a6;
+}

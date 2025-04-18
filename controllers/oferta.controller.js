@@ -5,42 +5,29 @@ exports.get_oferta = (request, response, next) => {
     Promise.all([
         Materia.sincronizarCarrerasDesdeAPI(),
         Materia.sincronizarPlanesDesdeAPI(),
-        Oferta.fetchAll(request.params.idCiclo, request.session.carrera),
-    ]).then(([dataCarreras,dataPlanes, materiasOfertadas]) => {
-        console.log(dataCarreras + '\n' + dataPlanes);
-        response.render('oferta_academica.ejs',{
-        titulo: 'oferta_academica',
-        privilegios: request.session.privilegios || [],
-        materias: materiasOfertadas.rows || [],
-        carrera: request.session.carrera || '',
-        ciclosEscolares: request.session.ciclosEscolares || [],
-        cicloActual: request.params.idCiclo || '',
-        username: request.session.username || '',
-        mail: request.session.mail || '',
-        planes: [],
-        planActual: request.params.idPlan || '',
-        rol: request.session.rol || '',
-        });
+    ]).then(([dataCarreras,dataPlanes]) => {
+        Oferta.fetchAll(request.params.idCiclo, request.session.carrera).then((materiasOfertadas) => {
+            console.log(dataCarreras + '\n' + dataPlanes);
+            response.render('oferta_academica.ejs',{
+            titulo: 'oferta_academica',
+            privilegios: request.session.privilegios || [],
+            materias: materiasOfertadas.rows || [],
+            carrera: request.session.carrera || '',
+            ciclosEscolares: request.session.ciclosEscolares || [],
+            cicloActual: request.params.idCiclo || '',
+            username: request.session.username || '',
+            mail: request.session.mail || '',
+            planes: [],
+            planActual: request.params.idPlan || '',
+            rol: request.session.rol || '',
+            });
+        }).catch((error) => {
+            console.log(error);
+        })
+        
     }).catch((error) => {
         console.log(error);
     })
-    /*Oferta.fetchAll(request.params.idCiclo, request.session.carrera).then((materiasOfertadas) => {
-        response.render('oferta_academica.ejs',{
-        titulo: 'oferta_academica',
-        privilegios: request.session.privilegios || [],
-        materias: materiasOfertadas.rows || [],
-        carrera: request.session.carrera || '',
-        ciclosEscolares: request.session.ciclosEscolares || [],
-        cicloActual: request.params.idCiclo || '',
-        username: request.session.username || '',
-        mail: request.session.mail || '',
-        planes: [],
-        planActual: request.params.idPlan || '',
-        rol: request.session.rol || '',
-    })   
-    }).catch((error) => {
-        console.log(error);
-    });*/
 }
 
 exports.get_agregar = (request, response, next) => {

@@ -19,11 +19,10 @@ exports.get_alumnos = (request, response, next) => {
     console.log(request.session.matricula);
     Promise.all([
         Alumno.sincronizarDesdeAPI(),
-        Alumno.fetchAll(),
-    ]).then(([data, alumnos]) => {
+    ]).then(([data]) => {
         console.log(data);
-        
-        // Si es una petición AJAX, devolver JSON
+        Alumno.fetchAll().then((alumnos) => {
+            // Si es una petición AJAX, devolver JSON
         if (request.xhr || request.headers['x-requested-with'] === 'XMLHttpRequest') {
             return response.status(200).json({ alumnos: alumnos.rows });
         }
@@ -41,6 +40,10 @@ exports.get_alumnos = (request, response, next) => {
             grupos: [],
             rol: request.session.rol || '',
         });
+        }).catch((error) => {
+            console.log(error);
+        })
+        
     }).catch((error) => {
         console.log(error);
     })
