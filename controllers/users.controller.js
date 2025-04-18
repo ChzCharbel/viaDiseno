@@ -39,7 +39,10 @@ exports.post_reset_password = (request, response, next) => {
             request.body.passwordInput,
             arreglo[2],
             arreglo[0],
-            arreglo[3]
+            arreglo[3],
+            arreglo[6],
+            arreglo[4],
+            arreglo[5],
           );
           usuario
             .save()
@@ -76,7 +79,7 @@ exports.get_login = (request, response, next) => {
 exports.post_login = (request, response, next) => {
   Usuario.fetchOne(request.body.matriculaInput)
     .then((usuario) => {
-      if (usuario.rows.length > 0) {
+      if (usuario.rowCount > 0) {
         const bcrypt = require("bcryptjs");
         bcrypt
           .compare(request.body.passwordInput, usuario.rows[0].password)
@@ -98,6 +101,10 @@ exports.post_login = (request, response, next) => {
                       CicloEscolar.fetchAll()
                         .then((ciclos) => {
                           request.session.ciclosEscolares = ciclos.rows;
+                          request.session.cicloActual =
+                            ciclos.rows[
+                              ciclos.rows.length - 1
+                            ].id_ciclo_escolar;
                           response.redirect(
                             "/inicio/" + ciclos.rows[0].id_ciclo_escolar
                           );
@@ -113,6 +120,10 @@ exports.post_login = (request, response, next) => {
                             ciclos.rows[
                               ciclos.rows.length - 1
                             ].id_ciclo_escolar;
+                            const lengthRows = ciclos.rows.length - 1;
+                            request.session.nombreCicloActual = 
+                            ciclos.rows[lengthRows].ciclo_escolar;
+                            console.log('nombre del ciclo:' + ciclos.rows[lengthRows].ciclo_escolar);
                           response.redirect("/enlista/alumno/");
                         })
                         .catch((error) => {

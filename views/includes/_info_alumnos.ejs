@@ -66,7 +66,7 @@
           <!-- Modales para visualizar detalles -->
           <% for (let alumno of alumnos) { %>
             <!-- Modal -->
-            <div class="modal fade" id="modal<%= alumno.matricula %>" tabindex="-1" aria-hidden="true">
+            <div class="modal fade" id="modal<%= alumno.id_ivd %>" tabindex="-1" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content rounded-4 border-0 shadow-lg">
 
@@ -84,7 +84,7 @@
                     <div class="border rounded-3 p-3 bg-light-subtle">
                       <div class="mb-2">
                         <span class="text-muted small">Matrícula</span><br>
-                        <span class="fw-medium"><%= alumno.matricula %></span>
+                        <span class="fw-medium"><%= alumno.id_ivd %></span>
                       </div>
                       <div class="mb-2">
                         <span class="text-muted small">Semestre</span><br>
@@ -115,7 +115,7 @@
                     <th>Matrícula</th>
                     <th>Nombre</th>
                     <th>Semestre</th>
-                    <th>Estatus</th>
+                    <th>Tipo</th>
                     <th>Carrera</th>
                     <th></th>
                   </tr>
@@ -131,7 +131,7 @@
                       </span></td>
                       <td><%= alumno.carrera %></td>
                       <td>
-                        <button class="btn btn-sm btn-vino" data-bs-toggle="modal" data-bs-target="#modal<%= alumno.matricula %>">
+                        <button class="btn btn-sm btn-vino" data-bs-toggle="modal" data-bs-target="#modal<%= alumno.id_ivd %>">
                           <i class="bi bi-eye"></i>
                         </button>
                       </td>

@@ -17,11 +17,12 @@ exports.get_horario_alumnos_regulares = (request, response, next) => {
 
 exports.get_alumnos = (request, response, next) => {
     console.log(request.session.matricula);
-    console.log(request.session.privilegios);
-    Alumno.fetchAll().then((alumnos) => {
-        console.log(alumnos.rows);
-        
-        // Si es una petición AJAX, devolver JSON
+    Promise.all([
+        Alumno.sincronizarDesdeAPI(),
+    ]).then(([data]) => {
+        console.log(data);
+        Alumno.fetchAll().then((alumnos) => {
+            // Si es una petición AJAX, devolver JSON
         if (request.xhr || request.headers['x-requested-with'] === 'XMLHttpRequest') {
             return response.status(200).json({ alumnos: alumnos.rows });
         }
@@ -39,12 +40,13 @@ exports.get_alumnos = (request, response, next) => {
             grupos: [],
             rol: request.session.rol || '',
         });
-
+        }).catch((error) => {
+            console.log(error);
+        })
+        
     }).catch((error) => {
         console.log(error);
-        response.render('error.ejs');
     })
-    
 }; 
 
 exports.get_buscar = (request, response, next) => {

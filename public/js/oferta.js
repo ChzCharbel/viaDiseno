@@ -16,7 +16,7 @@ function puedeCambiar(tabSemestre) {
             $("#alertasOA").fadeIn(1500, function(){
                 $("#alertasOA").fadeOut(15000, function(){
                 alerta.className = "col-9 offset-2 alert alert-info fw-semibold mb-4";
-                alerta.innerText = "Nota: guarda la oferta por semestre";
+                alerta.innerText = "Nota: guarda la oferta académica por semestre";
                 $("#alertasOA").fadeIn(1000);
                 });
             });

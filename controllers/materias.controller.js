@@ -9,8 +9,7 @@ exports.get_materias = (request, response, next) => {
         Materia.getMateriasPorCiclo(request.params.idCiclo),
         Profesor.fetchAll(),
         Salon.fetchAll(),
-
-        GrupoHorario.fetchAll()
+        GrupoHorario.fetchAll(),
     ]).then(([materias, profesores, salones, grupos_horarios]) => {
         response.render('materias.ejs', {
             titulo: 'Grupos',

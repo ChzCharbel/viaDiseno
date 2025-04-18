@@ -4,9 +4,8 @@ const Materia = require("../models/materias.model");
 exports.get_all_maestros = (request, response, next) => {
   Promise.all([
     Profesor.sincronizarDesdeAPI(),
-    Materia.getMateriasPorCiclo(request.params.idCiclo)
-  ])
-  .then(([profesoresData, materiasData]) => {
+    Materia.getMateriasPorCiclo(request.params.idCiclo),
+  ]).then(([profesoresData, materiasData]) => {
     Profesor.fetchAll()
       .then(async (profesoresData) => {
         const profesores = profesoresData.rows;
@@ -23,30 +22,30 @@ exports.get_all_maestros = (request, response, next) => {
         request.session.profesores = profesores;
         request.session.cicloActual = request.params.idCiclo;
 
-        response.render("profesores.ejs", {
-          titulo: "maestros",
-          privilegios: request.session.privilegios || [],
-          carrera: request.session.carrera || "",
-          profesores: request.session.profesores || [],
-          materias: materiasData || [],
-          ciclosEscolares: request.session.ciclosEscolares || [],
-          cicloActual: request.params.idCiclo || "",
-          username: request.session.username || "",
-          mail: request.session.mail || "",
-          rol: request.session.rol || "",
-          csrfToken: request.csrfToken()
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-        response.render("error.ejs");
-      });
-  })
-  .catch((error) => {
-    console.log(error);
-  });
-};
+      response.render("profesores.ejs", {
+        titulo: "maestros",
+        privilegios: request.session.privilegios || [],
+        carrera: request.session.carrera || "",
+        profesores: request.session.profesores || [],
+        materias: materiasData || [],
+        ciclosEscolares: request.session.ciclosEscolares || [],
+        cicloActual: request.params.idCiclo || "",
+        username: request.session.username || "",
+        mail: request.session.mail || "",
+        rol: request.session.rol || "",
+        csrfToken: request.csrfToken()
 
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+      response.render("error.ejs");
+    });
+  }).catch((error) => {
+    console.log(error);
+  })
+  
+};
 exports.post_asignar_materias = async (req, res, next) => {
   const id_profesor = req.body.id_profesor;
   let materias = req.body["materias[]"];

@@ -2,23 +2,32 @@ const Materia = require('../models/materias.model');
 const Oferta = require('../models/oferta.model');
 
 exports.get_oferta = (request, response, next) => {
-    Oferta.fetchAll(request.params.idCiclo).then((materiasOfertadas) => {
-        response.render('oferta_academica.ejs',{
-        titulo: 'oferta_academica',
-        privilegios: request.session.privilegios || [],
-        materias: materiasOfertadas.rows || [],
-        carrera: request.session.carrera || '',
-        ciclosEscolares: request.session.ciclosEscolares || [],
-        cicloActual: request.params.idCiclo || '',
-        username: request.session.username || '',
-        mail: request.session.mail || '',
-        planes: [],
-        planActual: request.params.idPlan || '',
-        rol: request.session.rol || '',
-    })   
+    Promise.all([
+        Materia.sincronizarCarrerasDesdeAPI(),
+        Materia.sincronizarPlanesDesdeAPI(),
+    ]).then(([dataCarreras,dataPlanes]) => {
+        Oferta.fetchAll(request.params.idCiclo, request.session.carrera).then((materiasOfertadas) => {
+            console.log(dataCarreras + '\n' + dataPlanes);
+            response.render('oferta_academica.ejs',{
+            titulo: 'oferta_academica',
+            privilegios: request.session.privilegios || [],
+            materias: materiasOfertadas.rows || [],
+            carrera: request.session.carrera || '',
+            ciclosEscolares: request.session.ciclosEscolares || [],
+            cicloActual: request.params.idCiclo || '',
+            username: request.session.username || '',
+            mail: request.session.mail || '',
+            planes: [],
+            planActual: request.params.idPlan || '',
+            rol: request.session.rol || '',
+            });
+        }).catch((error) => {
+            console.log(error);
+        })
+        
     }).catch((error) => {
         console.log(error);
-    });
+    })
 }
 
 exports.get_agregar = (request, response, next) => {
@@ -29,7 +38,7 @@ exports.get_agregar = (request, response, next) => {
         ]).then(([data, planVersiones, materias]) => {
             console.log(data);
             response.render('oferta_agregar.ejs',{
-                titulo: 'oferta_academica',
+                titulo: 'oferta_academica_agregar',
                 privilegios: request.session.privilegios || [],
                 csrfToken: request.csrfToken(),
                 materias: materias,
@@ -57,6 +66,6 @@ exports.post_agregar = (request, response, next) => {
             idMaterias.push(id);
         }
     }
-    const miOferta = new Oferta(request.params.idCiclo, idMaterias);
+    const miOferta = new Oferta(request.params.idCiclo, idMaterias, request.params.idPlan);
     miOferta.save();
 }
