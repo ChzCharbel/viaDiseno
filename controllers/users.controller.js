@@ -106,7 +106,7 @@ exports.post_login = (request, response, next) => {
                               ciclos.rows.length - 1
                             ].id_ciclo_escolar;
                           response.redirect(
-                            "/inicio/" + ciclos.rows[0].id_ciclo_escolar
+                            "/principal/" + ciclos.rows[0].id_ciclo_escolar
                           );
                         })
                         .catch((error) => {

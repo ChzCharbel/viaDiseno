@@ -48,10 +48,12 @@ app.use((req, res, next) => {
 const usersRoutes = require("./routes/users.routes");
 const enlistaRoutes = require("./routes/enlista.routes");
 const alumnosRoutes = require("./routes/alumnos.routes");
+const principalRoutes = require("./routes/principal.routes");
+
 const inicioRoutes = require("./routes/inicio.routes");
 const maestrosRoutes = require("./routes/maestros.routes");
 const materiasRoutes = require("./routes/materias.routes");
-const planesRoutes = require("./routes/planes.routes");
+//const planesRoutes = require("./routes/planes.routes");
 const ofertaRoutes = require("./routes/oferta.routes");
 const solicitudesRoutes = require("./routes/solicitudes.routes");
 const disponibleRoutes = require("./routes/disponible.routes");
@@ -64,10 +66,11 @@ app.use("/grupos", gruposRoutes);
 app.use("/users", usersRoutes);
 app.use("/enlista", enlistaRoutes);
 app.use("/alumnos", alumnosRoutes);
+app.use(principalRoutes);
 app.use("/inicio", inicioRoutes);
 app.use("/maestros", maestrosRoutes);
 app.use("/materias", materiasRoutes);
-app.use("/planes", planesRoutes);
+//app.use("/planes", planesRoutes);
 app.use("/oferta_academica", ofertaRoutes);
 app.use("/solicitudes", solicitudesRoutes);
 app.use("/disponible", disponibleRoutes);
