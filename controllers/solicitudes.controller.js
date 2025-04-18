@@ -1,4 +1,5 @@
 const SolicitaCambio = require("../models/solicitudes.model");
+const pool = require('../util/database'); 
 
 exports.get_solicitudes = (request, response, next) => {
   SolicitaCambio.fetchAll(request.params.idCiclo)
@@ -6,6 +7,7 @@ exports.get_solicitudes = (request, response, next) => {
       request.session.solicitudes = solicitudes.rows;
 
       response.render("solicitudes.ejs", {
+        csrfToken: request.csrfToken(),
         titulo: "solicitudes",
         privilegios: request.session.privilegios || [],
         carrera: request.session.carrera || "",
@@ -15,7 +17,7 @@ exports.get_solicitudes = (request, response, next) => {
         mail: request.session.mail || "",
         rol: request.session.rol || "",
         SolicitaCambio: solicitudes.rows,
-        matricula: request.session.matricula
+        matricula: request.session.matricula,
       });
     })
     .catch((error) => {
@@ -30,13 +32,19 @@ exports.enviarSolicitud = async (request, response, next) => {
     const datos = isJson ? request.body : request.body;
 
     const {
-      matricula, // esto ahora es id_ivd
-      id_materia,
-      descripcion,
+      matricula,
+      id_ciclo_escolar,
       tipo,
-      nombre_materia,
-      id_ciclo_escolar
+      mensaje,
+      descripcion,
+      id_ciclo_escolar_materia // 👈 esto debe coincidir con el name del select en el EJS
     } = datos;
+
+    if (!id_ciclo_escolar_materia) {
+      throw new Error("No se recibió id_ciclo_escolar_materia");
+    }
+
+    const id_materia = id_ciclo_escolar_materia; 
 
     console.log("Datos recibidos:", datos); // <-- Agrega esto para depurar
 
@@ -45,10 +53,13 @@ exports.enviarSolicitud = async (request, response, next) => {
     if (tipo === "cambio") {
       descripcionFinal = `El alumno solicita cambiar la materia ${nombre_materia}. Por la materia: ${descripcion}`;
     } else if (tipo === "eliminar") {
-      descripcionFinal = `El alumno solicita eliminar la materia ${nombre_materia}. Descripción del cambio: ${descripcion}`;
+      descripcionFinal = `El alumno solicita eliminar la materia ${nombre_materia}. Motivo: ${descripcion}`;
+    } else if (tipo === "agregar") {
+      descripcionFinal = `El alumno solicita agregar la materia seleccionada. Motivo: ${descripcion}`;
     } else {
       descripcionFinal = descripcion;
     }
+    
 
     const idCiclo = request.session.cicloActual || request.params.idCiclo;
 
@@ -74,5 +85,34 @@ exports.enviarSolicitud = async (request, response, next) => {
       return response.status(500).render("error.ejs");
     }
   }
+};
 
+exports.actualizarSolicitud = async (req, res) => {
+  const { id } = req.params;
+  const { estatus, respuesta } = req.body;
+
+  try {
+    await SolicitaCambio.actualizarEstatusConRespuesta(id, estatus, respuesta);
+
+    res.json({
+      mensaje: 'Actualizado correctamente',
+      aprobado: estatus,
+      respuesta,
+      fecha_resolucion: new Date().toISOString().slice(0, 10)
+    });
+  } catch (err) {
+    console.error('Error al actualizar estatus:', err);
+    res.status(500).json({ error: 'Error al actualizar solicitud' });
+  }
+};
+
+
+exports.mostrarSolicitudes = async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM solicitudes ORDER BY fecha_creacion DESC');
+    res.render('solicitudes', { solicitudes: result.rows });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error al obtener las solicitudes');
+  }
 };
