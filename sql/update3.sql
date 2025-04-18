@@ -1,1 +1,1 @@
-DELETE From grupos_horarios WHERE id_grupo_horario = 6;
+DELETE From grupos_horarios WHERE id_grupo_horario = 20;
