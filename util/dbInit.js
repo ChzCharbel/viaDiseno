@@ -9,7 +9,7 @@ const pool = require('./database');
 const TABLES_SQL_FILE = 'crearTablasnuevo.sql';
 const INSERTS_SQL_FILE = 'inserts_nuevas_tablas.sql';
 const FUNCTIONS_SQL_FILE = 'functions.sql';
-const UPDATE_SQL_FILE = 'update2.sql';
+const UPDATE_SQL_FILE = 'update3.sql';
 const SCHEME_SQL_FILE = 'nuevo_schema.sql';
 /**
  * Ejecuta un script SQL desde un archivo
@@ -44,7 +44,6 @@ const initializeDatabase = async () => {
 
     // Inserta datos iniciales
     await executeSQL(UPDATE_SQL_FILE);
-    await executeSQL(FUNCTIONS_SQL_FILE);
     
     console.log('Database initialization completed successfully.');
     return true;
