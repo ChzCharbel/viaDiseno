@@ -8,7 +8,7 @@
     </p>
   
     <p class="fs-6 text-secondary mt-3">
-      Esta sección corresponde a la semana de inscripciones del ciclo actual.
+      Esta sección corresponde a la semana de inscripciones del ciclo seleccionado.
     </p>
   </div>
   
@@ -19,10 +19,10 @@
         <i class="bi bi-info-circle me-2"></i>
         La fecha de inscripciones es del
         <strong>
-          <%= new Date(ciclo.inicio_inscripcion).toLocaleDateString('es-MX', { day: 'numeric', month: 'long' }) %>
+          <%= new Date(cicloEscolar.inicio_inscripcion).toLocaleDateString('es-MX', { day: 'numeric', month: 'long' }) %>
         </strong> al
         <strong>
-          <%= new Date(ciclo.fin_inscripcion).toLocaleDateString('es-MX', { day: 'numeric', month: 'long' }) %>
+          <%= new Date(cicloEscolar.fin_inscripcion).toLocaleDateString('es-MX', { day: 'numeric', month: 'long' }) %>
         </strong>.
       </p>
   
