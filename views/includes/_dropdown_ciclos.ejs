@@ -7,7 +7,10 @@
     data-bs-toggle="dropdown"
     aria-expanded="false"
   >
-    <%= cicloActual %>
+    <% for (ciclo of ciclosEscolares) { %>
+      <% if (ciclo.id_ciclo_escolar == cicloActual) { %>
+      <%= ciclo.ciclo_escolar %>
+      <% } } %>
   </a>
   <ul class="dropdown-menu" id="dropdown-menu">
     <div class="dropdown-items-container overflow-auto" style="max-height: 100px">

@@ -101,6 +101,10 @@ exports.post_login = (request, response, next) => {
                       CicloEscolar.fetchAll()
                         .then((ciclos) => {
                           request.session.ciclosEscolares = ciclos.rows;
+                          request.session.cicloActual =
+                            ciclos.rows[
+                              ciclos.rows.length - 1
+                            ].id_ciclo_escolar;
                           response.redirect(
                             "/inicio/" + ciclos.rows[0].id_ciclo_escolar
                           );
@@ -116,10 +120,10 @@ exports.post_login = (request, response, next) => {
                             ciclos.rows[
                               ciclos.rows.length - 1
                             ].id_ciclo_escolar;
+                            const lengthRows = ciclos.rows.length - 1;
                             request.session.nombreCicloActual = 
-                            ciclos.rows[
-                              ciclos.rows.length - 1
-                            ].ciclo_escolar;
+                            ciclos.rows[lengthRows].ciclo_escolar;
+                            console.log('nombre del ciclo:' + ciclos.rows[lengthRows].ciclo_escolar);
                           response.redirect("/enlista/alumno/");
                         })
                         .catch((error) => {
