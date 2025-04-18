@@ -1,4 +1,5 @@
 const SolicitaCambio = require("../models/solicitudes.model");
+const { obtenerIdMateriaPorCicloEscolarMateria } = require("../models/solicitudes.model");
 const pool = require('../util/database'); 
 
 exports.get_solicitudes = (request, response, next) => {
@@ -37,14 +38,21 @@ exports.enviarSolicitud = async (request, response, next) => {
       tipo,
       mensaje,
       descripcion,
-      id_ciclo_escolar_materia // 👈 esto debe coincidir con el name del select en el EJS
+      id_ciclo_escolar_materia,
+      nombre_materia
     } = datos;
 
-    if (!id_ciclo_escolar_materia) {
+    if (tipo === "agregar" && !id_ciclo_escolar_materia) {
       throw new Error("No se recibió id_ciclo_escolar_materia");
     }
+    
 
-    const id_materia = id_ciclo_escolar_materia; 
+    let id_materia = datos.id_materia;
+
+    if (tipo === "agregar" && id_ciclo_escolar_materia) {
+      id_materia = await obtenerIdMateriaPorCicloEscolarMateria(id_ciclo_escolar_materia);
+    }
+
 
     console.log("Datos recibidos:", datos); // <-- Agrega esto para depurar
 

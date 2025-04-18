@@ -1,92 +1,92 @@
 const db = require('../util/database');
-const {getAllCourses, getAllDegrees} = require('../util/admin.api.client');
-
-module.exports = class Grupo{
-    static async getAllCourses() {
-        return await getAllCourses();
-    }
-
-    static async getAllDegrees() {
-        return await getAllDegrees();
-    }
-
-    /* Filtra las materias por la carrera
-    que reciba como parametro */
-    static async fetchByDegree(carrera) {
-        return this.getAllCourses().then((materias) => {
-            const arregloMaterias = [];
-            for (let materia of materias) {
-                if (materia.plans[0].degree.name == carrera) {
-                    arregloMaterias.push(materia);
-                }
-            }
-            
-            return arregloMaterias;
-        }).catch((error) => {
-            console.log(error);
-        });
-    }
-
-    /* Filtra los planes de estudio por carrera */
-    static async fetchPlanesByDegree(carrera) {
-        return this.getAllDegrees().then((planes) => {
-            /* Carrera:
-            id: plan.id
-            nombre: plan.name
-            estatus: plan.status
-
-            Plan de Estudio:
-            id: plan.plans[0].id
-            version: plan.plans[0].version
-            estatus: plan.plans[0].status
-        */
-        const arregloPlanes = [];
-        let plansLength = 0;
-        for (let plan of planes) {
-            if (plan.name == carrera) {
-                console.log(plan)
-                plansLength = plan.plans.length;
-                if (plansLength > 0) {
-                    for (let i = 0; i < plansLength; i++) {
-                        if (plan.plans[i].status == 'active') {
-                            arregloPlanes.push(plan.plans[i]);
-                        }
-                    }
-                }
-                else {
-                    arregloPlanes.push(plan.plans[0]);
-                }
-            }
-        }
-
-        return arregloPlanes;
-        }).catch((error) => {
-            console.log(error);
-        })
-    }
-
-    static async sincronizarDesdeAPI() {
-        try {
-        const materias = await getAllCourses();
-        for (let materia of materias) {
-            if (materia.plans[0].degree.status == 'active') {
-                const estatus = materia.plans[0].degree.status;
-                const { id, name, credits, hours_professor} = materia;
-                await db.query(`
+ const {getAllCourses, getAllDegrees} = require('../util/admin.api.client');
+ 
+ module.exports = class Grupo{
+     static async getAllCourses() {
+         return await getAllCourses();
+     }
+ 
+     static async getAllDegrees() {
+         return await getAllDegrees();
+     }
+ 
+     /* Filtra las materias por la carrera
+     que reciba como parametro */
+     static async fetchByDegree(carrera) {
+         return this.getAllCourses().then((materias) => {
+             const arregloMaterias = [];
+             for (let materia of materias) {
+                 if (materia.plans[0].degree.name == carrera) {
+                     arregloMaterias.push(materia);
+                 }
+             }
+ 
+             return arregloMaterias;
+         }).catch((error) => {
+             console.log(error);
+         });
+     }
+ 
+     /* Filtra los planes de estudio por carrera */
+     static async fetchPlanesByDegree(carrera) {
+         return this.getAllDegrees().then((planes) => {
+             /* Carrera:
+             id: plan.id
+             nombre: plan.name
+             estatus: plan.status
+ 
+             Plan de Estudio:
+             id: plan.plans[0].id
+             version: plan.plans[0].version
+             estatus: plan.plans[0].status
+         */
+         const arregloPlanes = [];
+         let plansLength = 0;
+         for (let plan of planes) {
+             if (plan.name == carrera) {
+                 console.log(plan)
+                 plansLength = plan.plans.length;
+                 if (plansLength > 0) {
+                     for (let i = 0; i < plansLength; i++) {
+                         if (plan.plans[i].status == 'active') {
+                             arregloPlanes.push(plan.plans[i]);
+                         }
+                     }
+                 }
+                 else {
+                     arregloPlanes.push(plan.plans[0]);
+                 }
+             }
+         }
+ 
+         return arregloPlanes;
+         }).catch((error) => {
+             console.log(error);
+         })
+     }
+ 
+     static async sincronizarDesdeAPI() {
+         try {
+         const materias = await getAllCourses();
+         for (let materia of materias) {
+             if (materia.plans[0].degree.status == 'active') {
+                 const estatus = materia.plans[0].degree.status;
+                 const { id, name, credits, hours_professor} = materia;
+                 await db.query(`
                     CALL sincronizar_materias($1::integer, $2::text, $3::integer, $4::integer);
-                `, [id, name, parseInt(credits), hours_professor]);
-                }
-        }
-    
-        console.log("Materias sincronizadas exitosamente.");
-        return { mensaje: "Sincronización completada", total: materias.length };
-        } catch (error) {
-            console.error("Error al sincronizar materias:", error);
-            throw error;
-        }
-    }
-
-    static async sincronizarCarrerasDesdeAPI() {
+                 `, [id, name, parseInt(credits), hours_professor]);
+             }
+         }
+ 
+         console.log("Materias sincronizadas exitosamente.");
+         return { mensaje: "Sincronización completada", total: materias.length };
+         } catch (error) {
+             console.error("Error al sincronizar materias:", error);
+             throw error;
+         }
+     }
+ 
+     static async sincronizarCarrerasDesdeAPI() {
         try {
             const carreras = await getAllDegrees();
             for (let carrera of carreras) {
@@ -131,7 +131,8 @@ module.exports = class Grupo{
             throw error;
         }
     }
-    static async getMateriasPorCiclo(idCicloEscolar) {
+
+      static async getMateriasPorCiclo(idCicloEscolar) {
         try {
             const resultado = await db.query(`
             SELECT cem.id_ciclo_escolar_materia, m.materia AS nombre_materia
@@ -147,7 +148,34 @@ module.exports = class Grupo{
             console.error("Error al obtener materias del ciclo actual:", error);
             return [];
         }
-    }
+      }
 
-}
-
+      static async getMateriasConProfesorPorCiclo(idCicloEscolar) {
+        try {
+          const resultado = await db.query(`
+            SELECT
+              m.materia AS nombre_materia,
+              p.profesor AS profesor,
+              pm.id_profesor_materia,
+              p.id_profesor,
+              m.id_materia,
+              cem.id_ciclo_escolar_materia,
+              g.id_grupo AS id
+            FROM profesores_materias pm
+            JOIN profesores p ON p.id_profesor = pm.id_profesor
+            JOIN ciclos_escolares_materias cem ON cem.id_ciclo_escolar_materia = pm.id_ciclo_escolar_materia
+            JOIN planes_materias plm ON plm.id_plan_materia = cem.id_plan_materia
+            JOIN materias m ON m.id_materia = plm.id_materia
+            LEFT JOIN grupos_ciclos_materias gcm ON gcm.id_ciclo_escolar_materia = cem.id_ciclo_escolar_materia
+            LEFT JOIN grupos g ON gcm.id_grupo = g.id_grupo
+            WHERE cem.id_ciclo_escolar = $1
+            ORDER BY m.materia ASC
+          `, [idCicloEscolar]);
+      
+          return resultado.rows;
+        } catch (error) {
+          console.error("Error al obtener materias con profesor:", error);
+          return [];
+        }
+      }
+ }

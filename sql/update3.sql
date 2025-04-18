@@ -1,0 +1,1 @@
+DELETE From grupos_horarios WHERE id_grupo_horario = 20;

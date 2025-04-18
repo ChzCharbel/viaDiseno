@@ -73,6 +73,7 @@ app.use("/solicitudes", solicitudesRoutes);
 app.use("/disponible", disponibleRoutes);
 app.use('/ciclo', cicloRoutes);
 
+
 app.get("/v1/users/find_one/:id", async (req, res) => {
   try {
     const user = await getUserById(req.params.id);

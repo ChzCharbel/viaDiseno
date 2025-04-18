@@ -27,7 +27,7 @@
     <table class="table table-bordered align-middle text-center shadow-sm overflow-hidden">
       <thead class="table-light">
         <tr>
-          <th>Carrera</th>
+          <th>Profesor</th>
           <th>Materia</th>
           <th>Salón</th>
           <th>Horario</th>
@@ -42,7 +42,7 @@
         <% } else if (materias) { %>
           <% for (let materia of materias) { %>
             <tr>
-              <td>—</td> <!-- No viene la carrera en el query actual -->
+              <td><%= materia.profesor || 'Sin asignar' %></td>
               <td><%= materia.nombre_materia %></td>
               <td>
                 <!-- Botón para abrir modal -->
