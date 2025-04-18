@@ -30,12 +30,15 @@ exports.enviarSolicitud = async (request, response, next) => {
     const datos = isJson ? request.body : request.body;
 
     const {
-      matricula,
+      matricula, // esto ahora es id_ivd
       id_materia,
       descripcion,
       tipo,
-      nombre_materia
+      nombre_materia,
+      id_ciclo_escolar
     } = datos;
+
+    console.log("Datos recibidos:", datos); // <-- Agrega esto para depurar
 
     let descripcionFinal = "";
 
@@ -50,10 +53,12 @@ exports.enviarSolicitud = async (request, response, next) => {
     const idCiclo = request.session.cicloActual || request.params.idCiclo;
 
     await SolicitaCambio.crearSolicitud({
-      matricula,
+      id_ivd: matricula,
+      id_ciclo_escolar: idCiclo,
       id_materia,
-      idCiclo,
+      tipo,
       descripcion: descripcionFinal,
+      mensaje: "" // Se queda vacío para que el admin lo llene después
     });
 
     if (isJson) {
@@ -69,4 +74,5 @@ exports.enviarSolicitud = async (request, response, next) => {
       return response.status(500).render("error.ejs");
     }
   }
+
 };
