@@ -126,6 +126,30 @@ module.exports = class Profesor {
       return [];
     }
   }
+
+  static async obtenerDisponibilidad(idProfesor, idCiclo) {
+    const disponibilidadProfesor = await db.query(`SELECT
+      COUNT(*) * 0.5 as total_horas_profesor, 
+      COUNT(*) FILTER (WHERE dia_semana = 'lunes') * 0.5 AS total_horas_lunes,
+      COUNT(*) FILTER (WHERE dia_semana = 'martes') * 0.5 AS total_horas_martes,
+      COUNT(*) FILTER (WHERE dia_semana LIKE 'mi%') * 0.5 AS total_horas_miercoles,
+      COUNT(*) FILTER (WHERE dia_semana = 'jueves') * 0.5 AS total_horas_jueves,
+      COUNT(*) FILTER (WHERE dia_semana = 'viernes') * 0.5 AS total_horas_viernes
+      FROM profesores_disponibilidad pd
+      WHERE id_profesor = $1::text AND disponible = true AND id_ciclo_escolar = $2::integer;`, [idProfesor, idCiclo]);
+
+    return disponibilidadProfesor;
+  }
+
+  static async obtenerHorario(idProfesor) {
+    const horarioProfe = await db.query(`SELECT 
+    hora_inicio, hora_fin, id_profesor_disponibilidad, dia_semana
+    FROM profesores_disponibilidad pd
+    WHERE id_profesor = 1 AND disponible = true AND id_ciclo_escolar = 1
+    GROUP BY id_profesor_disponibilidad
+    ORDER BY dia_semana, hora_inicio;`);
+    return horarioProfe;
+  }
   
   
   
