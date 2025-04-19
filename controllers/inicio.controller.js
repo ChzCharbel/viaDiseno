@@ -5,7 +5,11 @@ exports.get_inicio = (request, response, next) => {
     const editar = request.query.editar === 'true';
 
     console.log('CICLO ESCOLAR RUTA: ' + idCiclo);
-    ciclosModel.fetchAll()
+    ciclosModel.sincronizarCiclosEscolaresDesdeAPI()
+        .then((result) => {
+            console.log('Sincronización exitosa:', result);
+            return ciclosModel.fetchAll();
+        })
         .then(result => {
             const ciclosEscolares = result.rows;
             if (idCiclo) {

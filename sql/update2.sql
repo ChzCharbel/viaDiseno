@@ -11,3 +11,6 @@ CREATE TABLE IF NOT EXISTS public.profesores_materias (
 );
 
 ALTER TABLE "public"."planes_materias" RENAME COLUMN "id_plan" TO "id_plan_estudio";
+
+DELETE FROM public.grupos_horarios
+WHERE id_grupo_horario IN (1, 3, 4, 8, 15);

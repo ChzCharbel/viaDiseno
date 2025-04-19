@@ -1,4 +1,5 @@
 const db = require('../util/database');
+const {getCiclosEscolares} = require('../util/admin.api.client')
 
 module.exports = class CicloEscolar {
   constructor(mi_id, mi_fecha_inicio, mi_fecha_fin) {
@@ -41,4 +42,27 @@ module.exports = class CicloEscolar {
       WHERE id_ciclo_escolar = $3::integer
     `, [fechaInicio, fechaFin, id]);
   }
+
+  static async getCiclosEscolares(){
+    return await getCiclosEscolares();
+  }
+
+  static async sincronizarCiclosEscolaresDesdeAPI() {
+    try {
+        const ciclos = await getCiclosEscolares();
+        for (let ciclo of ciclos) {
+                const {id, code, start_date, end_date} = ciclo;
+                await db.query(`
+                    CALL sincronizar_ciclos_escolares($1::integer,$2::text,$3::date,$4::date);
+                `, [id, code, start_date, end_date]);
+        }
+        console.log("Ciclos escolares sincronizados exitosamente.");
+        return { mensaje: "Sincronización completada", total: ciclos.length };
+    }
+    catch (error) {
+        console.error("Error al sincronizar ciclos escolares:", error);
+        throw error;
+    }
+}
+
 };

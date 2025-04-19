@@ -35,27 +35,25 @@
         <% } else { %>
             <div class="col-10"></div>
         <% } %>
-        <span
-          class="mb-0 fs-3 position-absolute start-50 translate-middle-x text-light"
-        >
-        <% if (titulo == 'alumnos') { %>
+        <span class="mb-0 fs-3 position-absolute start-50 translate-middle-x text-light">
+          <% if (titulo == 'principal') { %>
+            Inicio
+          <% } else if (titulo == 'alumnos') { %>
             Alumnos
-        <% } else if (titulo == 'maestros') { %>
-            Maestros
-        <% } else if (titulo == 'materias') { %>
-            Materias
-        <% } else if (titulo == 'oferta_academica' || titulo == 'oferta_academica_agregar') { %>
+          <% } else if (titulo == 'maestros') { %>
+            Profesores
+          <% } else if (titulo == 'oferta_academica' || titulo == 'oferta_academica_agregar') { %>
             Oferta Académica
-        <% } else if (titulo == 'grupos') { %>
+          <% } else if (titulo == 'materias') { %>
             Grupos
-        <% } else if (titulo == 'solicitudes') { %>
+          <% } else if (titulo == 'solicitudes') { %>
             Solicitudes
-        <% } else if (titulo == 'planes') { %>
-            Plan de Estudio
-        <% } else if (titulo == 'Horario de Clases') { %>
+          <% } else if (titulo == 'inicio') { %>
+            Fechas de inscripciones
+          <% } else if (titulo == 'Horario de Clases') { %>
             Horario de Clases
-        <% } %>
-        </span>
+          <% } %>
+        </span>        
 
         <% if (typeof cicloActual !== 'undefined' && cicloActual) { %>
           <a href="/solicitudes/<%= cicloActual %>/" class="navbar-brand">
