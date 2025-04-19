@@ -1,8 +1,11 @@
 const CicloEscolar = require('../models/ciclos.model');
+const { getCiclosEscolares } = require('../util/admin.api.client');
+
 
 // Función GET para mostrar el formulario de inscripciones
 exports.get_inscripciones_form = (req, res, next) => {
     const idCiclo = req.params.idCiclo;
+    CicloEscolar.sincronizarCiclosEscolaresDesdeAPI();
 
     CicloEscolar.fetchOne(idCiclo)
         .then(result => {

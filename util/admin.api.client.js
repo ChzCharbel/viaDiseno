@@ -273,6 +273,47 @@ async function getAllDegrees() {
     
 }
 
+async function getCiclosEscolares(){
+    try {
+        const token = await getToken();
+        const headers = getHeaders(token);
+        const response = await axiosAdminClient.get("/v1/school_cycles/index", {
+        headers,
+    })
+
+    console.log("Respuesta recibida, status:", response.status);
+        
+    if (!response.data) {
+        console.error("No se recibieron datos de la API");
+        return [];
+    }
+
+    const jsonString = JSON.stringify(response.data);
+    const parsedJson = JSON.parse(jsonString);
+
+    if (!parsedJson.data || parsedJson.data.length === 0) {
+        console.log("No se encontraron ciclos en la respuesta");
+    } else {
+        console.log(`Se encontraron ${parsedJson.data.length} ciclos`);
+    }
+
+    return parsedJson.data;
+    }
+    catch (error) {
+        console.error("Error al obtener los ciclos:", error.message);
+        if (error.response) {
+            console.error("Detalles de la respuesta:", {
+                status: error.response.status,
+                statusText: error.response.statusText,
+                data: error.response.data
+            });
+        }
+        return [];
+    }
+    
+
+}
+
 const grupo13 = (async () => {
     const cuarto = await getUserGroups(13, 100007);
     console.log(cuarto.room);
@@ -304,4 +345,5 @@ module.exports = {
     getHeaders,
     axiosAdminClient,
     getAllDegrees,
+    getCiclosEscolares,
 };
