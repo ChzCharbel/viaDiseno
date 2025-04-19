@@ -37,23 +37,36 @@ exports.get_agregar = (request, response, next) => {
     Promise.all([
         Materia.sincronizarDesdeAPI(),
         Materia.fetchPlanesByDegree(request.session.carrera),
-        Materia.fetchByDegree(request.session.carrera),
-        ]).then(([data, planVersiones, materias]) => {
-            console.log(data);
-            response.render('oferta_agregar.ejs',{
-                titulo: 'oferta_academica_agregar',
-                privilegios: request.session.privilegios || [],
-                csrfToken: request.csrfToken(),
-                materias: materias,
-                carrera: request.session.carrera || '',
-                ciclosEscolares: request.session.ciclosEscolares || [],
-                cicloActual: request.params.idCiclo || '',
-                username: request.session.username || '',
-                mail: request.session.mail || '',
-                planes: planVersiones || [],
-                planActual: request.params.idPlan || '',
-                rol: request.session.rol || '',
-            })
+        //Materia.fetchByDegree(request.session.carrera),
+        ]).then(([data, planVersiones]) => {
+            Materia.sincronizarPlanesMaterias().then((dataPlanesMaterias) => {
+                console.log(data);
+                console.log(dataPlanesMaterias);
+                Materia.fetchAll(request.params.idCiclo).then((materias) => {
+                    console.log(materias.length);
+                    response.render('oferta_agregar.ejs',{
+                    titulo: 'oferta_academica_agregar',
+                    info: request.session.info || '',
+                    error: request.session.error || '',
+                    privilegios: request.session.privilegios || [],
+                    csrfToken: request.csrfToken(),
+                    materias: materias,
+                    carrera: request.session.carrera || '',
+                    ciclosEscolares: request.session.ciclosEscolares || [],
+                    cicloActual: request.params.idCiclo || '',
+                    username: request.session.username || '',
+                    mail: request.session.mail || '',
+                    planes: planVersiones || [],
+                    planActual: request.params.idPlan || '',
+                    rol: request.session.rol || '',
+                    })
+                }).catch((error) => {
+                    console.log(error);
+                })
+                
+            }).catch((error) => {
+                console.log(error);
+            });
     }).catch((error) => {
         console.log(error);
     });
@@ -69,6 +82,13 @@ exports.post_agregar = (request, response, next) => {
             idMaterias.push(id);
         }
     }
-    const miOferta = new Oferta(request.params.idCiclo, idMaterias, request.params.idPlan);
-    miOferta.save();
+    const miOferta = new Oferta(request.params.idCiclo, idMaterias);
+    miOferta.save().then(() => {
+        request.session.info = `La oferta ha sido guardada exitosamente`;
+        const rutaRedirect = '/oferta_academica/' + request.params.idCiclo + '/' + request.params.idPlan + '/agregar';
+        response.redirect(rutaRedirect);
+    }).catch((error) => {
+        request.session.error = `Ocurrió un error al intentar guardar la oferta, inténtelo de nuevo`
+        console.log(error);
+    });
 }
