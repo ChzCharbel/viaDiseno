@@ -5,9 +5,14 @@ const { getCiclosEscolares } = require('../util/admin.api.client');
 // Función GET para mostrar el formulario de inscripciones
 exports.get_inscripciones_form = (req, res, next) => {
     const idCiclo = req.params.idCiclo;
-    CicloEscolar.sincronizarCiclosEscolaresDesdeAPI();
-
-    CicloEscolar.fetchOne(idCiclo)
+    
+    console.log('Iniciando sincronización de ciclos escolares...');
+    
+    CicloEscolar.sincronizarCiclosEscolaresDesdeAPI()
+        .then((result) => {
+            console.log('Sincronización exitosa:', result);
+            return CicloEscolar.fetchOne(idCiclo);
+        })
         .then(result => {
             if (result.rows.length > 0) {
                 const cicloEscolar = result.rows[0];
@@ -22,8 +27,8 @@ exports.get_inscripciones_form = (req, res, next) => {
             }
         })
         .catch(err => {
-            console.log(err);
-            res.status(500).send('Error al obtener el ciclo escolar');
+            console.error('Error en get_inscripciones_form:', err);
+            res.status(500).send('Error al obtener el ciclo escolar: ' + err.message);
         });
 };
 
