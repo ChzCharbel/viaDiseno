@@ -1,9 +1,27 @@
--- Por si no los deja agregar solicitudes por el id que es serial
-SELECT setval('solicitudes_cambio_id_solicitud_seq', (SELECT MAX(id_solicitud) FROM solicitudes_cambio));
+CREATE OR REPLACE PROCEDURE sincronizar_ciclos_escolares(
+    id_ciclo_api integer,
+    nombre_ciclo TEXT,
+    start_date DATE,
+    end_date DATE
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    existe_ciclo INTEGER;
+BEGIN
+    SELECT COUNT(*) INTO existe_ciclo
+    FROM ciclos_escolares
+    WHERE id_ciclo_escolar = id_ciclo_api;
 
--- Para que sepan si tienen materias en el ciclo escolar actual (que es 22)
-SELECT m.id_materia, m.materia
-FROM ciclos_escolares_materias cem
-JOIN planes_materias pm ON cem.id_plan_materia = pm.id_plan_materia
-JOIN materias m ON pm.id_materia = m.id_materia
-WHERE cem.id_ciclo_escolar = 22;
+    IF existe_ciclo = 0 THEN
+        INSERT INTO ciclos_escolares (id_ciclo_escolar, ciclo_escolar, fecha_inicio, fecha_fin)
+        VALUES (id_ciclo_api, nombre_ciclo, start_date, end_date);
+    ELSE
+        UPDATE ciclos_escolares 
+        SET ciclo_escolar = nombre_ciclo,
+            fecha_inicio = start_date,
+            fecha_fin = end_date    
+        WHERE id_ciclo_escolar = id_ciclo_api;
+    END IF;
+END;
+$$;
