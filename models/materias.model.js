@@ -1,16 +1,42 @@
 const db = require('../util/database');
- const {getAllCourses, getAllDegrees} = require('../util/admin.api.client');
+const {getAllCourses, getAllDegrees} = require('../util/admin.api.client');
+
+module.exports = class Grupo{
+    static async getAllCourses() {
+        return await getAllCourses();
+    }
+
+    static async getAllDegrees() {
+        return await getAllDegrees();
+    }
+
+    /* Devuelve las materias que no se encuentran en la 
+    oferta del ciclo escolar actual */
+    static async fetchAll(idCiclo) {
+        try {
+            const planesMaterias = await db.query(`SELECT * FROM planes_materias
+                JOIN planes_estudios using (id_plan_estudio)
+                JOIN materias using (id_materia);`)
+            const materiasNoOfertadas = [];
+            for (let materia of planesMaterias.rows) {
+                const materiaExistente = await db.query(`
+                    SELECT * FROM ciclos_escolares_materias
+                    JOIN planes_materias using (id_plan_materia)
+                    JOIN materias using (id_materia)
+                    WHERE id_materia = $1::integer AND id_ciclo_escolar = $2::integer;`, [materia.id_materia, idCiclo]);
+                if (materiaExistente.rowCount  == 0) {
+                    materiasNoOfertadas.push(materia);
+                }
+            }
+            return materiasNoOfertadas;
+        }
+        catch (error) {
+            console.error("Error al obtener materias:", error);
+            throw error;
+        }
+    }
  
- module.exports = class Grupo{
-     static async getAllCourses() {
-         return await getAllCourses();
-     }
- 
-     static async getAllDegrees() {
-         return await getAllDegrees();
-     }
- 
-     /* Filtra las materias por la carrera
+    /* Filtra las materias por la carrera
      que reciba como parametro */
      static async fetchByDegree(carrera) {
          return this.getAllCourses().then((materias) => {
@@ -128,6 +154,28 @@ const db = require('../util/database');
         }
         catch (error) {
             console.error("Error al sincronizar planes:", error);
+            throw error;
+        }
+    }
+    
+    static async sincronizarPlanesMaterias() {
+        try {
+            const materiasAPI = await getAllCourses();
+            for (let materia of materiasAPI) {
+                if (materia.plans[0].degree.status == 'active') {
+                    const estatus = materia.plans[0].status;
+                    const planId = materia.plans[0].id;
+                    const semestre = materia.plans_courses[0].semester;
+                    await db.query(`
+                        CALL sincronizar_planes_materias($1::integer, $2::integer, $3::integer, $4::text);
+                    `, [materia.id, planId, semestre, estatus]);
+                }
+            }
+            console.log("Planes con materias sincronizadss exitosamente.");
+            return { mensaje: "Sincronización completada", total: materiasAPI.length };
+        }
+        catch (error) {
+            console.error("Error al sincronizar planes con materias:", error);
             throw error;
         }
     }
