@@ -335,6 +335,45 @@ const materias = (async () => {
     }
 });
 
+/**
+ * Crea un nuevo grupo
+ * grupoData - Datos del grupo a crear
+ * grupoData.school_cycle_id - ID del ciclo escolar
+ * grupoData.professor_id - ID del profesor
+ * grupoData.course_id - ID del curso
+ * grupoData.name - Nombre del grupo
+ * grupoData.room - Salón asignado
+ * @returns Respuesta de la API
+ */
+async function createGrupo(grupoData) {
+    try {
+        const token = await getToken();
+        if (!token) {
+            console.error("Error: Could not get authentication token");
+            return { error: "Authentication failed" };
+        }
+
+        const headers = getHeaders(token);
+        
+        const response = await axiosAdminClient.post("/v1/groups", grupoData, {
+            headers,
+        });
+
+        console.log("Grupo creado con éxito:", response.status);
+        return response.data;
+    } catch (error) {
+        console.error("Error al crear grupo:", error.message);
+        if (error.response) {
+            console.error("Detalles de la respuesta:", {
+                status: error.response.status,
+                statusText: error.response.statusText,
+                data: error.response.data
+            });
+        }
+        return { error: error.message };
+    }
+}
+
 module.exports = {
     getUserById,
     getUserGroups,
@@ -346,4 +385,5 @@ module.exports = {
     axiosAdminClient,
     getAllDegrees,
     getCiclosEscolares,
+    createGrupo,
 };
