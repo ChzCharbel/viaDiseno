@@ -1,27 +1,33 @@
-CREATE OR REPLACE PROCEDURE sincronizar_ciclos_escolares(
-    id_ciclo_api integer,
-    nombre_ciclo TEXT,
-    start_date DATE,
-    end_date DATE
+CREATE OR REPLACE PROCEDURE sincronizar_planes_materias(
+    id_usr_materia integer,
+    id_plan_usr integer,
+    semestre_usr integer,
+    estatus_usr text
 )
 LANGUAGE plpgsql
 AS $$
 DECLARE
-    existe_ciclo INTEGER;
+    tabla_ultimo_id INT;
 BEGIN
-    SELECT COUNT(*) INTO existe_ciclo
-    FROM ciclos_escolares
-    WHERE id_ciclo_escolar = id_ciclo_api;
-
-    IF existe_ciclo = 0 THEN
-        INSERT INTO ciclos_escolares (id_ciclo_escolar, ciclo_escolar, fecha_inicio, fecha_fin)
-        VALUES (id_ciclo_api, nombre_ciclo, start_date, end_date);
+    IF NOT EXISTS (
+        SELECT 1 FROM planes_materias
+        WHERE id_materia = id_usr_materia
+          AND id_plan_estudio = id_plan_usr
+    ) THEN
+    
+	    SELECT MAX(id_plan_materia) + 1 INTO tabla_ultimo_id
+	    FROM planes_materias
+	    LIMIT 1;
+	    
+	    INSERT INTO planes_materias (id_plan_materia, id_plan_estudio, id_materia, semestre, estatus_plan_materia)
+	    VALUES (tabla_ultimo_id, id_plan_usr, id_usr_materia, semestre_usr, estatus_usr);
+    
     ELSE
-        UPDATE ciclos_escolares 
-        SET ciclo_escolar = nombre_ciclo,
-            fecha_inicio = start_date,
-            fecha_fin = end_date    
-        WHERE id_ciclo_escolar = id_ciclo_api;
+    
+	    UPDATE planes_materias 
+	    SET semestre = semestre_usr,
+	    estatus_plan_materia = estatus_usr
+	    WHERE id_materia = id_usr_materia AND id_plan_estudio = id_plan_usr;
     END IF;
 END;
 $$;
