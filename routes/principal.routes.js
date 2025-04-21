@@ -7,4 +7,3 @@ router.get("/principal/:idCicloEscolar", principalController.get_principal);
 
 module.exports = router;
 
-//este es al que mas le dudo

@@ -1,29 +1,43 @@
-<p>esta es la vista donde van las estadísticas</p>
+<!-- Gráficas lado a lado -->
+<div class="container mt-4">
+    <div class="row justify-content-center">
+      <!-- Gráfica: Materias por semestre -->
+      <div class="col-md-6">
+        <div class="card p-4 h-100">
+          <h5 class="text-center">Materias por Semestre</h5>
+          <canvas id="graficoMateriasSemestre" height="100"></canvas>
+        </div>
+      </div>
+  
+      <!-- Gráfica: Alumnos regulares vs irregulares -->
+      <div class="col-md-6">
+        <div class="card p-4 h-100">
+          <h5 class="text-center">Alumnos Regulares vs Irregulares</h5>
+          <canvas id="graficoRegulares" height="100"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>  
 
-
-<div class="container d-flex justify-content-center">
-  <div class="card p-4 mt-4" style="width: 80%;">
-    <h5 class="text-center">Materias por Semestre</h5>
-    <canvas id="graficoMateriasSemestre" height="100"></canvas>
-  </div>
-</div>
-
+<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
-  const materiasData = <%- JSON.stringify(materiasPorSemestre || []) %>;
+  // Materias por semestre
+  const materiasData = JSON.parse(`<%- JSON.stringify(materiasPorSemestre || []) %>`);
 
-  const labels = materiasData.map(item => `Semestre ${item.semestre}`);
-  const data = materiasData.map(item => item.cantidad);
+  const labelsMaterias = materiasData.map(item => `Semestre ${item.semestre}`);
+  const dataMaterias = materiasData.map(item => item.cantidad);
 
-  const ctx = document.getElementById('graficoMateriasSemestre').getContext('2d');
+  const ctxMaterias = document.getElementById('graficoMateriasSemestre').getContext('2d');
 
-  const graficoMaterias = new Chart(ctx, {
+  new Chart(ctxMaterias, {
     type: 'bar',
     data: {
-      labels: labels,
+      labels: labelsMaterias,
       datasets: [{
         label: 'Número de materias',
-        data: data,
+        data: dataMaterias,
         backgroundColor: 'rgba(149, 65, 77, 0.9)',
         borderColor: 'rgba(149, 65, 77, 1)',
         borderWidth: 1
@@ -32,28 +46,65 @@
     options: {
       responsive: true,
       plugins: {
-        legend: {
-          display: false
-        },
+        legend: { display: false },
         tooltip: {
           callbacks: {
-            label: (ctx) => `${ctx.raw} materias`
+            label: ctx => `${ctx.raw} materias`
           }
         }
       },
       scales: {
         y: {
           beginAtZero: true,
-          title: {
-            display: true,
-            text: 'Materias'
-          }
+          title: { display: true, text: 'Materias' }
         },
         x: {
-          title: {
-            display: true,
-            text: 'Semestres'
+          title: { display: true, text: 'Semestres' }
+        }
+      }
+    }
+  });
+
+  // Regulares vs Irregulares
+  const regularesData = JSON.parse(`<%- JSON.stringify(regularesIrregulares || []) %>`);
+
+  const labelsRegulares = regularesData.map(d => d.tipo);
+  const dataRegulares = regularesData.map(d => d.cantidad);
+
+  const ctxRegulares = document.getElementById('graficoRegulares').getContext('2d');
+
+  new Chart(ctxRegulares, {
+    type: 'pie',
+    data: {
+      labels: labelsRegulares,
+      datasets: [{
+        label: 'Alumnos',
+        data: dataRegulares,
+        backgroundColor: [
+          'rgba(149, 145, 145, 0.69)',
+          'rgba(149, 64, 76, 1)', 
+        ],
+        borderColor: [
+          'rgba(75, 192, 192, 1)',
+          'rgba(255, 99, 132, 1)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'bottom'
+        },
+        tooltip: {
+          callbacks: {
+            label: ctx => `${ctx.label}: ${ctx.raw} alumno(s)`
           }
+        },
+        title: {
+          display: true,
+          text: 'Distribución de alumnos'
         }
       }
     }

@@ -5,6 +5,7 @@ exports.get_principal = async (req, res, next) => {
 
   try {
     const materiasPorSemestre = await EstadisticasModel.getMateriasPorSemestre(idCiclo);
+    const regularesIrregulares = await EstadisticasModel.getRegularesVsIrregulares();
 
     res.render("principal.ejs", {
       titulo: "principal",
@@ -15,7 +16,8 @@ exports.get_principal = async (req, res, next) => {
       rol: req.session.rol || "",
       mail: req.session.mail || "",
       ciclosEscolares: req.session.ciclosEscolares || [],
-      materiasPorSemestre, // 👈 agregamos los datos
+      materiasPorSemestre,
+      regularesIrregulares
     });
   } catch (err) {
     console.error("Error al cargar la vista principal:", err);
