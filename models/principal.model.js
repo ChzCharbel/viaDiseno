@@ -18,4 +18,13 @@ module.exports = class EstadisticasModel {
       return [];
     }
   }
+
+	static async getAlumnosInscritos() {
+		const result = await db.query(`
+			SELECT inscrito, COUNT(*) AS total
+			FROM alumnos
+			GROUP BY inscrito
+		  `);
+		  return result.rows;
+	}
 };

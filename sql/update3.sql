@@ -73,3 +73,13 @@ BEGIN
     RETURN nuevo_id_grupo;
 END;
 $$;
+
+ALTER TABLE alumnos ADD COLUMN inscrito BOOLEAN DEFAULT FALSE;
+
+UPDATE planes_estudios 
+SET id_plan_estudio = 9,
+id_carrera = 8
+WHERE plan_estudio = 'Diseño y Arquitectura de Interiores 1';
+
+DELETE FROM carreras
+WHERE id_carrera = 2;

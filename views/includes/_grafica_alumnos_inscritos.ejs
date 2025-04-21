@@ -1,0 +1,29 @@
+<div class="grafica-container">
+    <canvas id="graficaInscritos" width="400" height="400"></canvas>
+  
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      const ctx = document.getElementById('graficaInscritos').getContext('2d');
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Inscritos', 'No inscritos'],
+          datasets: [{
+            data: [<%= inscritos %>, <%= noInscritos %>],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            title: {
+              display: true,
+              text: 'Distribución de Inscripción de Alumnos'
+            }
+          }
+        }
+      });
+    </script>
+  
