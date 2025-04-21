@@ -6,7 +6,8 @@ exports.get_principal = async (req, res, next) => {
   try {
     const materiasPorSemestre = await EstadisticasModel.getMateriasPorSemestre(idCiclo);
     const alumnosInscritos = await EstadisticasModel.getAlumnosInscritos();
-
+    const regularesIrregulares = await EstadisticasModel.getRegularesVsIrregulares();
+    
     let inscritos = 0;
     let noInscritos = 0;
 
@@ -15,6 +16,7 @@ exports.get_principal = async (req, res, next) => {
       else noInscritos = parseInt(row.total);
       
     });
+   
 
     res.render("principal.ejs", {
       titulo: "principal",
@@ -27,7 +29,8 @@ exports.get_principal = async (req, res, next) => {
       ciclosEscolares: req.session.ciclosEscolares || [],
       materiasPorSemestre, 
       inscritos,
-      noInscritos
+      noInscritos,
+      regularesIrregulares
     });
   } catch (err) {
     console.error("Error al cargar la vista principal:", err);

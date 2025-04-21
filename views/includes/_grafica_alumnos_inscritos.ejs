@@ -1,18 +1,25 @@
 <div class="grafica-container">
-    <canvas id="graficaInscritos" width="400" height="400"></canvas>
-  
+    <canvas id="graficaInscritos" height="200"></canvas>
+</div>
 
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-      const ctx = document.getElementById('graficaInscritos').getContext('2d');
-      new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: ['Inscritos', 'No inscritos'],
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const ctx = document.getElementById('graficaInscritos').getContext('2d');
+    new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+      labels: ['Inscritos', 'No inscritos'],
           datasets: [{
-            data: [<%= inscritos %>, <%= noInscritos %>],
-            borderWidth: 1
+            data: [`<%= inscritos %>`, `<%= noInscritos %>`],
+            borderWidth: 1,
+            backgroundColor: [
+              'rgba(149, 145, 145, 0.69)',
+              'rgba(149, 64, 76, 1)', 
+            ],
+            borderColor: [
+              'rgba(75, 192, 192, 1)',
+              'rgba(255, 99, 132, 1)'
+            ],
           }]
         },
         options: {

@@ -1,6 +1,7 @@
 const db = require("../util/database");
 
 module.exports = class EstadisticasModel {
+  // 1. Materias por semestre
   static async getMateriasPorSemestre(idCicloEscolar) {
     try {
       const resultado = await db.query(`
@@ -27,4 +28,24 @@ module.exports = class EstadisticasModel {
 		  `);
 		  return result.rows;
 	}
+  // 2. Alumnos regulares vs irregulares
+  static async getRegularesVsIrregulares() {
+    try {
+      const resultado = await db.query(`
+        SELECT 
+          regular, 
+          COUNT(*) AS cantidad 
+        FROM alumnos 
+        GROUP BY regular
+      `);
+
+      return resultado.rows.map(row => ({
+        tipo: row.regular ? "Regular" : "Irregular",
+        cantidad: parseInt(row.cantidad)
+      }));
+    } catch (error) {
+      console.error("Error al obtener estadísticas de regularidad:", error);
+      return [];
+    }
+  }
 };

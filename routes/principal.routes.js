@@ -9,4 +9,3 @@ router.get("/principal/:idCicloEscolar", isAuth, principalController.get_princip
 
 module.exports = router;
 
-//este es al que mas le dudo
