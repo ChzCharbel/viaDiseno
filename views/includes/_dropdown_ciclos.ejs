@@ -19,54 +19,92 @@
         <% if (ciclo.id_ciclo_escolar == cicloActual) { %>
           <% if (titulo == 'oferta_academica') { %>
             <li>
-              <a class="dropdown-item active" href="/<%= titulo %>/<%= ciclo.id_ciclo_escolar %>/<% if (planActual != '') {%><%=planActual%><%} else {%>plan_version<% } %>"> <%= ciclo.ciclo_escolar %> </a>
+              <a class="dropdown-item active ciclo-link" 
+                 data-ciclo-id="<%= ciclo.id_ciclo_escolar %>"
+                 href="/<%= titulo %>/<%= ciclo.id_ciclo_escolar %>/<% if (planActual != '') {%><%=planActual%><%} else {%>plan_version<% } %>"> 
+                 <%= ciclo.ciclo_escolar %> 
+              </a>
             </li>
           <% } else if (titulo == 'oferta_academica_agregar') { %>
               <li>
-              <a class="dropdown-item active" href="/oferta_academica/<%= ciclo.id_ciclo_escolar %>/<% if (planActual != '') {%><%=planActual%><%} else {%>plan_version<% } %>/agregar"> <%= ciclo.ciclo_escolar %> </a>
+              <a class="dropdown-item active ciclo-link"
+                 data-ciclo-id="<%= ciclo.id_ciclo_escolar %>"
+                 href="/oferta_academica/<%= ciclo.id_ciclo_escolar %>/<% if (planActual != '') {%><%=planActual%><%} else {%>plan_version<% } %>/agregar"> 
+                 <%= ciclo.ciclo_escolar %> 
+              </a>
             </li>
           <% } else { %> 
               <li>
-              <a class="dropdown-item active" href="/<%= titulo %>/<%= ciclo.id_ciclo_escolar %>"> <%= ciclo.ciclo_escolar %> </a>
+              <a class="dropdown-item active ciclo-link"
+                 data-ciclo-id="<%= ciclo.id_ciclo_escolar %>"
+                 href="/<%= titulo %>/<%= ciclo.id_ciclo_escolar %>"> 
+                 <%= ciclo.ciclo_escolar %> 
+              </a>
             </li>
         <% } } else { %>
           <% if (titulo == 'oferta_academica') { %>
             <li>
-              <a class="dropdown-item" href="/<%= titulo %>/<%= ciclo.id_ciclo_escolar %>/<% if (planActual != '') {%><%=planActual%><%} else {%>plan_version<% } %>"> <%= ciclo.ciclo_escolar %> </a>
+              <a class="dropdown-item ciclo-link"
+                 data-ciclo-id="<%= ciclo.id_ciclo_escolar %>"
+                 href="/<%= titulo %>/<%= ciclo.id_ciclo_escolar %>/<% if (planActual != '') {%><%=planActual%><%} else {%>plan_version<% } %>"> 
+                 <%= ciclo.ciclo_escolar %> 
+              </a>
             </li>
           <% } else if (titulo == 'oferta_academica_agregar') { %>
               <li>
-              <a class="dropdown-item" href="/oferta_academica/<%= ciclo.id_ciclo_escolar %>/<% if (planActual != '') {%><%=planActual%><%} else {%>plan_version<% } %>/agregar"> <%= ciclo.ciclo_escolar %> </a>
+              <a class="dropdown-item ciclo-link" 
+                 data-ciclo-id="<%= ciclo.id_ciclo_escolar %>"
+                 href="/oferta_academica/<%= ciclo.id_ciclo_escolar %>/<% if (planActual != '') {%><%=planActual%><%} else {%>plan_version<% } %>/agregar"> 
+                 <%= ciclo.ciclo_escolar %> 
+              </a>
             </li>
           <% } else { %> 
               <li>
-              <a class="dropdown-item" href="/<%= titulo %>/<%= ciclo.id_ciclo_escolar %>"> <%= ciclo.ciclo_escolar %> </a>
+              <a class="dropdown-item ciclo-link"
+                 data-ciclo-id="<%= ciclo.id_ciclo_escolar %>"
+                 href="/<%= titulo %>/<%= ciclo.id_ciclo_escolar %>"> 
+                 <%= ciclo.ciclo_escolar %> 
+              </a>
             </li>
           <% } %>
       <% } } %>
     </div>
-    <li><hr class="dropdown-divider" /></li>
-    <li>
-      <a class="dropdown-item text-dark fw-bold" href="#" id="add-cycle">
-        <i class="bi bi-plus-circle-fill"></i> Agregar nuevo
-      </a>
-    </li>
   </ul>
 </div>
 
 <script>
-  document
-    .getElementById("add-cycle")
-    .addEventListener("click", function (event) {
-      event.preventDefault();
-      const newCycle = prompt("Ingrese el nuevo ciclo escolar:");
-      if (newCycle) {
-        const dropdownMenu = document.getElementById("dropdown-menu");
-        const divider =
-          dropdownMenu.querySelector(".dropdown-divider").parentElement; // Selecciono el <li> que contiene el <hr>
-        const newItem = document.createElement("li");
-        newItem.innerHTML = `<a class="dropdown-item" href="#">${newCycle}</a>`;
-        dropdownMenu.insertBefore(newItem, divider); // Inserto antes del <li> que contiene el divider
-      }
+  document.addEventListener('DOMContentLoaded', function() {
+    // Checar si hay un ciclo guardado en localStorage
+    const cicloGuardado = localStorage.getItem('cicloSeleccionado');
+      // Agregar evento click a todos los links de ciclos
+    document.querySelectorAll('.ciclo-link').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        const cicloId = this.getAttribute('data-ciclo-id');
+        localStorage.setItem('cicloSeleccionado', cicloId);
+      });
     });
+    
+    if (cicloGuardado && cicloGuardado !== '<%= cicloActual %>') {
+      const currentPath = window.location.pathname;
+      const currentTitle = '<%= titulo %>';
+      
+      // Verificar si planActual está definido en la vista actual
+      const planActual = '<%= typeof planActual !== "undefined" ? planActual : "" %>';
+      
+      // Construir la nueva URL basada en el tipo de página
+      let newUrl;
+      if (currentTitle === 'oferta_academica') {
+        newUrl = '/' + currentTitle + '/' + cicloGuardado + '/' + (planActual || 'plan_version');
+      } else if (currentTitle === 'oferta_academica_agregar') {
+        newUrl = '/oferta_academica/' + cicloGuardado + '/' + (planActual || 'plan_version') + '/agregar';
+      } else {
+        newUrl = '/' + currentTitle + '/' + cicloGuardado;
+      }
+      
+      // Redirigir solo si la URL cambiaría
+      if (currentPath !== newUrl) {
+        window.location.href = newUrl;
+      }
+    }
+  });
 </script>
