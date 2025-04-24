@@ -23,6 +23,16 @@ app.use(
   })
 );
 
+// Connect-flash añadido
+const flash = require("connect-flash");
+app.use(flash());
+
+// Middleware para pasar los mensajes flash a todas las vistas
+app.use((req, res, next) => {
+  res.locals.messages = req.flash();
+  next();
+});
+
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -33,7 +43,9 @@ const csrf = require("csurf");
 const csrfProtection = csrf();
 
 app.use((req, res, next) => {
-  if (req.path.startsWith("/disponible")) {
+  // Saltar CSRF para estas rutas durante pruebas
+  const rutasSinCSRF = ["/disponible", "/salones/asignar"];
+  if (rutasSinCSRF.includes(req.path)) {
     return next();
   }
   csrfProtection(req, res, next); 
@@ -49,7 +61,6 @@ const usersRoutes = require("./routes/users.routes");
 const enlistaRoutes = require("./routes/enlista.routes");
 const alumnosRoutes = require("./routes/alumnos.routes");
 const principalRoutes = require("./routes/principal.routes");
-
 const inicioRoutes = require("./routes/inicio.routes");
 const maestrosRoutes = require("./routes/maestros.routes");
 const materiasRoutes = require("./routes/materias.routes");
@@ -58,11 +69,10 @@ const ofertaRoutes = require("./routes/oferta.routes");
 const solicitudesRoutes = require("./routes/solicitudes.routes");
 const disponibleRoutes = require("./routes/disponible.routes");
 const cicloRoutes = require('./routes/ciclo.routes');
-
-
+const salonesRoutes = require('./routes/salones.routes');
 const gruposRoutes = require("./routes/grupos.routes"); 
-app.use("/grupos", gruposRoutes);
 
+app.use("/grupos", gruposRoutes);
 app.use("/users", usersRoutes);
 app.use("/enlista", enlistaRoutes);
 app.use("/alumnos", alumnosRoutes);
@@ -75,8 +85,9 @@ app.use("/oferta_academica", ofertaRoutes);
 app.use("/solicitudes", solicitudesRoutes);
 app.use("/disponible", disponibleRoutes);
 app.use('/ciclo', cicloRoutes);
+app.use('/salones', salonesRoutes);
 
-
+// Rutas para pruebas de API
 app.get("/v1/users/find_one/:id", async (req, res) => {
   try {
     const user = await getUserById(req.params.id);
@@ -111,7 +122,7 @@ app.get("/", (req, res) => {
   res.redirect("/users/login");
 });
 
-
+// Página 404
 app.use((req, res, next) => {
   res.status(404).render('error', { 
     pageTitle: 'Page Not Found', 
@@ -121,6 +132,7 @@ app.use((req, res, next) => {
   });
 });
 
+// Iniciar servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

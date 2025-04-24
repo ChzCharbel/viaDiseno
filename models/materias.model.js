@@ -208,7 +208,7 @@ module.exports = class Grupo{
               p.id_profesor,
               m.id_materia,
               cem.id_ciclo_escolar_materia,
-              g.id_grupo AS id
+              pm.id_profesor_materia AS id
             FROM profesores_materias pm
             JOIN profesores p ON p.id_profesor = pm.id_profesor
             JOIN ciclos_escolares_materias cem ON cem.id_ciclo_escolar_materia = pm.id_ciclo_escolar_materia

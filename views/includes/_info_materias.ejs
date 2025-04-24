@@ -15,7 +15,7 @@
           <button class="btn btn-outline-success rounded-pill px-4" type="submit">
             Buscar
           </button>
-        </form>          
+        </form>
       </div>
     </div>
   </div>
@@ -31,7 +31,7 @@
           <th>Materia</th>
           <th>Salón</th>
           <th>Horario</th>
-          <th>Estatus</th>
+          <th>Acción</th>
         </tr>
       </thead>
       <tbody>
@@ -44,28 +44,23 @@
             <tr>
               <td><%= materia.profesor || 'Sin asignar' %></td>
               <td><%= materia.nombre_materia %></td>
+
+              <!-- Celda de salón -->
               <td>
-                <!-- Botón para abrir modal -->
                 <button
-                  type="button"
-                  class="btn btn-outline-secondary btn-sm rounded-pill"
+                  class="btn btn-outline-primary btn-sm rounded-pill"
                   data-bs-toggle="modal"
                   data-bs-target="#modalSalones<%= materia.id_ciclo_escolar_materia %>">
                   Seleccionar salón
                 </button>
-      
-                <!-- Incluir modal -->
-                <%- include('_modal_salones.ejs', { materia: materia, salones: salones }) %>
-      
-                <!-- Texto de salón seleccionado -->
                 <div id="salonSeleccionado_<%= materia.id_ciclo_escolar_materia %>" class="mt-2 text-muted small">
                   No seleccionado
                 </div>
                 <input type="hidden" name="salon_<%= materia.id_ciclo_escolar_materia %>" id="inputSalon_<%= materia.id_ciclo_escolar_materia %>">
               </td>
-              
+
+              <!-- Horario -->
               <td>
-                <!-- Botón para abrir modal -->
                 <button 
                   type="button" 
                   class="btn btn-outline-secondary btn-sm rounded-pill" 
@@ -73,8 +68,7 @@
                   data-bs-target="#modalHorario<%= materia.id %>">
                   Seleccionar horario
                 </button>
-              
-                <!-- Modal de horario -->
+
                 <div class="modal fade" id="modalHorario<%= materia.id %>" tabindex="-1" aria-labelledby="modalHorarioLabel<%= materia.id %>" aria-hidden="true">
                   <div class="modal-dialog">
                     <form action="/materias/guardar-horario/<%= materia.id %>" method="POST">
@@ -82,22 +76,19 @@
                       <input type="hidden" name="id_grupo" value="<%= materia.id %>">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h5 class="modal-title" id="modalHorarioLabel<%= materia.id %>">Asignar horario para <%= materia.name %></h5>
+                          <h5 class="modal-title" id="modalHorarioLabel<%= materia.id %>">Asignar horario para <%= materia.nombre_materia %></h5>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                         </div>
-
-                        
-
                         <div class="modal-body">
                           <% const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes']; %>
                           <% dias.forEach((dia, index) => { %>
                             <div class="mb-3">
                               <label><strong><%= dia %></strong></label>
                               <div class="input-group">
-                                <select name="hora_inicio_<%= index %>" class="form-select" >
-                                  <option value="">N/A</option> <!-- Opción N/A -->
+                                <select name="hora_inicio_<%= index %>" class="form-select">
+                                  <option value="">N/A</option>
                                   <% for (let h = 7; h <= 16; h++) {
-                                       let horaStr = h < 10 ? '0' + h : '' + h;
+                                    let horaStr = h < 10 ? '0' + h : '' + h;
                                   %>
                                     <option value="<%= horaStr %>:00"><%= horaStr %>:00</option>
                                     <% if (h < 16) { %>
@@ -105,11 +96,10 @@
                                     <% } %>
                                   <% } %>
                                 </select>
-                                
                                 <select name="hora_fin_<%= index %>" class="form-select">
-                                  <option value="">N/A</option> <!-- Opción N/A -->
+                                  <option value="">N/A</option>
                                   <% for (let h = 7; h <= 16; h++) {
-                                       let horaStr = h < 10 ? '0' + h : '' + h;
+                                    let horaStr = h < 10 ? '0' + h : '' + h;
                                   %>
                                     <option value="<%= horaStr %>:00"><%= horaStr %>:00</option>
                                     <% if (h < 16) { %>
@@ -117,9 +107,7 @@
                                     <% } %>
                                   <% } %>
                                 </select>
-                                
                                 <input type="hidden" name="dia_<%= index %>" value="<%= dia %>">
-                                
                               </div>
                             </div>
                           <% }) %>
@@ -131,22 +119,58 @@
                     </form>
                   </div>
                 </div>
-              
-                <!-- Vista del horario asignado -->
-                <div id="horario_<%= materia.id %>" class="text-muted small mt-2">Sin asignar</div>
               </td>
-              
 
+              <!-- Botón Guardar salón -->
               <td>
-                <button class="btn btn-primary btn-sm rounded-pill px-3"
-                  onclick="guardarSalonSeleccionado('<%= materia.id_ciclo_escolar_materia %>')">Guardar</button>
+                <button
+                  class="btn btn-primary btn-sm rounded-pill px-3"
+                  onclick='guardarSalonSeleccionado("<%= materia.id_ciclo_escolar_materia %>", "<%= materia.id_materia %>")'>
+                  Guardar
+                </button>
               </td>
             </tr>
+
+            <!-- Modal embebido -->
+            <div class="modal fade" id="modalSalones<%= materia.id_ciclo_escolar_materia %>" tabindex="-1" aria-labelledby="labelSalones<%= materia.id_ciclo_escolar_materia %>" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="labelSalones<%= materia.id_ciclo_escolar_materia %>">
+                      Selecciona un salón para <%= materia.nombre_materia %>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                  </div>
+                  <div class="modal-body">
+                    <% salones.forEach(salon => { %>
+                      <button
+                        class="btn btn-light w-100 my-1 text-start border"
+                        data-salon-id="<%= salon.id_salon %>"
+                        onclick="seleccionarSalon('<%= materia.id_ciclo_escolar_materia %>', '<%= salon.id_salon %>', '<%= salon.id_salon %> (<%= salon.descripcion %>)')">
+                        <%= salon.id_salon %>.- <b><%= salon.tipo %></b> <br>(<%= salon.descripcion %>)
+                      </button>
+                    <% }) %>
+                    <input type="hidden" id="inputSalon_<%= materia.id_ciclo_escolar_materia %>">
+                    <input type="hidden" id="csrfToken_<%= materia.id_ciclo_escolar_materia %>" value="<%= csrfToken %>">
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-primary rounded-pill px-4"
+                      onclick="guardarSalonSeleccionado('<%= materia.id_ciclo_escolar_materia %>', '<%= materia.id_materia %>')"
+                      data-bs-dismiss="modal">
+                      Guardar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           <% } %>
         <% } %>
-      </tbody>      
+      </tbody>
     </table>
   </div>
+
   <!-- Scripts -->
   <script>
     localStorage.setItem('cicloActual', '<%= cicloActual %>');

@@ -1,102 +1,78 @@
 window.salonSeleccionado = {};
 
-document.addEventListener('DOMContentLoaded', function() {
-  const savedSelections = localStorage.getItem('salonSeleccionado');
-  if (savedSelections) {
-    try {
-      window.salonSeleccionado = JSON.parse(savedSelections);
-      console.log('Selecciones recuperadas del localStorage:', window.salonSeleccionado);
-    } catch (error) {
-      console.error('Error al recuperar selecciones:', error);
-      window.salonSeleccionado = {};
+    document.addEventListener('DOMContentLoaded', function () {
+      const savedSelections = localStorage.getItem('salonSeleccionado');
+      if (savedSelections) {
+        try {
+          window.salonSeleccionado = JSON.parse(savedSelections);
+          console.log('Selecciones recuperadas del localStorage:', window.salonSeleccionado);
+        } catch (error) {
+          console.error('Error al recuperar selecciones:', error);
+          window.salonSeleccionado = {};
+        }
+      }
+    });
+
+    function seleccionarSalon(idCicloMateria, idSalon, descripcionSalon) {
+      console.log('Seleccionando salón:', { idCicloMateria, idSalon, descripcionSalon });
+
+      window.salonSeleccionado[idCicloMateria] = idSalon;
+      localStorage.setItem('salonSeleccionado', JSON.stringify(window.salonSeleccionado));
+
+      const texto = document.getElementById('salonSeleccionado_' + idCicloMateria);
+      if (texto) {
+        texto.textContent = 'Seleccionado: ' + descripcionSalon;
+      }
+
+      const input = document.getElementById('inputSalon_' + idCicloMateria);
+      if (input) {
+        input.value = idSalon;
+      }
     }
-  }
-});
 
-function seleccionarSalon(idMateria, idSalon, descripcionSalon) {
-  console.log('Seleccionando salón:', { idMateria, idSalon, descripcionSalon });
-
-  window.salonSeleccionado[idMateria] = idSalon;
-  localStorage.setItem('salonSeleccionado', JSON.stringify(window.salonSeleccionado));
-
-  const texto = document.getElementById('salonSeleccionado_' + idMateria);
-  if (texto) {
-    texto.textContent = 'Seleccionado: ' + descripcionSalon;
-  }
-  
-  const modal = document.getElementById('modalSalones' + idMateria);
-  if (modal) {
-    const botones = modal.querySelectorAll('.modal-body .btn');
-    botones.forEach(btn => {
-      btn.classList.remove('btn-primary');
-      btn.classList.add('btn-light');
-    });
+    function guardarSalonSeleccionado(idCicloMateria, idMateria) {
+      console.log('Ejecutando guardarSalonSeleccionado()');
+      console.log('idCicloMateria:', idCicloMateria);
+      console.log('idMateria:', idMateria);
     
-
-    console.log('Buscando botón para salón ID:', idSalon);
-    let encontrado = false;
-    botones.forEach(btn => {
-      const btnSalonId = btn.getAttribute('data-salon-id');
-      console.log('Botón con salon ID:', btnSalonId);
-      if (btnSalonId === idSalon) {
-        console.log('¡Botón encontrado! Activando...');
-        btn.classList.remove('btn-light');
-        btn.classList.add('btn-primary');
-        encontrado = true;
+      const idSalon = window.salonSeleccionado[idCicloMateria];
+      if (!idSalon && idSalon !== 0) {
+        alert('Debes seleccionar un salón antes de guardar.');
+        return;
       }
-    });
-  }
-}
-
-function guardarSalonSeleccionado(idMateria) {
-  console.log('Guardando salón para la materia:', idMateria);
-  console.log('Estado actual de salonSeleccionado:', window.salonSeleccionado);
-  
-  let idSalon = null;
-  
-  if (window.salonSeleccionado && window.salonSeleccionado[idMateria]) {
-    idSalon = window.salonSeleccionado[idMateria];
-  }
-  
-  console.log('ID del salón seleccionado (final):', idSalon);
-
-  if (!idSalon && idSalon !== 0) {
-    alert('Debes seleccionar un salón antes de guardar.');
-    return;
-  }
-
-  const cicloActual = localStorage.getItem('cicloActual');
-  if (!cicloActual) {
-    alert('No se encontró el ciclo escolar actual.');
-    return;
-  }
-  const csrfToken = document.getElementById('csrfToken_' + idMateria)?.value || '';
-  console.log('CSRF Token obtenido:', csrfToken);
-
-  fetch('/grupos/asignar-salon', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'CSRF-Token': csrfToken
-    },
-    body: JSON.stringify({
-      id_materia: idMateria,
-      id_salon: idSalon,
-      id_ciclo_escolar: cicloActual
-    }),
-  })
-    .then(response => response.json())
-    .then(data => {
-      alert(data.mensaje || 'Salón asignado correctamente');
-
-      const modalElement = document.getElementById('modalSalones' + idMateria);
-      const modalInstance = bootstrap.Modal.getInstance(modalElement);
-      if (modalInstance) {
-        modalInstance.hide();
+    
+      const cicloActual = parseInt(localStorage.getItem('cicloActual'));
+      if (isNaN(cicloActual)) {
+        alert('Ciclo escolar no válido.');
+        return;
       }
-    })
-    .catch(err => {
-      console.error('Error al guardar salón:', err);
-      alert('Hubo un error al asignar el salón');
-    });
-}
+    
+      const csrfToken = document.querySelector('input[name=\"_csrf\"]')?.value || '';
+    
+      fetch('/grupos/asignar-salon', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'CSRF-Token': csrfToken
+        },
+        body: JSON.stringify({
+          id_materia: idMateria,
+          id_salon: idSalon,
+          id_ciclo_escolar: cicloActual
+        }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          alert(data.mensaje || 'Salón asignado correctamente');
+          const modalElement = document.getElementById('modalSalones' + idCicloMateria);
+          const modalInstance = bootstrap.Modal.getInstance(modalElement);
+          if (modalInstance) {
+            modalInstance.hide();
+          }
+        })
+        .catch(err => {
+          console.error('Error al guardar salón:', err);
+          alert('Hubo un error al asignar el salón');
+        });
+    }
+    

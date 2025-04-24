@@ -7,9 +7,14 @@ const Materia = require('../models/materias.model');
 exports.asignarSalonPorMateria = async (req, res) => {
   const { id_materia, id_salon, id_ciclo_escolar } = req.body;
 
+  console.log("ID materia recibido:", id_materia);
+  console.log("ID salón recibido:", id_salon);
+  console.log("ID ciclo escolar recibido:", id_ciclo_escolar);
+
   try {
-    // Buscar el grupo asociado a la materia en ese ciclo
     const grupo = await Grupo.obtenerGrupoPorMateria(id_materia, id_ciclo_escolar);
+
+    console.log("Resultado de obtenerGrupoPorMateria:", grupo.rows);
 
     if (grupo.rowCount === 0) {
       return res.status(404).json({ mensaje: 'No se encontró grupo para esa materia' });
@@ -17,7 +22,8 @@ exports.asignarSalonPorMateria = async (req, res) => {
 
     const id_grupo = grupo.rows[0].id_grupo;
 
-    // Actualizar el grupo con el salón seleccionado
+    console.log("ID de grupo encontrado:", id_grupo);
+
     await Grupo.asignarSalon(id_grupo, id_salon);
 
     res.status(200).json({ mensaje: 'Salón asignado correctamente' });
@@ -27,7 +33,6 @@ exports.asignarSalonPorMateria = async (req, res) => {
   }
 };
 
-//GET: Cargar datos iniciales (materias, profesores, salones)
 exports.getDatosGrupos = async (req, res) => {
   const idCicloEscolar = req.query.idCiclo || 1;
 
