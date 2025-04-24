@@ -57,11 +57,11 @@ function agregar(stringMateria) {
     const icono = document.getElementById("iconoBoton" + idMateria);
     const botonEnviar = document.getElementById("botonEnviarOA");
     // se checa si el boton es + o -
-    if (boton.getAttribute('funcion') == 'agregar'){
+    if (boton.getAttribute('funcion') === 'agregar'){
         // variable para ver si la materia esta en el arreglo
         let nueva = true;
         for (let materias of materiasPorAgregar) {
-            if (materias.id_materia == materia.id_materia) {
+            if (materias.id_materia === materia.id_materia) {
                 nueva = false;
             }
         }
