@@ -56,7 +56,7 @@ exports.get_agregar = (request, response, next) => {
                     cicloActual: request.params.idCiclo || '',
                     username: request.session.username || '',
                     mail: request.session.mail || '',
-                    planes: planVersiones || [],
+                    planes: planVersiones.rows || [],
                     planActual: request.params.idPlan || '',
                     rol: request.session.rol || '',
                     })
