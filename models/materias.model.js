@@ -52,44 +52,13 @@ module.exports = class Grupo{
              console.log(error);
          });
      }
- 
+
      /* Filtra los planes de estudio por carrera */
-     static async fetchPlanesByDegree(carrera) {
-         return this.getAllDegrees().then((planes) => {
-             /* Carrera:
-             id: plan.id
-             nombre: plan.name
-             estatus: plan.status
- 
-             Plan de Estudio:
-             id: plan.plans[0].id
-             version: plan.plans[0].version
-             estatus: plan.plans[0].status
-         */
-         const arregloPlanes = [];
-         let plansLength = 0;
-         for (let plan of planes) {
-             if (plan.name == carrera) {
-                 console.log(plan)
-                 plansLength = plan.plans.length;
-                 if (plansLength > 0) {
-                     for (let i = 0; i < plansLength; i++) {
-                         if (plan.plans[i].status == 'active') {
-                             arregloPlanes.push(plan.plans[i]);
-                         }
-                     }
-                 }
-                 else {
-                     arregloPlanes.push(plan.plans[0]);
-                 }
-             }
-         }
- 
-         return arregloPlanes;
-         }).catch((error) => {
-             console.log(error);
-         })
-     }
+    static fetchPlanesByDegree(carrera) {
+        return db.query(`SELECT * FROM planes_estudios WHERE
+        id_carrera = (SELECT id_carrera FROM carreras WHERE carrera = 
+        $1::text);`, [carrera]);
+    }
  
      static async sincronizarDesdeAPI() {
          try {
