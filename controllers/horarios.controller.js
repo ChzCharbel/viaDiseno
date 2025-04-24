@@ -24,7 +24,7 @@ exports.generarHorariosParaTodos = async (req, res) => {
 
   try {
     const alumnos = await AlumnosModel.fetchAll();
-    const gruposDisponibles = await HorarioModel.pbtenerGruposOfertados(id_ciclo_escolar);
+    const gruposDisponibles = await HorarioModel.obtenerGruposOfertados(id_ciclo_escolar);
 
     let totalInscritos = 0;
     const resumen = [];
