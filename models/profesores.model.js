@@ -127,7 +127,7 @@ module.exports = class Profesor {
     }
   }
 
-  static async obtenerDisponibilidad(idMateria, idProfesor, idCiclo) {
+  static obtenerDisponibilidad(idMateria, idProfesor, idCiclo) {
     return db.query(`SELECT
       FLOOR(COUNT(*) * 0.5) as total_horas_profesor, 
       (SELECT horas_profesor
