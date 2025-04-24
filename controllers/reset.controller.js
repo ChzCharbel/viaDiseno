@@ -23,10 +23,7 @@ exports.post_recuperar_password = async (request, response) => {
   const matricula = (request.body.matriculaInput || '').trim();
 
   try {
-    console.log('📨 Iniciando recuperación para matrícula:', matricula);
-
     const usuario = await getUserById(matricula);
-    console.log('👤 Usuario encontrado:', usuario);
 
     if (!usuario || usuario.status !== 'success' || !usuario.data.email) {
       request.session.error = 'No se encontró un usuario activo con esa matrícula.';
@@ -35,16 +32,10 @@ exports.post_recuperar_password = async (request, response) => {
 
     const correo = usuario.data.email;
 
-    console.log("🕒 Hora del servidor:", new Date());
-
-
-    // ✅ Generamos el token y lo guardamos en la base de datos
+    // Generar el token y guardar en la base de datos
     const token = await ResetModel.generarToken(matricula);
-    console.log('💾 Token generado y guardado para:', matricula);
 
-    // ✅ Enviamos el correo
-    console.log('📧 Enviando correo a:', correo);
-
+    // Envio de correo
     const info = await transporter.sendMail({
       from: '"IVD Soporte" <ivdpruebas@gmail.com>',
       to: correo,
@@ -56,13 +47,11 @@ exports.post_recuperar_password = async (request, response) => {
         <p>Este enlace expirará en 15 minutos.</p>
       `
     });
-
-    console.log('✅ Correo enviado:', info.response);
     request.session.info = 'Si existe una cuenta vinculada a esa matrícula, se ha enviado un correo con las instrucciones.';
     response.redirect('/');
 
   } catch (error) {
-    console.error('❌ Error durante el proceso de recuperación:', error);
+    console.error('Error durante el proceso de recuperación:', error);
     request.session.error = 'Ocurrió un error al procesar la recuperación.';
     response.redirect('/users/recuperar');
   }
@@ -119,7 +108,7 @@ exports.post_restablecer_password = async (req, res) => {
     return res.redirect('/');
 
   } catch (error) {
-    console.error('❌ Error al restablecer contraseña:', error);
+    console.error('Error al restablecer contraseña:', error);
     req.session.error = 'Ocurrió un error al restablecer tu contraseña.';
     res.redirect(`/users/restablecer/${token}`);
   }

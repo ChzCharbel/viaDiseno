@@ -209,11 +209,11 @@ module.exports = class Usuario {
   }
   static async fetchOneByCorreo(correo) {
     try {
-      const usuarios = await getAllUsers('student'); // o 'admin' si aplica
+      const usuarios = await getAllUsers('student');
       const usuario = usuarios.find(u => u.email === correo);
       return usuario;
     } catch (error) {
-      console.error('❌ Error en fetchOneByCorreo:', error);
+      console.error('Error en fetchOneByCorreo:', error);
       return null;
     }
   }
