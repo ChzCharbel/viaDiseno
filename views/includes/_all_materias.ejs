@@ -42,13 +42,13 @@
             </a>
             <ul class="dropdown-menu" id="dropdown-planes">
                 <% for (let plan of planes) { %>
-                    <% if (plan.id == planActual) {%>
+                    <% if (plan.id_plan_estudio == planActual) {%>
                         <li>
-                            <a class="dropdown-item active" id="planActivo" nombrePlan="<%= carrera %> <%= plan.version %>" href="/oferta_academica/<%=cicloActual %>/<%= plan.id %>/agregar"><%= carrera %> <%= plan.version %></a>
+                            <a class="dropdown-item active" id="planActivo" nombrePlan="<%= plan.plan_estudio %>" href="/oferta_academica/<%=cicloActual %>/<%= plan.id_plan_estudio %>/agregar"><%= plan.plan_estudio %></a>
                         </li>
                     <% } else { %>
                         <li>
-                            <a class="dropdown-item" href="/oferta_academica/<%=cicloActual %>/<%= plan.id %>/agregar"><%= carrera %> <%= plan.version %></a> 
+                            <a class="dropdown-item" href="/oferta_academica/<%=cicloActual %>/<%= plan.id_plan_estudio %>/agregar"><%= plan.plan_estudio %></a> 
                         </li>
                     <% } } %>
             </ul>
