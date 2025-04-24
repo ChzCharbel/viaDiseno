@@ -12,7 +12,7 @@ module.exports = class OfertaAcademica {
         consulta */
         let consulta = `INSERT INTO ciclos_escolares_materias(id_ciclo_escolar, id_plan_materia) VALUES`;
         let i = 2;
-        for (let id of stringIds) {
+        for (let id of this.idsMaterias) {
             if (id != '') {
                 consulta += `($1::integer,$`;
                 consulta += (i) + `::integer),`;
