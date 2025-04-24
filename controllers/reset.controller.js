@@ -59,7 +59,7 @@ exports.post_recuperar_password = async (request, response) => {
 
     console.log('✅ Correo enviado:', info.response);
     request.session.info = 'Si existe una cuenta vinculada a esa matrícula, se ha enviado un correo con las instrucciones.';
-    response.redirect('/users/recuperar');
+    response.redirect('/');
 
   } catch (error) {
     console.error('❌ Error durante el proceso de recuperación:', error);

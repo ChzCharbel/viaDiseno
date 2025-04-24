@@ -9,7 +9,29 @@
     <link rel="stylesheet" href="/css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 </head>
-
+<script>
+    // Función para desaparecer con animación los mensajes de alerta
+    function fadeOut(element) {
+      let opacity = 1;
+      const timer = setInterval(() => {
+        if (opacity <= 0.1) {
+          clearInterval(timer);
+          element.style.display = 'none';
+        }
+        element.style.opacity = opacity;
+        opacity -= 0.05;
+      }, 50);
+    }
+  
+    // Espera 3 segundos y desaparece las alertas
+    setTimeout(() => {
+      const alertaError = document.getElementById('alertaError');
+      const alertaInfo = document.getElementById('alertaInfo');
+      if (alertaError) fadeOut(alertaError);
+      if (alertaInfo) fadeOut(alertaInfo);
+    }, 3000);
+  </script>
+  
 <body id="loginBody">
     <div class="container py-4 px-3 mx-auto">
         <div class="row">
@@ -25,11 +47,11 @@
                     
                     <div class="card-body">
                         <% if (error) { %>
-                            <div class="alert alert-danger"><%= error %></div>
+                            <div id="alertaError" class="alert alert-danger"><%= error %></div>
                         <% } %>
                           
                         <% if (info) { %>
-                            <div class="alert alert-success"><%= info %></div>
+                            <div id="alertaInfo" class="alert alert-success"><%= info %></div>
                         <% } %>
                           
                         <form action="/users/<% if (isReset) { %>recuperar<% } else if (isNew) { %>resetpassword<% } else { %>login<% } %>" method="POST" class="needs-validation">
