@@ -35,6 +35,9 @@ exports.post_recuperar_password = async (request, response) => {
 
     const correo = usuario.data.email;
 
+    console.log("🕒 Hora del servidor:", new Date());
+
+
     // ✅ Generamos el token y lo guardamos en la base de datos
     const token = await ResetModel.generarToken(matricula);
     console.log('💾 Token generado y guardado para:', matricula);
@@ -67,11 +70,59 @@ exports.post_recuperar_password = async (request, response) => {
 
 
 
-exports.get_restablecer_password = (req, res) => {
-  res.send("Vista para ingresar nueva contraseña (pendiente de implementar)");
+exports.get_restablecer_password = async (req, res) => {
+  const token = req.params.token;
+
+  try {
+    console.log("🔍 Token recibido:", token);
+    const tokenValido = await ResetModel.obtenerTokenValido(token);
+    console.log("✅ Resultado búsqueda en BD:", tokenValido);
+
+    if (!tokenValido) {
+      return res.send("El enlace ha expirado o ya fue utilizado.");
+    }
+
+    res.render("restablecer_password.ejs", {
+      token,
+      csrfToken: req.csrfToken(),
+      error: req.session.error || '',
+      info: req.session.info || ''
+    });
+
+  } catch (error) {
+    console.error("❌ Error al validar token:", error);
+    res.send("Error al procesar la solicitud.");
+  }
 };
 
-exports.post_restablecer_password = (req, res) => {
-  res.send("Lógica para guardar nueva contraseña (pendiente de implementar)");
+
+exports.post_restablecer_password = async (req, res) => {
+  const { nuevaPassword, token } = req.body;
+
+  try {
+    const tokenData = await ResetModel.obtenerTokenValido(token);
+
+    if (!tokenData) {
+      req.session.error = 'El enlace de recuperación ha expirado o ya fue utilizado.';
+      return res.redirect('/users/recuperar');
+    }
+
+    const id_ivd = tokenData.id_ivd;
+
+    // Cambiar la contraseña cifrada
+    await Usuario.actualizarPassword(id_ivd, nuevaPassword);
+
+    // Marcar el token como utilizado
+    await ResetModel.marcarComoUsado(token);
+
+    req.session.info = 'Tu contraseña ha sido restablecida correctamente.';
+    return res.redirect('/');
+
+  } catch (error) {
+    console.error('❌ Error al restablecer contraseña:', error);
+    req.session.error = 'Ocurrió un error al restablecer tu contraseña.';
+    res.redirect(`/users/restablecer/${token}`);
+  }
 };
+
 
