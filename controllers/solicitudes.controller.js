@@ -54,7 +54,7 @@ exports.enviarSolicitud = async (request, response, next) => {
     }
 
 
-    console.log("Datos recibidos:", datos); // <-- Agrega esto para depurar
+    console.log("Datos recibidos:", datos); 
 
     let descripcionFinal = "";
 
