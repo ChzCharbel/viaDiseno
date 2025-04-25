@@ -1,23 +1,12 @@
 let materiasPorAgregar = [];
-window.setTimeout(function() {
-    const alerta = document.getElementById("alertasOA");
-    if (alerta.innerText == (
-        "Ocurrió un error al intentar guardar la oferta, inténtelo de nuevo" ||
-        "La oferta ha sido guardada exitosamente")) {
-        $("#alertasOA").slideUp(1000, function() {
-    $("#alertasOA").slideDown(1000);
-    alerta.className = "col-9 offset-2 alert alert-info fw-semibold mb-4";
-    alerta.innerText = "Nota: guarda la oferta académica por semestre";
-    });
-    }
-}, 3000);
 
-function puedeCambiar(tabSemestre) {
+$(document).on('show.bs.tab', '[data-bs-toggle="pill"]', function (e) {
+    const semestreTab = $(this).attr('semestre');
     if (materiasPorAgregar.length > 0) {
         let semestreActual = materiasPorAgregar[0].semestre;
-        if (semestreActual != tabSemestre) {
+        if (semestreActual != semestreTab) {
             let confirmacion = window.confirm("Si cambias de semestre se eliminará tu selección. ¿Deseas continuar?");
-            if (confirmacion == true) {
+            if (confirmacion === true) {
                 for (let materia of materiasPorAgregar) {
                     const boton = document.getElementById("boton" + materia.id_materia);
                     const icono = document.getElementById("iconoBoton" + materia.id_materia);
@@ -46,9 +35,26 @@ function puedeCambiar(tabSemestre) {
                     });
                 });
             }
+            else {
+                e.preventDefault();
+            }
         }
     }
-}
+});
+
+
+window.setTimeout(function() {
+    const alerta = document.getElementById("alertasOA");
+    if (alerta.innerText == (
+        "Ocurrió un error al intentar guardar la oferta, inténtelo de nuevo" ||
+        "La oferta ha sido guardada exitosamente")) {
+        $("#alertasOA").slideUp(1000, function() {
+    $("#alertasOA").slideDown(1000);
+    alerta.className = "col-9 offset-2 alert alert-info fw-semibold mb-4";
+    alerta.innerText = "Nota: guarda la oferta académica por semestre";
+    });
+    }
+}, 3000);
 
 function agregar(stringMateria) {
     const materia = JSON.parse(stringMateria);
@@ -57,11 +63,11 @@ function agregar(stringMateria) {
     const icono = document.getElementById("iconoBoton" + idMateria);
     const botonEnviar = document.getElementById("botonEnviarOA");
     // se checa si el boton es + o -
-    if (boton.getAttribute('funcion') === 'agregar'){
+    if (boton.getAttribute('funcion') == 'agregar'){
         // variable para ver si la materia esta en el arreglo
         let nueva = true;
         for (let materias of materiasPorAgregar) {
-            if (materias.id_materia === materia.id_materia) {
+            if (materias.id_materia == materia.id_materia) {
                 nueva = false;
             }
         }
@@ -126,6 +132,11 @@ function agregar(stringMateria) {
     console.log(materiasPorAgregar);
 }
 
+$('#botonConfirmar').on('click', function () {
+    // vaciar el arreglo
+    materiasPorAgregar.length = 0;
+})
+
 function enviarSeleccion() {
     // contador para numero de materia en la tabla
     let i = 1;
@@ -168,6 +179,4 @@ function enviarSeleccion() {
     }
     // cambiar el valor del input a los ids de las materias
     inputIds.setAttribute('value',ids);
-    // vaciar el arreglo
-    materiasPorAgregar.length = 0;
 }
