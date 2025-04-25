@@ -7,6 +7,7 @@ exports.get_principal = async (req, res, next) => {
     const materiasPorSemestre = await EstadisticasModel.getMateriasPorSemestre(idCiclo);
     const alumnosInscritos = await EstadisticasModel.getAlumnosInscritos();
     const regularesIrregulares = await EstadisticasModel.getRegularesVsIrregulares();
+    const resumenSolicitudes = await EstadisticasModel.getResumenSolicitudes(idCiclo);
     
     let inscritos = 0;
     let noInscritos = 0;
@@ -30,7 +31,8 @@ exports.get_principal = async (req, res, next) => {
       materiasPorSemestre, 
       inscritos,
       noInscritos,
-      regularesIrregulares
+      regularesIrregulares,
+      resumenSolicitudes
     });
   } catch (err) {
     console.error("Error al cargar la vista principal:", err);

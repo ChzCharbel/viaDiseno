@@ -132,46 +132,48 @@
 
   //Numero de solicitudes
 
-  const solicitudesData = {
-    labels: ['Aprobadas', 'Rechazadas', 'Pendientes'],
+const resumenSolicitudes = JSON.parse(`<%- JSON.stringify(resumenSolicitudes || []) %>`);
+
+const etiquetas = ['Aprobadas', 'Rechazadas', 'Pendientes'];
+const datos = [
+  (resumenSolicitudes.find(s => s.estatus === 'aprobada') || { cantidad: 0 }).cantidad,
+  (resumenSolicitudes.find(s => s.estatus === 'rechazada') || { cantidad: 0 }).cantidad,
+  (resumenSolicitudes.find(s => s.estatus === 'pendiente') || { cantidad: 0 }).cantidad
+];
+
+const ctxSolicitudes = document.getElementById('graficoSolicitudes').getContext('2d');
+
+new Chart(ctxSolicitudes, {
+  type: 'pie',
+  data: {
+    labels: etiquetas,
     datasets: [{
-      data: [0, 1, 0],
+      data: datos,
       backgroundColor: [
-        'rgba(0, 128, 0, 1)', 
-        'rgba(255, 0, 0, 0.7)',    
-        'rgba(149, 64, 76, 1)',    
+        'rgba(0, 128, 0, 1)',     
+        'rgba(255, 0, 0, 0.7)',      
+        'rgba(149, 64, 76, 1)',      
       ],
       borderColor: [
-      'rgba(0, 128, 0, 1)', 
-      'rgba(255, 0, 0, 0.7)',    
-        'rgba(149, 64, 76, 1)',    
+        'rgba(0, 128, 0, 1)',
+        'rgba(255, 0, 0, 0.7)',
+        'rgba(149, 64, 76, 1)',
       ],
       borderWidth: 1
     }]
-  };
-
-  const ctxSolicitudes = document.getElementById('graficoSolicitudes').getContext('2d');
-
-  new Chart(ctxSolicitudes, {
-    type: 'pie',
-    data: solicitudesData,
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: 'bottom'
-        },
-        title: {
-          display: true,
-          text: 'Distribución de Solicitudes'
-        },
-        tooltip: {
-          callbacks: {
-            label: ctx => `${ctx.label}: ${ctx.raw} solicitudes`
-          }
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'bottom' },
+      title: { display: true, text: 'Distribución de Solicitudes' },
+      tooltip: {
+        callbacks: {
+          label: ctx => `${ctx.label}: ${ctx.raw} solicitudes`
         }
       }
     }
-  });
+  }
+});
 
 </script>
