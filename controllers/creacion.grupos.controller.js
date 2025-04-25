@@ -3,7 +3,6 @@ const Oferta = require('../models/oferta.model');
 
 exports.get_creados = (request, response, next) => {
     Oferta.fetchAll(request.params.idCiclo, request.session.carrera).then( (ofertaAcademica) => {
-        console.log(ofertaAcademica.rows)
         crearGrupos.fetchAll(request.params.idCiclo).then((grupos) => {
             response.render('grupos_creados.ejs', {
                 titulo: "grupos",
@@ -27,7 +26,18 @@ exports.get_creados = (request, response, next) => {
 }
 
 exports.get_crear = (request, response, next) => {
-    //crearGrupos.getProfes();
-    console.log('Creando grupos...')
+    console.log('Creando grupos...');
+    crearGrupos.getProfes(request.params.idCiclo, request.session.carrera).then(() => {
+        response.redirect('/grupos/creados/' + request.params.idCiclo);
+    }).catch((error) => {
+        console.log(error);
+    });
+}
 
+exports.get_rechazar = (request, response, next) => {
+    crearGrupos.rollbackDisponibilidadProfe(request.params.idCicloMateria).then(() => {
+        response.redirect('/grupos/creados/' + request.params.idCiclo);
+    }).catch((error) => {
+        console.log(error);
+    });
 }
