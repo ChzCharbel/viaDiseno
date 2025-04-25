@@ -15,16 +15,74 @@ module.exports = class GruposAutomaticos {
     static idProfes = [];
     static idCiclo = -1;
 
-    static rollbackDisponibilidadProfe(grupos) {
-        
+    static async rollbackDisponibilidadProfe(idMateriaCiclo) {
+        const grupos = await this.fetchGruposByIdMateriaCiclo(idMateriaCiclo);
+        const idsCambiar = [];
+        let horaActual = '';
+        for (let grupo of grupos.rows) {
+            console.log('ciclo escolar: ' + grupo.id_ciclo_escolar + ' grupo: '
+                + grupo.id_grupo + ' idGrupoHorario: ' + grupo.dia_semana + ' ' 
+                + grupo.id_grupo_horario + ' hora inicio: ' +  grupo.hora_inicio 
+                + ' hora fin: ' + grupo.hora_fin + ' idProfesor: ' + grupo.id_profesor);
+            const mediaHora = await db.query(`SELECT * FROM profesores_disponibilidad 
+                WHERE id_ciclo_escolar = $1::integer AND dia_semana = $2::text AND 
+                id_profesor = $3::integer ORDER BY dia_semana, hora_inicio;`, 
+                [grupo.id_ciclo_escolar, grupo.dia_semana, grupo.id_profesor]);
+            console.log('MEDIA HORA: ');
+            console.log(mediaHora.rows);
+            for (let disponibilidad of mediaHora.rows) {
+                if (disponibilidad.hora_inicio === grupo.hora_inicio) {
+                    console.log(disponibilidad);
+                    idsCambiar.push(disponibilidad.id_profesor_disponibilidad);
+                    horaActual = disponibilidad.hora_fin;
+                }
+                else {
+                    if (disponibilidad.hora_inicio !== grupo.hora_fin) {
+                        if (horaActual === disponibilidad.hora_inicio) {
+                            console.log(disponibilidad);
+                            idsCambiar.push(disponibilidad.id_profesor_disponibilidad);
+                            horaActual = disponibilidad.hora_fin;
+                        }
+                    }
+                }
+            }
+            console.log(idsCambiar);
+            await db.query('BEGIN;');
+            if (idsCambiar.length > 1 ) {
+                let update = 'UPDATE profesores_disponibilidad SET disponible = TRUE WHERE id_profesor_disponibilidad = $1::integer';
+                let contParametro = 2;
+                for (let i = 0; i < idsCambiar.length; i++) {
+                    //update += idsCambiar[i];
+                    if (i === (idsCambiar.length - 1)) {
+                        update += ';'
+                    }
+                    else {
+                        update += ' OR id_profesor_disponibilidad = $';
+                        update += contParametro;
+                        update += '::integer'
+                    }
+                    contParametro++;
+                }
+                console.log(update);
+                console.log(idsCambiar)
+                await db.query(update, idsCambiar);
+                
+            }
+            else {
+                console.log('UPDATE profesores_disponibilidad SET disponible = TRUE WHERE id_profesor_disponibilidad = ' + idsCambiar[0]);
+                await db.query(`UPDATE profesores_disponibilidad SET disponible = TRUE WHERE id_profesor_disponibilidad = $1::integer`, idsCambiar[0]);
+            }
+            await db.query(`DELETE FROM grupos WHERE id_grupo = $1::integer`, [grupo.id_grupo]);
+        }
+        await db.query('COMMIT;');
     }
 
     static fetchGruposByIdMateriaCiclo(idMateriaCiclo) {
         return db.query(`SELECT * FROM grupos_ciclos_materias 
         JOIN ciclos_escolares_materias using (id_ciclo_escolar_materia)
         JOIN grupos_horarios using (id_grupo)
+        JOIN grupos using (id_grupo)
         WHERE id_ciclo_escolar_materia = $1::integer;`, [idMateriaCiclo]);
-
     }
 
     static fetchAll(ciclo) {
