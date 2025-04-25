@@ -26,7 +26,8 @@ CREATE OR REPLACE FUNCTION public.consulta_info_alumnos(IN matricula_usr text)
  rol TEXT,
  semestre TEXT, 
  regular boolean, 
- estatus_alumno TEXT, 
+ estatus_alumno TEXT,
+ inscrito boolean, 
  carrera TEXT)
  LANGUAGE plpgsql
 AS $function$
