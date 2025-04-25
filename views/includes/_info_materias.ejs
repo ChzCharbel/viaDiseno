@@ -153,15 +153,45 @@
   <!-- Scripts -->
 <script>
   document.getElementById("generarHorariosBtn").addEventListener("click", async () => {
-    const idCicloEscolar = prompt("Ingresa el ID del ciclo escolar:");
+    // Obtener el ID del ciclo de la URL actual
+    const urlPath = window.location.pathname;
+    const urlSegments = urlPath.split('/');
+    const cicloActualInput = document.getElementById("cicloActualId");
+    
+    // Intentar obtener el ciclo de diferentes formas (del input hidden, de la URL o del localStorage)
+    let idCicloEscolar = cicloActualInput ? cicloActualInput.value : null;
+    
+    if (!idCicloEscolar) {
+      // Si no hay un input con el ciclo, intentar extraerlo de la URL
+      // Buscamos un segmento que sea un número en la URL (asumimos que es el ID del ciclo)
+      for (let segment of urlSegments) {
+        if (!isNaN(segment) && segment.trim() !== '') {
+          idCicloEscolar = segment;
+          break;
+        }
+      }
+    }
+    
+    if (!idCicloEscolar) {
+      // Como último recurso, intentar obtenerlo del localStorage
+      idCicloEscolar = localStorage.getItem('cicloSeleccionado') || localStorage.getItem('cicloActual');
+    }
 
-    if (!idCicloEscolar) return;
-
-    try {
+    if (!idCicloEscolar) {
+      alert("No se pudo determinar el ciclo escolar actual. Por favor, seleccione un ciclo primero.");
+      return;
+    }    try {
+      // Obtener el token CSRF del elemento meta o del input hidden
+      const csrfToken = document.querySelector('input[name="_csrf"]') ? 
+                         document.querySelector('input[name="_csrf"]').value : 
+                         '<%= csrfToken %>';
+      
       const res = await fetch("/grupos/horarios", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "CSRF-Token": csrfToken,
+          "X-CSRF-Token": csrfToken
         },
         body: JSON.stringify({ id_ciclo_escolar: parseInt(idCicloEscolar) })
       });
@@ -171,6 +201,7 @@
       // Mostrar resultado en consola y/o DOM
       alert(data.message || "Proceso completado.");
       console.log("Resumen por alumno:", data.detalle);
+      console.log("Ciclo escolar utilizado:", idCicloEscolar);
 
     } catch (err) {
       console.error("Error al generar horarios:", err);

@@ -121,6 +121,25 @@ async function getUserGroups(cycle_id, user_ivd_id) {
 
 async function getAcademicHistory(ivd_id) {
     try {
+        // Si el ID es undefined o null, reportarlo inmediatamente
+        if (ivd_id === undefined || ivd_id === null) {
+            console.warn(`ID inválido para historial académico: '${ivd_id}', es undefined o null.`);
+            return { error: "ID inválido", details: "ID es undefined o null" };
+        }
+        
+        // Intentamos extraer un número del ID (pueden ser IDs como "IVD12345" o "100123")
+        // Extraemos solo los dígitos numéricos del ID
+        const rawId = String(ivd_id);
+        const numericId = rawId.match(/\d+/);
+        
+        if (!numericId) {
+            console.warn(`No se encontraron dígitos en el ID: '${ivd_id}'`);
+            return { error: "ID inválido", details: "No se encontraron dígitos en el ID" };
+        }
+        // Usamos solo la parte numérica para la consulta a la API
+        const cleanId = numericId[0];
+        console.log(`ID original: '${ivd_id}', ID limpio para API: '${cleanId}'`);
+
         const token = await getToken();
         if (!token) {
             console.error("Error: Could not get authentication token");
@@ -128,19 +147,51 @@ async function getAcademicHistory(ivd_id) {
         }
 
         const headers = getHeaders(token);
-
-        const response = await axiosAdminClient.get("v1/students/academic_history", {
+        console.log(`Obteniendo historial académico para alumno ID: ${cleanId}`);        const response = await axiosAdminClient.get("v1/students/academic_history", {
             headers,
             params: {
-                ivd_id,
+                ivd_id: cleanId, // Usamos el ID limpio, no el original
             },
         });
 
-        const jsonString = JSON.stringify(response.data);
-        const parsedJson = JSON.parse(jsonString);
-        return parsedJson.data;
+        // Imprimimos la estructura completa de la respuesta para depuración
+        console.log(`Estructura de respuesta para el alumno ${ivd_id}:`, JSON.stringify(response.data, null, 2).substring(0, 300) + '...');
+        
+        // Para manejar el formato correcto donde los datos están dentro de una propiedad "data"
+        if (response.data && response.data.data && Array.isArray(response.data.data)) {
+            console.log(`Historial académico encontrado para alumno ${ivd_id}: ${response.data.data.length} materias`);
+            return response.data.data; // Devolvemos el array de materias dentro de data
+        }
+        
+        // Si la estructura no es la esperada pero tenemos algo en response.data, verificamos
+        if (response.data && Array.isArray(response.data)) {
+            console.log(`Historial académico encontrado para alumno ${ivd_id} (formato alternativo): ${response.data.length} materias`);
+            return response.data;
+        }
+        
+        // Si no hay datos en el formato esperado, devolvemos un array vacío
+        console.log(`No se encontró historial académico para el alumno ${ivd_id} en formato esperado`);
+        return [];
     } catch (error) {
-        console.error("Error fetching academic history:", error.message);
+        console.error(`Error fetching academic history for student ${ivd_id}:`, error.message);
+        
+        // Proporcionar más información para depuración
+        if (error.response) {
+            console.error("Detalles de la respuesta:", {
+                status: error.response.status,
+                statusText: error.response.statusText,
+                data: error.response.data
+            });
+        }
+        
+        // Para errores 422, es probable que el formato del ID sea incorrecto o el alumno no exista
+        if (error.response && error.response.status === 422) {
+            return { 
+                error: "ID no válido o alumno no encontrado", 
+                details: error.response.data || error.message 
+            };
+        }
+        
         return { error: error.message };
     }
 }

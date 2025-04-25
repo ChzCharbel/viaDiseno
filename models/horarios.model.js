@@ -10,12 +10,12 @@ module.exports = class Horario {
             pm.id_materia,
             pm.semestre
             FROM grupos_ciclos_materias gcm
-            JOIN ciclos_escolares_materias cem ON gcm.id_cem = cem.id_cem
-            JOIN planes_materias pm ON cem.id_pm = pm.id_pm
+            JOIN ciclos_escolares_materias cem ON gcm.id_ciclo_escolar_materia = cem.id_ciclo_escolar_materia
+            JOIN planes_materias pm ON cem.id_plan_materia = pm.id_plan_materia
             WHERE cem.id_ciclo_escolar = $1
         `;
-        const [rows] = await db.execute(query, [id_ciclo_escolar]);
-        return rows;
+        const result = await db.query(query, [id_ciclo_escolar]);
+        return result.rows;
     }
 
     static async obtenerHistorialAcademico(id_alumno) {
