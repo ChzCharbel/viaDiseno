@@ -43,14 +43,12 @@
                   <td class="text-center"><%= materia.creditos %></td>
                   <td class="text-center">
                     <button
-                      class="btn btn-outline-secondary btn-sm"
-                      data-bs-toggle="popover"
-                      data-bs-title="Detalles de la materia"
-                      data-bs-placement="left"
-                      data-bs-content="<%= materia.descripcion || 'Sin descripción disponible' %>"
-                    >
-                      <i class="bi bi-info-circle"></i> Más info
+                    class="btn btn-outline-danger btn-sm eliminar-materia"
+                    data-id="<%= materia.id_plan_materia %>"
+                  >
+                    <i class="bi bi-dash-circle"></i>
                     </button>
+
                   </td>
                 </tr>
               <% } %>
