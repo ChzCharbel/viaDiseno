@@ -14,6 +14,7 @@
                     Además, si algún horario no es de tu agrado, te pedimos rechazarlo para poder liberar la disponibilidad del profesor 
                     y así puedas editar manualmente el horario posteriormente. 
                 </li>
+                <li class="mb-2">Cuando termines, presiona el botón de finalizar, que te redirigirá a la asignación manual de grupos.</li>
             </ol>
             
             Te pedimos paciencia, porque este proceso puede tomar un tiempo. <br>
@@ -21,7 +22,7 @@
         </div>
     </div>
     <% if (grupos.length == 0) { %>
-        <a href="/grupos/crear/cicloActual" class="btn btn-primary offset-5">Generar grupos</a>
+        <a href="/grupos/crear/<%=cicloActual%>" class="btn btn-primary offset-5">Generar grupos</a>
     <% } else { %>
         <div class="accordion mb-4" id="accordionExample">
             <div class="accordion-item">
@@ -30,7 +31,7 @@
                     <i class="bi bi-file-earmark-bar-graph p-2 fw-bold"> </i>  Gráficas con Resultados
                 </button>
                 </h2>
-                <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                <div id="collapseOne" class="accordion-collapse collapse " data-bs-parent="#accordionExample">
                     <div class="accordion-body">
                         <div>
                             <canvas id="graficaBarras" style="width: 100px; height: 300px;"></canvas>
@@ -86,7 +87,25 @@
                             <% } } %>
                             </td>
                             <td>
-                                <a href="/grupos/rechazar/<%= grupo.id_ciclo_escolar_materia %>" class="btn btn-primary">Rechazar</a>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalRechazarHorario<%=grupo.id_grupo_horario%>">Rechazar</button>
+                                <div id="modalRechazarHorario<%=grupo.id_grupo_horario%>" class="modal fade" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" aria-hidden="true">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5 fw-semibold"> Rechazar grupo </h1> 
+                                            </div>
+                                            <div class="modal-body">
+                                                ¿Estás seguro de que quieres rechazar el grupo generado para <span class="fw-semibold"><em><%= grupo.materia %></em></span>?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                <a href="/grupos/rechazar/<%= cicloActual %>/<%= grupo.id_ciclo_escolar_materia %>" class="btn btn-primary">Aceptar</a>
+                                            </div>
+                                            
+                                        </div>
+                                        
+                                    </div>
+                                </div>
                             </td>
                             <% } %>
                         </tr>
@@ -106,14 +125,23 @@ const materiasOfertadas = JSON.parse(`<%- JSON.stringify(ofertaAcademica) %>`);
 const grupoMateria = [];
 
 const primero = [];
+const primeroOferta = [];
 const segundo = [];
+const segundoOferta = [];
 const tercero = [];
+const terceroOferta = [];
 const cuarto = [];
+const cuartoOferta = [];
 const quinto = [];
+const quintoOferta = [];
 const sexto = [];
+const sextoOferta = [];
 const septimo = [];
+const septimoOferta = [];
 const octavo = [];
+const octavoOferta = [];
 const noveno = [];
+const novenoOferta = [];
 
 for (let grupo of grupos) {
     if (grupoMateria.includes(grupo.id_ciclo_escolar_materia) === false) {
