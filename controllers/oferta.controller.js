@@ -92,3 +92,16 @@ exports.post_agregar = (request, response, next) => {
         console.log(error);
     });
 }
+
+exports.delete_materia = (request, response, next) => {
+    const idPlanMateria = request.params.idPlanMateria;
+    
+    OfertaAcademica.eliminarMateriaPorId(idPlanMateria)
+      .then(() => {
+        response.status(200).json({ mensaje: 'Materia eliminada correctamente' });
+      })
+      .catch(error => {
+        console.error(error);
+        response.status(500).json({ mensaje: 'Error al eliminar la materia' });
+      });
+  };
