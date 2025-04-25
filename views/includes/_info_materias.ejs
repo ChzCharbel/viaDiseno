@@ -146,8 +146,38 @@
         <% } %>
       </tbody>      
     </table>
+    <div class="d-flex justify-content-end mt-3">
+      <button class="btn btn-primary" id="generarHorariosBtn">Generar Horarios</button>
+    </div>
   </div>
   <!-- Scripts -->
+<script>
+  document.getElementById("generarHorariosBtn").addEventListener("click", async () => {
+    const idCicloEscolar = prompt("Ingresa el ID del ciclo escolar:");
+
+    if (!idCicloEscolar) return;
+
+    try {
+      const res = await fetch("/grupos/horarios", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id_ciclo_escolar: parseInt(idCicloEscolar) })
+      });
+
+      const data = await res.json();
+
+      // Mostrar resultado en consola y/o DOM
+      alert(data.message || "Proceso completado.");
+      console.log("Resumen por alumno:", data.detalle);
+
+    } catch (err) {
+      console.error("Error al generar horarios:", err);
+      alert("Ocurrió un error al generar los horarios.");
+    }
+  });
+</script>
   <script>
     localStorage.setItem('cicloActual', '<%= cicloActual %>');
     console.log('Ciclo escolar guardado en localStorage:', '<%= cicloActual %>');
