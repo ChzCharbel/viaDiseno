@@ -194,4 +194,29 @@ module.exports = class Usuario {
       [id]
     );
   }
+
+  static async actualizarPassword(id_ivd, nuevaPassword) {
+    try {
+      const password_cifrada = await bcrypt.hash(nuevaPassword, 12);
+      return db.query(
+        `UPDATE usuarios SET password = $1 WHERE id_ivd = $2`,
+        [password_cifrada, id_ivd]
+      );
+    } catch (error) {
+      console.log('Error al actualizar la contraseña:', error);
+      throw error;
+    }
+  }
+  static async fetchOneByCorreo(correo) {
+    try {
+      const usuarios = await getAllUsers('student');
+      const usuario = usuarios.find(u => u.email === correo);
+      return usuario;
+    } catch (error) {
+      console.error('Error en fetchOneByCorreo:', error);
+      return null;
+    }
+  }
+  
+  
 };

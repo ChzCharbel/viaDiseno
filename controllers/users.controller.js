@@ -11,10 +11,19 @@ exports.get_reset_password = (request, response, next) => {
     isLoggedIn: request.session.isLoggedIn || false,
     matricula: request.session.matricula || "",
     isNew: true,
+    isReset: true, 
     csrfToken: request.csrfToken(),
     privilegios: request.session.privilegios || [],
+    error: request.session.error || '',
+    info: request.session.info || '',
+    carrera: request.session.carrera || '',
+    username: request.session.username || '',
+    mail: request.session.mail || '',
   });
+  request.session.error = '';
+  request.session.info = '';
 };
+
 
 exports.post_reset_password = (request, response, next) => {
   console.log(request.body.matriculaInput);
@@ -69,11 +78,17 @@ exports.get_login = (request, response, next) => {
     isLoggedIn: request.session.isLoggedIn || false,
     matricula: request.session.matricula || "",
     isNew: false,
+    isReset: false,
     csrfToken: request.csrfToken(),
     privilegios: request.session.privilegios || [],
     carrera: request.session.carrera || "",
     username: request.session.username || "",
+    mail: request.session.mail || "",
+    error: request.session.error || '',
+    info: request.session.info || ''
   });
+  request.session.error = '';
+  request.session.info = '';
 };
 
 exports.post_login = (request, response, next) => {
