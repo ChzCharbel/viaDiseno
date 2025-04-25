@@ -55,16 +55,20 @@
           <% } %>
         </span>        
 
-        <% if (typeof cicloActual !== 'undefined' && cicloActual) { %>
+        <% if (typeof cicloActual !== 'undefined' && cicloActual && rol == 'admin') { %>
           <a href="/solicitudes/<%= cicloActual %>/" class="navbar-brand">
-        <% } else { %>
+            <span class="material-symbols-outlined fs-2" style="color: white; cursor: pointer;">
+              notifications
+            </span>
+          </a>
+        <% } else if (rol == 'admin') { %>
           <a href="#" class="navbar-brand" title="Ciclo no definido">
-        <% } %>
-          <span class="material-symbols-outlined fs-2" style="color: white; cursor: pointer;">
-            notifications
-          </span>
-
-
+            <span class="material-symbols-outlined fs-2" style="color: white; cursor: pointer;">
+              notifications
+            </span>
+          </a>
+        <% } %>        
+          
         <span
           ><a class="navbar-brand material-symbols-outlined fs-1"
             ><%- include('./_perfil_user') %></a
