@@ -63,7 +63,7 @@ exports.enviarSolicitud = async (request, response, next) => {
     } else if (tipo === "eliminar") {
       descripcionFinal = `El alumno solicita eliminar la materia ${nombre_materia}. Motivo: ${descripcion}`;
     } else if (tipo === "agregar") {
-      descripcionFinal = `El alumno solicita agregar la materia seleccionada. Motivo: ${descripcion}`;
+      descripcionFinal = `El alumno solicita agregar la materia seleccionada. Motivo: ${descripcion}. Materia: ${nombre_materia}`;
     } else {
       descripcionFinal = descripcion;
     }
