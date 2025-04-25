@@ -1,24 +1,24 @@
-<!-- Gráficas lado a lado -->
+<!-- Gráficas lado a lado en una fila -->
 <div class="container mt-4">
   <div class="row justify-content-center">
-    <!-- Gráfica: Materias por semestre -->
-    <div class="col-md-4">
+    <!-- Materias por semestre -->
+    <div class="col-md-3">
       <div class="card p-3">
         <h6 class="text-center">Materias por Semestre</h6>
         <canvas id="graficoMateriasSemestre" height="80"></canvas>
       </div>
     </div>
 
-    <!-- Gráfica: Alumnos regulares vs irregulares -->
-    <div class="col-md-4">
+    <!-- Alumnos Regulares vs Irregulares -->
+    <div class="col-md-3">
       <div class="card p-3">
         <h6 class="text-center">Regulares vs Irregulares</h6>
         <canvas id="graficoRegulares" height="80"></canvas>
       </div>
     </div>
 
-    <!-- Gráfica: Alumnos inscritos -->
-    <div class="col-md-4">
+    <!-- Alumnos Inscritos -->
+    <div class="col-md-3">
       <div class="card p-3">
         <h6 class="text-center">Alumnos Inscritos</h6>
         <div class="card-body p-0">
@@ -26,19 +26,18 @@
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Gráfica: Solicitudes-->
-  <div class="col-md-4>">
-    <div class="card p-3">
-        <h5 class="text-center">Número de Solicitudes</h5>
-        <div class="card-footer text-center">
-        <canvas id="graficoSolicitudes" height="100"></canvas>
+    <!-- Número de Solicitudes -->
+    <div class="col-md-3">
+      <div class="card p-3">
+        <h6 class="text-center">Número de Solicitudes</h6>
+        <canvas id="graficoSolicitudes" height="80"></canvas>
       </div>
     </div>
   </div>
-
 </div>
+
+
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
