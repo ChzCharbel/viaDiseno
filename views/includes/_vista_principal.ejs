@@ -1,35 +1,33 @@
 <!-- Gráficas lado a lado -->
 <div class="container mt-4">
-    <div class="row justify-content-center">
-      <!-- Gráfica: Materias por semestre -->
-      <div class="col-md-6">
-        <div class="card p-4 h-100">
-          <h5 class="text-center">Materias por Semestre</h5>
-          <canvas id="graficoMateriasSemestre" height="100"></canvas>
-        </div>
-      </div>
-  
-      <!-- Gráfica: Alumnos regulares vs irregulares -->
-      <div class="col-md-6">
-        <div class="card p-4 h-100">
-          <h5 class="text-center">Alumnos Regulares vs Irregulares</h5>
-          <canvas id="graficoRegulares" height="100"></canvas>
-        </div>
+  <div class="row justify-content-center">
+    <!-- Gráfica: Materias por semestre -->
+    <div class="col-md-4">
+      <div class="card p-3">
+        <h6 class="text-center">Materias por Semestre</h6>
+        <canvas id="graficoMateriasSemestre" height="80"></canvas>
       </div>
     </div>
 
-    <div class="row mt-4 justify-content-center">
-      <!-- Gráfica: Alumnos inscritos -->
-    <div class = "col-md-6">
-    <div class="card p-4 h-100">
-      <h5 class="text-center">Alumnos Inscritos</h5>
-      <div class="card-body">
-        <%- include('_grafica_alumnos_inscritos') %>
+    <!-- Gráfica: Alumnos regulares vs irregulares -->
+    <div class="col-md-4">
+      <div class="card p-3">
+        <h6 class="text-center">Regulares vs Irregulares</h6>
+        <canvas id="graficoRegulares" height="80"></canvas>
       </div>
     </div>
-    </div>
 
-  </div>  
+    <!-- Gráfica: Alumnos inscritos -->
+    <div class="col-md-4">
+      <div class="card p-3">
+        <h6 class="text-center">Alumnos Inscritos</h6>
+        <div class="card-body p-0">
+          <%- include('_grafica_alumnos_inscritos') %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
