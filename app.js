@@ -58,10 +58,12 @@ const ofertaRoutes = require("./routes/oferta.routes");
 const solicitudesRoutes = require("./routes/solicitudes.routes");
 const disponibleRoutes = require("./routes/disponible.routes");
 const cicloRoutes = require('./routes/ciclo.routes');
-
+const creacionGruposRoutes = require('./routes/creacion.grupos.routes')
 
 const gruposRoutes = require("./routes/grupos.routes"); 
 app.use("/grupos", gruposRoutes);
+
+app.use("/grupos", creacionGruposRoutes);
 
 app.use("/users", usersRoutes);
 app.use("/enlista", enlistaRoutes);
