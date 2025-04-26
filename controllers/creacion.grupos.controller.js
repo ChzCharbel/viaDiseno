@@ -5,7 +5,7 @@ exports.get_creados = (request, response, next) => {
     Oferta.fetchAll(request.params.idCiclo, request.session.carrera).then( (ofertaAcademica) => {
         crearGrupos.fetchAll(request.params.idCiclo).then((grupos) => {
             response.render('grupos_creados.ejs', {
-                titulo: "grupos",
+                titulo: "crear_grupos",
                 privilegios: request.session.privilegios || [],
                 carrera: request.session.carrera || "",
                 profesores: request.session.profesores || [],
