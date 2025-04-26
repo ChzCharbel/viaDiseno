@@ -34,37 +34,42 @@
         aria-label="Menú de navegación vertical"
       >
         <a
-          href="/principal/<%=ciclosEscolares[0].id_ciclo_escolar %>"
+          href="/principal/<%=cicloActual%>"
           class="btn btn-outline-danger w-100 rounded-0 fs-2"
           >Inicio</a
         >
         <a
-          href="/oferta_academica/<%=ciclosEscolares[0].id_ciclo_escolar %>/plan_version"
+          href="/oferta_academica/<%=cicloActual%>/plan_version"
           class="btn btn-outline-danger w-100 rounded-0 fs-2"
           >Oferta Académica</a
         >
         <a
-          href="/maestros/<%=ciclosEscolares[0].id_ciclo_escolar %>"
+          href="/maestros/<%=cicloActual%>"
           class="btn btn-outline-danger w-100 rounded-0 fs-2"
           >Profesores</a
         >
         <a
-        href="/inicio/<%=ciclosEscolares[0].id_ciclo_escolar %>"
+        href="/inicio/<%=cicloActual%>"
         class="btn btn-outline-danger w-100 rounded-0 fs-2"
           >Fechas de inscripciones</a
         >
         <a
-          href="/materias/<%=ciclosEscolares[0].id_ciclo_escolar %>"
+        href="/grupos/creados/<%=cicloActual%>"
+        class="btn btn-outline-danger w-100 rounded-0 fs-2"
+          >Creación de Grupos</a
+        >
+        <a
+          href="/materias/<%=cicloActual%>"
           class="btn btn-outline-danger w-100 rounded-0 fs-2"
           >Grupos</a
         >
         <a
-          href="/alumnos/<%=ciclosEscolares[0].id_ciclo_escolar %>"
+          href="/alumnos/<%=cicloActual%>"
           class="btn btn-outline-danger w-100 rounded-0 fs-2"
           >Alumnos</a
         >
         <a
-          href="/solicitudes/<%=ciclosEscolares[0].id_ciclo_escolar %>"
+          href="/solicitudes/<%=cicloActual%>"
           class="btn btn-outline-danger w-100 rounded-0 fs-2"
           >Solicitudes</a
         >
