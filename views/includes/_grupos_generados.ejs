@@ -36,9 +36,6 @@
                         <div>
                             <canvas id="graficaBarras" style="width: 100px; height: 300px;"></canvas>
                         </div>
-                        <div>
-                            <canvas id="graficaPastel" style="width: 100px; height: 200px;"></canvas>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -143,6 +140,36 @@ const octavoOferta = [];
 const noveno = [];
 const novenoOferta = [];
 
+for (let materia of materiasOfertadas) {
+    if (materia.semestre === 1) {
+        primeroOferta.push(materia);
+    }
+    else if (materia.semestre === 2) {
+        segundoOferta.push(materia);
+    }
+    else if (materia.semestre === 3) {
+        terceroOferta.push(materia);
+    }
+    else if (materia.semestre === 4) {
+        cuartoOferta.push(materia);
+    }
+    else if (materia.semestre === 5) {
+        quintoOferta.push(materia);
+    }
+    else if (materia.semestre === 6) {
+        sextoOferta.push(materia);
+    }
+    else if (materia.semestre === 7) {
+        septimoOferta.push(materia);
+    }
+    else if (materia.semestre === 8) {
+        octavoOferta.push(materia);
+    }
+    else if (materia.semestre === 9) {
+        novenoOferta.push(materia);
+    }
+}
+
 for (let grupo of grupos) {
     if (grupoMateria.includes(grupo.id_ciclo_escolar_materia) === false) {
         grupoMateria.push(grupo.id_ciclo_escolar_materia);
@@ -181,20 +208,26 @@ console.log(grupoMateria);
 new Chart(barras, {
     type: 'bar',
     data: {
-        labels: ['1°', '2°', '3°', '4°', '5°', '6°', '7°', '8°', '9°'],
+        labels: ['1°', '2°', '3°', '4°',
+        '5°', '6°', '7°', '8°', '9°'],
         datasets: [{
-            label: 'Grupos generados por semestre',
-            data: [primero.length, segundo.length, tercero.length, cuarto.length, quinto.length, sexto.length, septimo.length, octavo.length, noveno.length],
+            label: 'Materias asignadas',
+            data: [primero.length, segundo.length, tercero.length, 
+            cuarto.length, quinto.length, sexto.length, septimo.length, 
+            octavo.length, noveno.length],
             backgroundColor: [
             'rgba(148, 64, 75, 0.8)',
+            ],
+            borderWidth: 1
+        },
+        {
+            label: 'Oferta académica',
+            data: [primeroOferta.length, segundoOferta.length, 
+            terceroOferta.length, cuartoOferta.length, quintoOferta.length, 
+            sextoOferta.length, septimoOferta.length, octavoOferta.length, 
+            novenoOferta.length],
+            backgroundColor: [
             'rgba(148, 125, 128, 0.8)',
-            'rgba(148, 64, 75, 0.8)',
-            'rgba(148, 125, 128, 0.8)',
-            'rgba(148, 64, 75, 0.8)',
-            'rgba(148, 125, 128, 0.8)',
-            'rgba(148, 64, 75, 0.8)',
-            'rgba(148, 125, 128, 0.8)',
-            'rgba(148, 64, 75, 0.8)',
             ],
             borderWidth: 1
         }]
@@ -202,6 +235,12 @@ new Chart(barras, {
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            plugins: {
+            title: {
+                display: true,
+                text: 'Asignación de Materias'
+            }
+        },
         scales: {
             y: {
             beginAtZero: true
@@ -210,30 +249,6 @@ new Chart(barras, {
     }
 });
 
-new Chart(pastel, {
-    type: 'pie',
-    data: {
-        labels: ['Materias Asignadas', 'Oferta Académica'],
-        datasets: [{
-            label: 'Materias Asignadas vs Oferta Académica',
-            data: [materiasOfertadas.length, grupoMateria.length],
-            backgroundColor: [
-            'rgba(148, 64, 75, 0.8)',
-            'rgba(148, 125, 128, 0.8)',
-            ],
-            borderWidth: 1,
-        }]
-        },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        }
-    }
-});
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
