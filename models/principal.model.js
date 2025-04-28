@@ -48,4 +48,23 @@ module.exports = class EstadisticasModel {
       return [];
     }
   }
+
+  static async getResumenSolicitudes(idCiclo) {
+    const query = `
+      SELECT 
+        CASE 
+          WHEN resuelto = false THEN 'pendiente'
+          WHEN aprobado = true THEN 'aprobada'
+          WHEN aprobado = false THEN 'rechazada'
+        END AS estatus,
+        COUNT(*) AS cantidad
+      FROM public.solicitudes_cambio
+      WHERE id_ciclo_escolar = $1
+      GROUP BY estatus;
+    `;
+    const { rows } = await db.query(query, [idCiclo]);
+    return rows;
+  }
+  
+  
 };

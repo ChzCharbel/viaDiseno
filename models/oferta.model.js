@@ -37,4 +37,12 @@ module.exports = class OfertaAcademica {
             JOIN carreras c using (id_carrera)
             WHERE id_ciclo_escolar = $1::integer  AND carrera = $2::text`, [idCicloE, carrera]);
     }
+
+    static eliminarMateriaPorId(idPlanMateria) {
+        return db.query(
+            'DELETE FROM ciclos_escolares_materias WHERE id_plan_materia = $1::integer',
+            [idPlanMateria]
+        );
+    }
+
 }
