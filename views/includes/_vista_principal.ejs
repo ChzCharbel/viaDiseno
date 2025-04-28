@@ -36,6 +36,14 @@
         <canvas id="graficoSolicitudes" height="80"></canvas>
       </div>
     </div>
+
+    <!-- Gráfica: Grupos creados vs Oferta académica -->
+
+    <div class="col-md-4">
+      <div class="card p-3">
+        <canvas id="graficaBarras"></canvas>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -176,6 +184,52 @@ new Chart(ctxSolicitudes, {
       }
     }
   }
+});
+
+</script>
+
+new Chart(barras, {
+    type: 'bar',
+    data: {
+        labels: ['1°', '2°', '3°', '4°',
+        '5°', '6°', '7°', '8°', '9°'],
+        datasets: [{
+            label: 'Materias asignadas',
+            data: [primero.length, segundo.length, tercero.length, 
+            cuarto.length, quinto.length, sexto.length, septimo.length, 
+            octavo.length, noveno.length],
+            backgroundColor: [
+            'rgba(148, 64, 75, 0.8)',
+            ],
+            borderWidth: 1
+        },
+        {
+            label: 'Oferta académica',
+            data: [primeroOferta.length, segundoOferta.length, 
+            terceroOferta.length, cuartoOferta.length, quintoOferta.length, 
+            sextoOferta.length, septimoOferta.length, octavoOferta.length, 
+            novenoOferta.length],
+            backgroundColor: [
+            'rgba(148, 125, 128, 0.8)',
+            ],
+            borderWidth: 1
+        }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+            title: {
+                display: true,
+                text: 'Asignación de Materias'
+            }
+        },
+        scales: {
+            y: {
+            beginAtZero: true
+            }
+        }
+    }
 });
 
 </script>
