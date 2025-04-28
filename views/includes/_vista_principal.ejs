@@ -37,14 +37,15 @@
       </div>
     </div>
 
-    <!-- Gráfica: Grupos creados vs Oferta académica -->
+  </div>
 
-    <div class="col-md-4">
+  <!-- Gráfica: Grupos creados vs Oferta académica -->
+
+  <div class="col-md-4">
       <div class="card p-3">
         <canvas id="graficaBarras"></canvas>
       </div>
     </div>
-  </div>
 </div>
 
 
@@ -187,6 +188,100 @@ new Chart(ctxSolicitudes, {
 });
 
 </script>
+
+<script>
+
+const barras = document.getElementById('graficaBarras');
+const pastel = document.getElementById('graficaPastel');
+
+const grupos = JSON.parse(`<%- JSON.stringify(grupos) %>`);
+const materiasOfertadas = JSON.parse(`<%- JSON.stringify(ofertaAcademica) %>`);
+const grupoMateria = [];
+
+const primero = [];
+const primeroOferta = [];
+const segundo = [];
+const segundoOferta = [];
+const tercero = [];
+const terceroOferta = [];
+const cuarto = [];
+const cuartoOferta = [];
+const quinto = [];
+const quintoOferta = [];
+const sexto = [];
+const sextoOferta = [];
+const septimo = [];
+const septimoOferta = [];
+const octavo = [];
+const octavoOferta = [];
+const noveno = [];
+const novenoOferta = [];
+
+for (let materia of materiasOfertadas) {
+    if (materia.semestre === 1) {
+        primeroOferta.push(materia);
+    }
+    else if (materia.semestre === 2) {
+        segundoOferta.push(materia);
+    }
+    else if (materia.semestre === 3) {
+        terceroOferta.push(materia);
+    }
+    else if (materia.semestre === 4) {
+        cuartoOferta.push(materia);
+    }
+    else if (materia.semestre === 5) {
+        quintoOferta.push(materia);
+    }
+    else if (materia.semestre === 6) {
+        sextoOferta.push(materia);
+    }
+    else if (materia.semestre === 7) {
+        septimoOferta.push(materia);
+    }
+    else if (materia.semestre === 8) {
+        octavoOferta.push(materia);
+    }
+    else if (materia.semestre === 9) {
+        novenoOferta.push(materia);
+    }
+}
+
+for (let grupo of grupos) {
+    if (grupoMateria.includes(grupo.id_ciclo_escolar_materia) === false) {
+        grupoMateria.push(grupo.id_ciclo_escolar_materia);
+        if (grupo.semestre === 1) {
+            primero.push(grupo);
+        }
+        else if (grupo.semestre === 2) {
+            segundo.push(grupo);
+        }
+        else if (grupo.semestre === 3) {
+            tercero.push(grupo);
+        }
+        else if (grupo.semestre === 4) {
+            cuarto.push(grupo);
+        }
+        else if (grupo.semestre === 5) {
+            quinto.push(grupo);
+        }
+        else if (grupo.semestre === 6) {
+            sexto.push(grupo);
+        }
+        else if (grupo.semestre === 7) {
+            septimo.push(grupo);
+        }
+        else if (grupo.semestre === 8) {
+            octavo.push(grupo);
+        }
+        else if (grupo.semestre === 9) {
+            noveno.push(grupo);
+        }
+    }
+}
+console.log(materiasOfertadas)
+console.log(grupoMateria);
+
 
 new Chart(barras, {
     type: 'bar',
