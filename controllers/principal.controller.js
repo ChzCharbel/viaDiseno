@@ -10,6 +10,8 @@ exports.get_principal = async (req, res, next) => {
     const alumnosInscritos = await EstadisticasModel.getAlumnosInscritos();
     const regularesIrregulares = await EstadisticasModel.getRegularesVsIrregulares();
     const resumenSolicitudes = await EstadisticasModel.getResumenSolicitudes(idCiclo);
+    const ofertaAcademica = await Oferta.fetchAll(req.params.idCiclo, req.session.carrera);
+    const grupos = await crearGrupos.fetchAll(req.params.idCiclo);
     
     let inscritos = 0;
     let noInscritos = 0;
