@@ -75,12 +75,13 @@
                 <!-- Modal de horario -->
                 <div class="modal fade" id="modalHorario<%= materia.id %>" tabindex="-1" aria-labelledby="modalHorarioLabel<%= materia.id %>" aria-hidden="true">
                   <div class="modal-dialog">
-                    <form id="formHorario_<%= materia.id %>" action="/materias/guardar-horario/<%= materia.id %>" method="POST">
+                    <form id="formHorario_<%= materia.id %>" action="/materias/guardar-horario" method="POST">
                       <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                       <input type="hidden" name="id_grupo" value="<%= materia.id %>">
                       <input type="hidden" name="id_salon" id="inputHiddenSalon_<%= materia.id_materia %>">
                       <input type="hidden" name="id_profesor" id="inputHiddenProfesor_<%= materia.id_materia %>">
-
+                      <input type="hidden" name="id_ciclo_escolar" value="<%= cicloActual %>">
+                    
                       <div class="modal-content">
                         <div class="modal-header">
                           <h5 class="modal-title" id="modalHorarioLabel<%= materia.id %>">Asignar horario para <%= materia.nombre_materia %></h5>
@@ -149,23 +150,6 @@
     </div>
   </div>
 </div>
-
-<!-- Script para guardar id_salon e id_profesor en el formulario del modal -->
-<script>
-  function guardarSalonSeleccionado(idMateria) {
-    const inputSalon = document.getElementById(`inputSalon_${idMateria}`);
-    const inputHiddenSalon = document.getElementById(`inputHiddenSalon_${idMateria}`);
-    if (inputSalon && inputHiddenSalon) {
-      inputHiddenSalon.value = inputSalon.value;
-    }
-
-    const inputProfesor = document.getElementById(`inputProfesor_${idMateria}`);
-    const inputHiddenProfesor = document.getElementById(`inputHiddenProfesor_${idMateria}`);
-    if (inputProfesor && inputHiddenProfesor) {
-      inputHiddenProfesor.value = inputProfesor.value;
-    }
-  }
-</script>
 
 <script>
   localStorage.setItem('cicloActual', '<%= cicloActual %>');

@@ -20,9 +20,9 @@ module.exports = class GrupoHorario {
       "HF" + hora_fin
     );
     const result = await db.query(
-      `SELECT crear_grupo_completo($1, $2, $3, $4, $5) AS id_grupo`,
-      [id_salon, id_ciclo_escolar_materia, dia_semana, hora_inicio, hora_fin] // El orden debe coincidir con la función SQL
+      `SELECT asignar_horario_a_grupo($1, $2, $3, $4, $5)`,
+      [id_salon, id_ciclo_escolar_materia, dia_semana, hora_inicio, hora_fin]
     );
-    return result.rows[0].id_grupo;
+    return result.rows[0]?.asignar_horario_a_grupo || null;    
   }
 };

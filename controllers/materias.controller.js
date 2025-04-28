@@ -3,6 +3,8 @@ const Profesor = require('../models/profesores.model');
 const Salon = require('../models/salones.model');
 const GrupoHorario = require('../models/grupos_horarios.model');
 const { getAllCourses } = require('../util/admin.api.client');
+const db = require('../util/database');
+
 
 exports.get_materias = (request, response, next) => {
     Promise.all([
@@ -65,9 +67,19 @@ exports.post_guardar_horario = (req, res) => {
 };
 
 exports.guardarHorario = async (req, res) => {
-    const id_grupo = 1;
-    const id_ciclo_escolar = 1
+    const id_grupo = parseInt(req.body.id_grupo);
+    const id_ciclo_escolar = parseInt(req.body.id_ciclo_escolar);
+    const id_salon = parseInt(req.body.id_salon);
+    
+    if (isNaN(id_grupo) || isNaN(id_ciclo_escolar) || isNaN(id_salon)) {
+        return res.status(400).send("Faltan datos obligatorios para guardar el horario.");
+}
+
     const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+  
+    if (isNaN(id_grupo) || isNaN(id_ciclo_escolar) || isNaN(id_salon)) {
+      return res.status(400).send("Faltan datos obligatorios para guardar el horario.");
+    }
   
     try {
       for (let i = 0; i < dias.length; i++) {
@@ -75,15 +87,20 @@ exports.guardarHorario = async (req, res) => {
         const hora_inicio = req.body[`hora_inicio_${i}`];
         const hora_fin = req.body[`hora_fin_${i}`];
   
-        // Si ambas horas están definidas, guardar
         if (hora_inicio && hora_fin) {
-          await GrupoHorario.guardarHoras(id_grupo, id_ciclo_escolar, dia, hora_inicio, hora_fin);
+          await GrupoHorario.guardarHoras(
+            id_salon,
+            id_ciclo_escolar,
+            dia,
+            hora_inicio,
+            hora_fin
+          );
         }
       }
   
-      res.redirect('/ruta-donde-quieras-ir');
+      res.redirect(`/materias/${id_ciclo_escolar}`);
     } catch (err) {
       console.error('Error al guardar horarios:', err);
       res.status(500).send("Error al guardar horarios");
     }
-  };
+  };  

@@ -51,15 +51,8 @@ function seleccionarSalon(idMateria, idSalon, descripcionSalon) {
 function guardarSalonSeleccionado(idMateria) {
   console.log('Guardando salón para la materia:', idMateria);
   console.log('Estado actual de salonSeleccionado:', window.salonSeleccionado);
-  
-  let idSalon = null;
-  
-  if (window.salonSeleccionado && window.salonSeleccionado[idMateria]) {
-    idSalon = window.salonSeleccionado[idMateria];
-  }
-  
-  console.log('ID del salón seleccionado (final):', idSalon);
 
+  let idSalon = window.salonSeleccionado?.[idMateria] || null;
   if (!idSalon && idSalon !== 0) {
     alert('Debes seleccionar un salón antes de guardar.');
     return;
@@ -72,9 +65,6 @@ function guardarSalonSeleccionado(idMateria) {
   }
 
   const csrfToken = document.getElementById('csrfToken_' + idMateria)?.value || '';
-  console.log('CSRF Token obtenido:', csrfToken);
-
-  // ✅ Obtener también el ID del profesor desde el input hidden
   const inputProfesor = document.getElementById('inputProfesor_' + idMateria);
   const idProfesor = inputProfesor ? inputProfesor.value : null;
 
@@ -83,6 +73,14 @@ function guardarSalonSeleccionado(idMateria) {
     return;
   }
 
+  // Actualizar inputs hidden del formulario de horario
+  const inputHiddenSalon = document.getElementById(`inputHiddenSalon_${idMateria}`);
+  if (inputHiddenSalon) inputHiddenSalon.value = idSalon;
+
+  const inputHiddenProfesor = document.getElementById(`inputHiddenProfesor_${idMateria}`);
+  if (inputHiddenProfesor) inputHiddenProfesor.value = idProfesor;
+
+  // Enviar al backend
   fetch('/grupos/asignar-salon', {
     method: 'POST',
     headers: {
@@ -99,12 +97,9 @@ function guardarSalonSeleccionado(idMateria) {
     .then(response => response.json())
     .then(data => {
       alert(data.mensaje || 'Salón asignado correctamente');
-
       const modalElement = document.getElementById('modalSalones' + idMateria);
       const modalInstance = bootstrap.Modal.getInstance(modalElement);
-      if (modalInstance) {
-        modalInstance.hide();
-      }
+      if (modalInstance) modalInstance.hide();
     })
     .catch(err => {
       console.error('Error al guardar salón:', err);
