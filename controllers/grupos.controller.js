@@ -29,7 +29,7 @@ exports.getDatosGrupos = async (req, res) => {
 
   try {
     const [materias, profesores, salones] = await Promise.all([
-      Materia.getMateriasPorCiclo(idCicloEscolar),
+      Grupo.getMateriasConProfesorPorCiclo(idCicloEscolar), // <-- aquí el cambio
       Profesor.fetchAll(),
       Salon.fetchAll(),
     ]);
