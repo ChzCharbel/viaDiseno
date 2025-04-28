@@ -1,4 +1,6 @@
 const EstadisticasModel = require("../models/principal.model");
+const crearGrupos = require('../models/createGroups.model');
+const Oferta = require('../models/oferta.model');
 
 exports.get_principal = async (req, res, next) => {
   const idCiclo = req.params.idCicloEscolar;
@@ -7,6 +9,8 @@ exports.get_principal = async (req, res, next) => {
     const materiasPorSemestre = await EstadisticasModel.getMateriasPorSemestre(idCiclo);
     const alumnosInscritos = await EstadisticasModel.getAlumnosInscritos();
     const regularesIrregulares = await EstadisticasModel.getRegularesVsIrregulares();
+    const ofertaAcademica = await Oferta.fetchAll(req.params.idCiclo, req.session.carrera);
+    const grupos = await crearGrupos.fetchAll(req.params.idCiclo);
     
     let inscritos = 0;
     let noInscritos = 0;
@@ -26,6 +30,8 @@ exports.get_principal = async (req, res, next) => {
       username: req.session.username || "",
       rol: req.session.rol || "",
       mail: req.session.mail || "",
+      grupos: grupos.rows || [],
+      ofertaAcademica: ofertaAcademica.rows || [],
       ciclosEscolares: req.session.ciclosEscolares || [],
       materiasPorSemestre, 
       inscritos,
