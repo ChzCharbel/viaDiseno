@@ -178,6 +178,7 @@
   color: #95404c !important;
   border-color: #daa6a6;
 }
+
 .scrollable-materias {
   max-height: 300px;
   overflow-y: auto;
@@ -185,3 +186,7 @@
   border-radius: 0.375rem;
   padding: 0.5rem;
 }
+.bg-vino {
+  background-color: #95404c;
+}
+
