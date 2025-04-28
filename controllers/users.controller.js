@@ -151,7 +151,7 @@ exports.post_login = (request, response, next) => {
                   console.log(error);
                 });
             } else {
-              request.session.warning = `Usuario y/o contraseña incorrectos`;
+              request.session.error = `Usuario y/o contraseña incorrectos`;
               console.log(request.session.warning);
               response.redirect("/users/login");
             }
@@ -160,7 +160,7 @@ exports.post_login = (request, response, next) => {
             console.log(error);
           });
       } else {
-        request.session.warning = `Usuario y/o contraseña incorrectos`;
+        request.session.error = `Usuario y/o contraseña incorrectos`;
         response.redirect("/users/login");
       }
     })
