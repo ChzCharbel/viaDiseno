@@ -26,4 +26,13 @@ module.exports = class Grupo {
 
     return db.query(query, [idSalon, idGrupo]);
   }
+
+  static async verificarOCrearGrupo(idMateria, idCicloEscolar, idProfesor, idSalon) {
+    const query = `
+      SELECT verificar_o_crear_grupo($1, $2, $3, $4)
+    `;
+    const values = [idMateria, idCicloEscolar, idProfesor, idSalon];
+    return db.query(query, values);
+  }
+
 };

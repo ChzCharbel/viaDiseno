@@ -45,27 +45,25 @@
               <td><%= materia.profesor || 'Sin asignar' %></td>
               <td><%= materia.nombre_materia %></td>
               <td>
-                <!-- Botón para abrir modal -->
                 <button
                   type="button"
                   class="btn btn-outline-secondary btn-sm rounded-pill"
                   data-bs-toggle="modal"
-                  data-bs-target="#modalSalones<%= materia.id_ciclo_escolar_materia %>">
+                  data-bs-target="#modalSalones<%= materia.id_materia %>">
                   Seleccionar salón
                 </button>
-      
-                <!-- Incluir modal -->
+
                 <%- include('_modal_salones.ejs', { materia: materia, salones: salones }) %>
-      
-                <!-- Texto de salón seleccionado -->
-                <div id="salonSeleccionado_<%= materia.id_ciclo_escolar_materia %>" class="mt-2 text-muted small">
+
+                <div id="salonSeleccionado_<%= materia.id_materia %>" class="mt-2 text-muted small">
                   No seleccionado
                 </div>
-                <input type="hidden" name="salon_<%= materia.id_ciclo_escolar_materia %>" id="inputSalon_<%= materia.id_ciclo_escolar_materia %>">
+
+                <input type="hidden" id="inputSalon_<%= materia.id_materia %>">
+                <input type="hidden" id="inputProfesor_<%= materia.id_materia %>" value="<%= materia.id_profesor %>">
               </td>
-              
+
               <td>
-                <!-- Botón para abrir modal -->
                 <button 
                   type="button" 
                   class="btn btn-outline-secondary btn-sm rounded-pill" 
@@ -73,20 +71,21 @@
                   data-bs-target="#modalHorario<%= materia.id %>">
                   Seleccionar horario
                 </button>
-              
+
                 <!-- Modal de horario -->
                 <div class="modal fade" id="modalHorario<%= materia.id %>" tabindex="-1" aria-labelledby="modalHorarioLabel<%= materia.id %>" aria-hidden="true">
                   <div class="modal-dialog">
-                    <form action="/materias/guardar-horario/<%= materia.id %>" method="POST">
+                    <form id="formHorario_<%= materia.id %>" action="/materias/guardar-horario/<%= materia.id %>" method="POST">
                       <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                       <input type="hidden" name="id_grupo" value="<%= materia.id %>">
+                      <input type="hidden" name="id_salon" id="inputHiddenSalon_<%= materia.id_materia %>">
+                      <input type="hidden" name="id_profesor" id="inputHiddenProfesor_<%= materia.id_materia %>">
+
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h5 class="modal-title" id="modalHorarioLabel<%= materia.id %>">Asignar horario para <%= materia.name %></h5>
+                          <h5 class="modal-title" id="modalHorarioLabel<%= materia.id %>">Asignar horario para <%= materia.nombre_materia %></h5>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                         </div>
-
-                        
 
                         <div class="modal-body">
                           <% const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes']; %>
@@ -94,8 +93,8 @@
                             <div class="mb-3">
                               <label><strong><%= dia %></strong></label>
                               <div class="input-group">
-                                <select name="hora_inicio_<%= index %>" class="form-select" >
-                                  <option value="">N/A</option> <!-- Opción N/A -->
+                                <select name="hora_inicio_<%= index %>" class="form-select">
+                                  <option value="">N/A</option>
                                   <% for (let h = 7; h <= 16; h++) {
                                        let horaStr = h < 10 ? '0' + h : '' + h;
                                   %>
@@ -105,9 +104,9 @@
                                     <% } %>
                                   <% } %>
                                 </select>
-                                
+
                                 <select name="hora_fin_<%= index %>" class="form-select">
-                                  <option value="">N/A</option> <!-- Opción N/A -->
+                                  <option value="">N/A</option>
                                   <% for (let h = 7; h <= 16; h++) {
                                        let horaStr = h < 10 ? '0' + h : '' + h;
                                   %>
@@ -117,13 +116,13 @@
                                     <% } %>
                                   <% } %>
                                 </select>
-                                
+
                                 <input type="hidden" name="dia_<%= index %>" value="<%= dia %>">
-                                
                               </div>
                             </div>
                           <% }) %>
                         </div>
+
                         <div class="modal-footer">
                           <button type="submit" class="btn btn-primary">Guardar horario</button>
                         </div>
@@ -131,90 +130,48 @@
                     </form>
                   </div>
                 </div>
-              
-                <!-- Vista del horario asignado -->
+
                 <div id="horario_<%= materia.id %>" class="text-muted small mt-2">Sin asignar</div>
               </td>
-              
 
               <td>
                 <button class="btn btn-primary btn-sm rounded-pill px-3"
-                  onclick="guardarSalonSeleccionado('<%= materia.id_ciclo_escolar_materia %>')">Guardar</button>
+                  onclick="guardarSalonSeleccionado('<%= materia.id_materia %>')">Guardar</button>
               </td>
             </tr>
           <% } %>
         <% } %>
-      </tbody>      
+      </tbody>
     </table>
+
     <div class="d-flex justify-content-end mt-3">
       <button class="btn btn-primary" id="generarHorariosBtn">Generar Horarios</button>
     </div>
   </div>
-  <!-- Scripts -->
-<script>
-  document.getElementById("generarHorariosBtn").addEventListener("click", async () => {
-    // Obtener el ID del ciclo de la URL actual
-    const urlPath = window.location.pathname;
-    const urlSegments = urlPath.split('/');
-    const cicloActualInput = document.getElementById("cicloActualId");
-    
-    // Intentar obtener el ciclo de diferentes formas (del input hidden, de la URL o del localStorage)
-    let idCicloEscolar = cicloActualInput ? cicloActualInput.value : null;
-    
-    if (!idCicloEscolar) {
-      // Si no hay un input con el ciclo, intentar extraerlo de la URL
-      // Buscamos un segmento que sea un número en la URL (asumimos que es el ID del ciclo)
-      for (let segment of urlSegments) {
-        if (!isNaN(segment) && segment.trim() !== '') {
-          idCicloEscolar = segment;
-          break;
-        }
-      }
-    }
-    
-    if (!idCicloEscolar) {
-      // Como último recurso, intentar obtenerlo del localStorage
-      idCicloEscolar = localStorage.getItem('cicloSeleccionado') || localStorage.getItem('cicloActual');
-    }
-
-    if (!idCicloEscolar) {
-      alert("No se pudo determinar el ciclo escolar actual. Por favor, seleccione un ciclo primero.");
-      return;
-    }    try {
-      // Obtener el token CSRF del elemento meta o del input hidden
-      const csrfToken = document.querySelector('input[name="_csrf"]') ? 
-                         document.querySelector('input[name="_csrf"]').value : 
-                         '<%= csrfToken %>';
-      
-      const res = await fetch("/grupos/horarios", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "CSRF-Token": csrfToken,
-          "X-CSRF-Token": csrfToken
-        },
-        body: JSON.stringify({ id_ciclo_escolar: parseInt(idCicloEscolar) })
-      });
-
-      const data = await res.json();
-
-      // Mostrar resultado en consola y/o DOM
-      alert(data.message || "Proceso completado.");
-      console.log("Resumen por alumno:", data.detalle);
-      console.log("Ciclo escolar utilizado:", idCicloEscolar);
-
-    } catch (err) {
-      console.error("Error al generar horarios:", err);
-      alert("Ocurrió un error al generar los horarios.");
-    }
-  });
-</script>
-  <script>
-    localStorage.setItem('cicloActual', '<%= cicloActual %>');
-    console.log('Ciclo escolar guardado en localStorage:', '<%= cicloActual %>');
-  </script>
-  <script src="/js/asignarSalon.js"></script>
-  <script src="/js/scriptIVD.js"></script>
-  <script src="/js/buscadorMaterias.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </div>
+
+<!-- Script para guardar id_salon e id_profesor en el formulario del modal -->
+<script>
+  function guardarSalonSeleccionado(idMateria) {
+    const inputSalon = document.getElementById(`inputSalon_${idMateria}`);
+    const inputHiddenSalon = document.getElementById(`inputHiddenSalon_${idMateria}`);
+    if (inputSalon && inputHiddenSalon) {
+      inputHiddenSalon.value = inputSalon.value;
+    }
+
+    const inputProfesor = document.getElementById(`inputProfesor_${idMateria}`);
+    const inputHiddenProfesor = document.getElementById(`inputHiddenProfesor_${idMateria}`);
+    if (inputProfesor && inputHiddenProfesor) {
+      inputHiddenProfesor.value = inputProfesor.value;
+    }
+  }
+</script>
+
+<script>
+  localStorage.setItem('cicloActual', '<%= cicloActual %>');
+  console.log('Ciclo escolar guardado en localStorage:', '<%= cicloActual %>');
+</script>
+<script src="/js/asignarSalon.js"></script>
+<script src="/js/scriptIVD.js"></script>
+<script src="/js/buscadorMaterias.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

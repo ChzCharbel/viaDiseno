@@ -1,14 +1,14 @@
 <!-- Modal de salones por materia -->
 <div
  class="modal fade"
- id="modalSalones<%= materia.id_ciclo_escolar_materia %>"
+ id="modalSalones<%= materia.id_materia %>"
  tabindex="-1"
- aria-labelledby="labelSalones<%= materia.id_ciclo_escolar_materia %>"
+ aria-labelledby="labelSalones<%= materia.id_materia %>"
  aria-hidden="true">
  <div class="modal-dialog modal-dialog-centered">
    <div class="modal-content">
      <div class="modal-header">
-       <h5 class="modal-title" id="labelSalones<%= materia.id_ciclo_escolar_materia %>">
+       <h5 class="modal-title" id="labelSalones<%= materia.id_materia %>">
          Selecciona un salón para <%= materia.nombre_materia %>
        </h5>
        <button
@@ -23,20 +23,20 @@
          <button
            class="btn btn-light w-100 my-1 text-start border"
            data-salon-id="<%= salon.id_salon %>"
-           onclick="seleccionarSalon('<%= materia.id_ciclo_escolar_materia %>', '<%= salon.id_salon %>', '<%= salon.id_salon %> (<%= salon.descripcion %>)')">
+           onclick="seleccionarSalon('<%= materia.id_materia %>', '<%= salon.id_salon %>', '<%= salon.id_salon %> (<%= salon.descripcion %>)')">
            <%= salon.id_salon %>.-  <b><%= salon.tipo %></b> <br>(<%= salon.descripcion %>)
          </button>
        <% }) %>
-       <input type="hidden" id="inputSalon_<%= materia.id_ciclo_escolar_materia %>">
-       <input type="hidden" id="csrfToken_<%= materia.id_ciclo_escolar_materia %>" value="<%= csrfToken %>">
+       <input type="hidden" id="inputSalon_<%= materia.id_materia %>">
+       <input type="hidden" id="csrfToken_<%= materia.id_materia %>" value="<%= csrfToken %>">
      </div>
      <div class="modal-footer">
        <button
          type="button"
          class="btn btn-primary rounded-pill px-4"
-         onclick="guardarSalonSeleccionado('<%= materia.id_ciclo_escolar_materia %>')"
+         onclick="guardarSalonSeleccionado('<%= materia.id_materia %>')"
          data-bs-dismiss="modal"
-         id="btnGuardar<%= materia.id_ciclo_escolar_materia %>">
+         id="btnGuardar<%= materia.id_materia %>">
          Guardar
        </button>
      </div>

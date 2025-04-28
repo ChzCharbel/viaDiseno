@@ -148,29 +148,10 @@ module.exports = class Grupo{
             throw error;
         }
     }
-
-      static async getMateriasPorCiclo(idCicloEscolar) {
-        try {
-            const resultado = await db.query(`
-            SELECT cem.id_ciclo_escolar_materia, m.materia AS nombre_materia
-            FROM ciclos_escolares_materias cem
-            JOIN planes_materias pm ON cem.id_plan_materia = pm.id_plan_materia
-            JOIN materias m ON pm.id_materia = m.id_materia
-            WHERE pm.estatus_plan_materia = 'active'
-            AND cem.id_ciclo_escolar = $1
-            ORDER BY m.materia ASC
-        `, [idCicloEscolar]);
-            return resultado.rows;
-        } catch (error) {
-            console.error("Error al obtener materias del ciclo actual:", error);
-            return [];
-        }
-      }
-
-      static async getMateriasConProfesorPorCiclo(idCicloEscolar) {
+    static async getMateriasConProfesorPorCiclo(idCicloEscolar) {
         try {
           const resultado = await db.query(`
-            SELECT
+            SELECT DISTINCT ON (m.id_materia, p.id_profesor)
               m.materia AS nombre_materia,
               p.profesor AS profesor,
               pm.id_profesor_materia,
@@ -186,7 +167,7 @@ module.exports = class Grupo{
             LEFT JOIN grupos_ciclos_materias gcm ON gcm.id_ciclo_escolar_materia = cem.id_ciclo_escolar_materia
             LEFT JOIN grupos g ON gcm.id_grupo = g.id_grupo
             WHERE cem.id_ciclo_escolar = $1
-            ORDER BY m.materia ASC
+            ORDER BY m.id_materia, p.id_profesor, g.id_grupo NULLS LAST
           `, [idCicloEscolar]);
       
           return resultado.rows;
@@ -194,5 +175,6 @@ module.exports = class Grupo{
           console.error("Error al obtener materias con profesor:", error);
           return [];
         }
-      }
- }
+      }                 
+
+    }

@@ -70,8 +70,18 @@ function guardarSalonSeleccionado(idMateria) {
     alert('No se encontró el ciclo escolar actual.');
     return;
   }
+
   const csrfToken = document.getElementById('csrfToken_' + idMateria)?.value || '';
   console.log('CSRF Token obtenido:', csrfToken);
+
+  // ✅ Obtener también el ID del profesor desde el input hidden
+  const inputProfesor = document.getElementById('inputProfesor_' + idMateria);
+  const idProfesor = inputProfesor ? inputProfesor.value : null;
+
+  if (!idProfesor) {
+    alert('No se encontró el profesor asignado a esta materia.');
+    return;
+  }
 
   fetch('/grupos/asignar-salon', {
     method: 'POST',
@@ -82,7 +92,8 @@ function guardarSalonSeleccionado(idMateria) {
     body: JSON.stringify({
       id_materia: idMateria,
       id_salon: idSalon,
-      id_ciclo_escolar: cicloActual
+      id_ciclo_escolar: cicloActual,
+      id_profesor: idProfesor
     }),
   })
     .then(response => response.json())
