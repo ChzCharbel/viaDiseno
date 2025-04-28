@@ -13,7 +13,7 @@
   </div>
 
   <div
-    class="offcanvas offcanvas-start"
+    class="offcanvas offcanvas-start bg-vino shadow-lg"
     data-bs-scroll="true"
     tabindex="-1"
     id="offcanvasWithBothOptions"
@@ -22,57 +22,114 @@
     <div class="offcanvas-header">
       <button
         type="button"
-        class="btn-close"
+        class="btn-close btn-close-white"
         data-bs-dismiss="offcanvas"
         aria-label="Close"
       ></button>
     </div>
-    <div class="offcanvas-body d-flex flex-column p-0">
+    <div class="offcanvas-body d-flex flex-column p-4">
       <div
         class="btn-group-vertical w-100 rounded-0"
         role="group"
         aria-label="Menú de navegación vertical"
       >
+      <% if (titulo == 'principal') { %>
         <a
           href="/principal/<%=cicloActual%>"
-          class="btn btn-outline-danger w-100 rounded-0 fs-2"
-          >Inicio</a
+          class="btn text-light w-100 rounded-0 fs-4 text-start mb-2 shadow"
+          ><i class="bi bi-house-door-fill"></i> Inicio</a
         >
+      <% } else { %>
+        <a
+          href="/principal/<%=cicloActual%>"
+          class="btn text-light w-100 rounded-0 fs-4 text-start mb-2"
+          ><i class="bi bi-house-door-fill"></i> Inicio</a
+        >
+      <% } if (titulo == 'oferta_academica' || titulo == 'oferta_academica_agregar') { %>
         <a
           href="/oferta_academica/<%=cicloActual%>/plan_version"
-          class="btn btn-outline-danger w-100 rounded-0 fs-2"
-          >Oferta Académica</a
+          class="btn text-light w-100 rounded-0 fs-4 text-start mb-2 shadow"
+          ><i class="bi bi-book-half"></i> Oferta Académica</a
         >
+      <% } else { %>
+        <a
+          href="/oferta_academica/<%=cicloActual%>/plan_version"
+          class="btn text-light w-100 rounded-0 fs-4 text-start mb-2"
+          ><i class="bi bi-book-half"></i> Oferta Académica</a
+        >
+      <% } if (titulo == 'maestros') { %>
         <a
           href="/maestros/<%=cicloActual%>"
-          class="btn btn-outline-danger w-100 rounded-0 fs-2"
-          >Profesores</a
+          class="btn text-light w-100 rounded-0 fs-4 text-start mb-2 shadow"
+          ><i class="bi bi-mortarboard-fill"></i> Profesores</a
         >
+      <% } else { %>
         <a
-        href="/inicio/<%=cicloActual%>"
-        class="btn btn-outline-danger w-100 rounded-0 fs-2"
-          >Fechas de inscripciones</a
+          href="/maestros/<%=cicloActual%>"
+          class="btn text-light w-100 rounded-0 fs-4 text-start mb-2"
+          ><i class="bi bi-mortarboard-fill"></i> Profesores</a
         >
-        <a
-        href="/grupos/creados/<%=cicloActual%>"
-        class="btn btn-outline-danger w-100 rounded-0 fs-2"
-          >Creación de Grupos</a
-        >
-        <a
-          href="/materias/<%=cicloActual%>"
-          class="btn btn-outline-danger w-100 rounded-0 fs-2"
-          >Grupos</a
-        >
+      <% } if (titulo == 'alumnos') { %>
         <a
           href="/alumnos/<%=cicloActual%>"
-          class="btn btn-outline-danger w-100 rounded-0 fs-2"
-          >Alumnos</a
+          class="btn text-light w-100 rounded-0 fs-4 text-start mb-2 shadow"
+          ><i class="bi bi-backpack2-fill"></i> Alumnos</a
         >
+      <% } else { %>
+        <a
+          href="/alumnos/<%=cicloActual%>"
+          class="btn text-light w-100 rounded-0 fs-4 text-start mb-2"
+          ><i class="bi bi-backpack2-fill"></i> Alumnos</a
+        >
+      <% } if (titulo == 'crear_grupos') { %>
+        <a
+        href="/grupos/creados/<%=cicloActual%>"
+        class="btn text-light w-100 rounded-0 fs-4 text-start mb-2 shadow"
+          ><i class="bi bi-person-plus-fill"></i> Creación de Grupos</a
+        >
+      <% } else { %>
+        <a
+        href="/grupos/creados/<%=cicloActual%>"
+        class="btn text-light w-100 rounded-0 fs-4 text-start mb-2"
+          ><i class="bi bi-person-plus-fill"></i> Creación de Grupos</a
+        >
+      <% } if (titulo == 'materias') { %>
+        <a
+          href="/materias/<%=cicloActual%>"
+          class="btn text-light w-100 rounded-0 fs-4 text-start mb-2 shadow"
+          ><i class="bi bi-people-fill"></i> Grupos</a
+        >
+      <% } else { %>
+        <a
+          href="/materias/<%=cicloActual%>"
+          class="btn text-light w-100 rounded-0 fs-4 text-start mb-2"
+          ><i class="bi bi-people-fill"></i> Grupos</a
+        >
+      <% } if (titulo == 'solicitudes') { %>
         <a
           href="/solicitudes/<%=cicloActual%>"
-          class="btn btn-outline-danger w-100 rounded-0 fs-2"
-          >Solicitudes</a
+          class="btn text-light w-100 rounded-0 fs-4 text-start mb-2 shadow"
+          ><i class="bi bi-chat-right-text-fill"></i> Solicitudes</a
         >
+      <% } else { %>
+        <a
+          href="/solicitudes/<%=cicloActual%>"
+          class="btn text-light w-100 rounded-0 fs-4 text-start mb-2"
+          ><i class="bi bi-chat-right-text-fill"></i> Solicitudes</a
+        >
+      <% } if (titulo == 'inicio') { %>
+        <a
+        href="/inicio/<%=cicloActual%>"
+        class="btn text-light w-100 rounded-0 fs-4 text-start mb-2 shadow"
+          ><i class="bi bi-calendar-week-fill"></i> Fechas de inscripciones</a
+        >
+      <% } else { %>
+        <a
+        href="/inicio/<%=cicloActual%>"
+        class="btn text-light w-100 rounded-0 fs-4 text-start mb-2"
+          ><i class="bi bi-calendar-week-fill"></i> Fechas de inscripciones</a
+        >
+      <% } %>
       </div>
 
       <div class="flex-grow-1"></div>
