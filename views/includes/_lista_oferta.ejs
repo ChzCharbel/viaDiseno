@@ -4,12 +4,12 @@
       <div class="col offset-1" id="col_tabs">
         <ul class="nav nav-underline">
           <li class="nav-item">
-            <a class="nav-link link-dark active" aria-current="page" href="/oferta_academica/<%= cicloActual %>/plan_version">
+            <a class="nav-link link-dark active" aria-current="page" href="/oferta_academica/<%= cicloActual %>/<%= planActual %>">
               Materias seleccionadas
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link link-dark" href="/oferta_academica/<%= cicloActual %>/plan_version/agregar">
+            <a class="nav-link link-dark" href="/oferta_academica/<%= cicloActual %>/<%= planActual %>/agregar">
               Agregar materias
             </a>
           </li>
@@ -35,21 +35,16 @@
             <tbody>
               <% for (let i = 0; i < materias.length; i++) { 
                 const materia = materias[i]; %>
-                <tr>
+                <tr id="row-<%= materia.id_plan_materia %>">
                   <td class="text-center"><%= materia.plan_estudio %></td>
                   <td class="text-center"><%= materia.id_materia %></td>
                   <td class="text-center"><%= materia.materia %></td>
                   <td class="text-center"><%= materia.horas_profesor %></td>
                   <td class="text-center"><%= materia.creditos %></td>
                   <td class="text-center">
-
-                    <button
-                    class="btn btn-outline-danger btn-sm eliminar-materia"
-                    data-id="<%= materia.id_plan_materia %>"
-                  >
-                    <i class="bi bi-dash-circle"></i>
+                    <button type="button" class="btn btn-outline-danger btn-sm eliminar-materia" data-id="<%= materia.id_plan_materia %>">
+                      <i class="bi bi-dash-circle"></i>
                     </button>
-
                   </td>
                 </tr>
               <% } %>
@@ -80,6 +75,14 @@
 </div>
 
   <script>
+  const csrfToken = "<%= csrfToken %>";
+  const cicloActual = "<%= cicloActual %>";
+  const planActual = "<%= planActual %>";
+  </script>
+
+
+
+  <script>
     document.addEventListener("DOMContentLoaded", function () {
       const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
       popoverTriggerList.forEach((popoverTriggerEl) => {
@@ -91,11 +94,13 @@
 
     //Eliminar materia de oferta academica
 
-    let idMateriaEliminar = null;
+  let idMateriaEliminar = null;
+  let rowToDelete = null;
 
   document.querySelectorAll('.eliminar-materia').forEach(boton => {
     boton.addEventListener('click', function() {
       idMateriaEliminar = this.getAttribute('data-id');
+      rowToDelete = this.closest('tr');
       const modal = new bootstrap.Modal(document.getElementById('confirmarEliminarModal'));
       modal.show();
     });
@@ -103,23 +108,27 @@
 
   document.getElementById('confirmarEliminarBtn').addEventListener('click', function() {
     if (idMateriaEliminar) {
-      fetch(`/oferta_academica/eliminar/${idMateriaEliminar}`, {
-        method: 'DELETE',
+      fetch(`/oferta_academica/${cicloActual}/${planActual}/eliminar/${idMateriaEliminar}`, {
+        method: 'GET',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'CSRF-Token': csrfToken
         }
       })
-      .then(response => {
-        if (response.ok) {
-          location.reload(); 
-        } else {
+        .then(response => {
+          if (response.ok) {
+            // Elimina la fila de la tabla sin recargar la página
+            if (rowToDelete) rowToDelete.remove();
+            // Cierra el modal
+            bootstrap.Modal.getInstance(document.getElementById('confirmarEliminarModal')).hide();
+          } else {
+            alert('Error al eliminar la materia');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
           alert('Error al eliminar la materia');
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('Error al eliminar la materia');
-      });
+        });
     }
   });
 

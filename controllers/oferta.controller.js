@@ -1,3 +1,4 @@
+const OfertaAcademica = require('../models/oferta.model');
 const Materia = require('../models/materias.model');
 const Oferta = require('../models/oferta.model');
 
@@ -98,10 +99,11 @@ exports.delete_materia = (request, response, next) => {
     
     OfertaAcademica.eliminarMateriaPorId(idPlanMateria)
       .then(() => {
+        console.log('Eliminación exitosa');
         response.status(200).json({ mensaje: 'Materia eliminada correctamente' });
       })
-      .catch(error => {
-        console.error(error);
+      .catch((error) => { console.log(error);
+        console.error('Error al eliminar la materia',error);
         response.status(500).json({ mensaje: 'Error al eliminar la materia' });
       });
   };

@@ -13,6 +13,6 @@ router.get('/:idCiclo/:idPlan', isAuth, canView, ofertaController.get_oferta);
 
 router.post('/:idCiclo/:idPlan/agregar', isAuth, canRegister, ofertaController.post_agregar);
 
-router.delete('/:idCiclo/:idPlan/eliminar', isAuth, canRegister, ofertaController.delete_materia);
+router.get('/:idCiclo/:idPlan/eliminar/:idPlanMateria', isAuth, canRegister, ofertaController.delete_materia);
 
 module.exports = router;
