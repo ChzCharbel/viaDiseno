@@ -14,6 +14,54 @@ module.exports = class GruposAutomaticos {
     static grupos = [];
     static idProfes = [];
     static idCiclo = -1;
+    static semana = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes'];
+    static gruposPrimero = [];
+    static gruposSegundo = [];
+    static gruposTercero = [];
+    static gruposCuarto = [];
+    static gruposQuinto = [];
+    static gruposSexto = [];
+    static gruposSeptimo = [];
+    static gruposOctavo = [];
+    static gruposNoveno = [];
+    /* arreglos con horas de inicio y fin de los grupos 
+    para evitar que se asignen clases del mismo semestre
+    a la misma hora
+
+    horasEvitarMayor: sirve para generar el query donde
+    se obtiene la disponibilidad del profe y que sólo se
+    tengan horas posteriores al fin de los grupos ya 
+    existentes
+
+    horasEvitarMenor: sirve para generar el query donde
+    se obtiene la disponibilidad del profe y que sólo se
+    tengan horas previas al inicio de los grupos ya 
+    existentes
+
+    */
+
+    static horasEvitarMayor = [ 
+        [ [], [], [], [], [] ],
+        [ [], [], [], [], [] ],
+        [ [], [], [], [], [] ],
+        [ [], [], [], [], [] ],
+        [ [], [], [], [], [] ],
+        [ [], [], [], [], [] ],
+        [ [], [], [], [], [] ],
+        [ [], [], [], [], [] ],
+        [ [], [], [], [], [] ]
+    ];
+    static horasEvitarMenor = [ 
+        [ [], [], [], [], [] ],
+        [ [], [], [], [], [] ],
+        [ [], [], [], [], [] ],
+        [ [], [], [], [], [] ],
+        [ [], [], [], [], [] ],
+        [ [], [], [], [], [] ],
+        [ [], [], [], [], [] ],
+        [ [], [], [], [], [] ],
+        [ [], [], [], [], [] ]
+    ];
 
     static async rollbackDisponibilidadProfe(idMateriaCiclo) {
         const grupos = await this.fetchGruposByIdMateriaCiclo(idMateriaCiclo);
@@ -109,6 +157,53 @@ module.exports = class GruposAutomaticos {
         }
         return this.materiasAsignadas;
     }
+    
+
+    static async obtenerGruposSemestre() {
+        const gruposSemestre = this.fetchAll(this.idCiclo); //!!!
+        if (gruposSemestre.rowCount > 0) {
+            for (let grupo of gruposSemestre.rows) {
+                if (grupo.bloque_semestre === 1) {
+                    this.gruposPrimero.push([grupo.dia_semana, grupo.hora_inicio, grupo.hora_fin]);
+                }
+                else if (grupo.bloque_semestre === 2) {
+                    this.gruposSegundo.push([grupo.dia_semana, grupo.hora_inicio, grupo.hora_fin]);
+                }
+                else if (grupo.bloque_semestre === 3) {
+                    this.gruposTercero.push([grupo.dia_semana, grupo.hora_inicio, grupo.hora_fin]);
+                }
+                else if (grupo.bloque_semestre === 4) {
+                    this.gruposCuarto.push([grupo.dia_semana, grupo.hora_inicio, grupo.hora_fin]);
+                }
+                else if (grupo.bloque_semestre === 5) {
+                    this.gruposQuinto.push([grupo.dia_semana, grupo.hora_inicio, grupo.hora_fin]);
+                }
+                else if (grupo.bloque_semestre === 6) {
+                    this.gruposSexto.push([grupo.dia_semana, grupo.hora_inicio, grupo.hora_fin]);
+                }
+                else if (grupo.bloque_semestre === 7) {
+                    this.gruposSeptimo.push([grupo.dia_semana, grupo.hora_inicio, grupo.hora_fin]);
+                }
+                else if (grupo.bloque_semestre === 8) {
+                    this.gruposOctavo.push([grupo.dia_semana, grupo.hora_inicio, grupo.hora_fin]);
+                }
+                else if (grupo.bloque_semestre === 9) {
+                    this.gruposNoveno.push([grupo.dia_semana, grupo.hora_inicio, grupo.hora_fin]);
+                }
+            }
+            console.log("GRUPOS:");
+            console.log(this.gruposPrimero);
+            console.log(this.gruposSegundo);
+            console.log(this.gruposTercero);
+            console.log(this.gruposCuarto);
+            console.log(this.gruposQuinto);
+            console.log(this.gruposSexto);
+            console.log(this.gruposSeptimo);
+            console.log(this.gruposOctavo);
+            console.log(this.gruposNoveno);
+
+        }
+    }
 
     static async asignarHorarioGrupo(horarioClase, horario, idMateria) {
         let acumHoras = 0;
@@ -137,6 +232,22 @@ module.exports = class GruposAutomaticos {
                             inicioFinDias[contadorHorarios].push(horario.rows[j].hora_inicio);
                             idsCambiar.push(horario.rows[j].id_profesor_disponibilidad);
                             acumHoras += 0.5;
+
+                            if (horarioClase[i][1] == 'lunes') {
+                                this.horasEvitarMenor[0][0].push(horario.rows[j].hora_inicio);
+                            }
+                            else if (horarioClase[i][1] == 'martes') {
+                                this.horasEvitarMenor[0][1].push(horario.rows[j].hora_inicio);
+                            }
+                            else if (horarioClase[i][1] == 'miercoles') {
+                                this.horasEvitarMenor[0][2].push(horario.rows[j].hora_inicio);
+                            }
+                            else if (horarioClase[i][1] == 'jueves') {
+                                this.horasEvitarMenor[0][3].push(horario.rows[j].hora_inicio);
+                            }
+                            else if (horarioClase[i][1] == 'viernes') {
+                                this.horasEvitarMenor[0][4].push(horario.rows[j].hora_inicio);
+                            }
                         }
                         else {
                             if (horario.rows[j].hora_inicio == horario.rows[j - 1].hora_fin) {
@@ -147,10 +258,40 @@ module.exports = class GruposAutomaticos {
                             else {
                                 if (horarioClase[i][0] - acumHoras == 0.5) {
                                     inicioFinDias[contadorHorarios].push(horario.rows[j - 1].hora_inicio);
+                                    if (horarioClase[i][1] == 'lunes') {
+                                        this.horasEvitarMayor[0][0].push(horario.rows[j - 1].hora_inicio);
+                                    }
+                                    else if (horarioClase[i][1] == 'martes') {
+                                        this.horasEvitarMayor[0][1].push(horario.rows[j - 1].hora_inicio);
+                                    }
+                                    else if (horarioClase[i][1] == 'miercoles') {
+                                        this.horasEvitarMayor[0][2].push(horario.rows[j - 1].hora_inicio);
+                                    }
+                                    else if (horarioClase[i][1] == 'jueves') {
+                                        this.horasEvitarMayor[0][3].push(horario.rows[j - 1].hora_inicio);
+                                    }
+                                    else if (horarioClase[i][1] == 'viernes') {
+                                        this.horasEvitarMayor[0][4].push(horario.rows[j - 1].hora_inicio);
+                                    }
                                     acumHoras -= 0.5;
                                     contadorHorarios += 1;
                                     inicioFinDias.push([horarioClase[i][1]]);
                                     inicioFinDias[contadorHorarios].push(horario.rows[j].hora_inicio);
+                                    if (horarioClase[i][1] == 'lunes') {
+                                        this.horasEvitarMenor[0][0].push(horario.rows[j].hora_inicio);
+                                    }
+                                    else if (horarioClase[i][1] == 'martes') {
+                                        this.horasEvitarMenor[0][1].push(horario.rows[j].hora_inicio);
+                                    }
+                                    else if (horarioClase[i][1] == 'miercoles') {
+                                        this.horasEvitarMenor[0][2].push(horario.rows[j].hora_inicio);
+                                    }
+                                    else if (horarioClase[i][1] == 'jueves') {
+                                        this.horasEvitarMenor[0][3].push(horario.rows[j].hora_inicio);
+                                    }
+                                    else if (horarioClase[i][1] == 'viernes') {
+                                        this.horasEvitarMenor[0][4].push(horario.rows[j].hora_inicio);
+                                    }
                                     acumHoras += 0.5;
                                     idsCambiar.pop();
                                     idsCambiar.push(horario.rows[j].id_profesor_disponibilidad);
@@ -162,6 +303,21 @@ module.exports = class GruposAutomaticos {
                                     inicioFinDias.push([horarioClase[i][1]]);
                                     inicioFinDias[contadorHorarios].push(horario.rows[j].hora_inicio);
                                     idsCambiar.push(horario.rows[j].id_profesor_disponibilidad);
+                                    if (horarioClase[i][1] == 'lunes') {
+                                        this.horasEvitarMenor[0][0].push(horario.rows[j].hora_inicio);
+                                    }
+                                    else if (horarioClase[i][1] == 'martes') {
+                                        this.horasEvitarMenor[0][1].push(horario.rows[j].hora_inicio);
+                                    }
+                                    else if (horarioClase[i][1] == 'miercoles') {
+                                        this.horasEvitarMenor[0][2].push(horario.rows[j].hora_inicio);
+                                    }
+                                    else if (horarioClase[i][1] == 'jueves') {
+                                        this.horasEvitarMenor[0][3].push(horario.rows[j].hora_inicio);
+                                    }
+                                    else if (horarioClase[i][1] == 'viernes') {
+                                        this.horasEvitarMenor[0][4].push(horario.rows[j].hora_inicio);
+                                    }
                                 }
                             }
                                         
@@ -171,7 +327,27 @@ module.exports = class GruposAutomaticos {
             }
             inicioFinDias[contadorHorarios].push(horaFin);
             contadorHorarios += 1;
+            if (horarioClase[i][1] == 'lunes') {
+                this.horasEvitarMayor[0][0].push(horaFin);
+            }   
+            else if (horarioClase[i][1] == 'martes') {
+                this.horasEvitarMayor[0][1].push(horaFin);
+            }   
+            else if (horarioClase[i][1] == 'miercoles') {
+                this.horasEvitarMayor[0][2].push(horaFin);
+            }   
+            else if (horarioClase[i][1] == 'jueves') {
+                this.horasEvitarMayor[0][3].push(horaFin);
+            }   
+            else if (horarioClase[i][1] == 'viernes') {
+                this.horasEvitarMayor[0][4].push(horaFin);
+            }   
+            
         }
+        console.log('NUEVOS ARREGLOS: \n Mayor:');
+        console.log(this.horasEvitarMayor);
+        console.log('NUEVOS ARREGLOS: \n Menor:');
+        console.log(this.horasEvitarMenor);
         console.log(inicioFinDias);
         this.grupos.push(inicioFinDias);
         console.log(idsCambiar);
@@ -205,7 +381,11 @@ module.exports = class GruposAutomaticos {
         let horasJueves = parseInt(disp.total_horas_jueves);
         let horasViernes = parseInt(disp.total_horas_viernes);
         // horas disponibles del profesor a la semana
-        let horasTotalesSemana = parseInt(disp.total_horas_profesor);
+        let horasTotalesSemana = horasLunes + horasMartes + horasMiercoles + horasJueves + horasViernes;
+        // string para generar consulta de disponibilidad de horas del profe dinamicamente
+        let consultaHoras = '';
+        // arreglo con los valores que se enviaran en la consulta
+        let parametrosConsulta = [];
 
         horasSemanaProfesor.push([horasLunes, 'lunes']);
         horasSemanaProfesor.push([horasMartes, 'martes']);
@@ -222,10 +402,140 @@ module.exports = class GruposAutomaticos {
                 const idMateria = materiasPrioridad[i];
                 // revisar que no haya sido asignada la materia
                 if (this.materiasAsignadas.includes(idMateria) === false) {
+                    /* obtengo el semestre al que se dara la materia */
+                    const semestre_materia = await db.query(`SELECT m.horas_profesor, cem.bloque_semestre
+                    FROM materias m
+                    JOIN planes_materias pm using (id_materia)
+                    JOIN ciclos_escolares_materias cem using (id_plan_materia)
+                    WHERE id_materia = $1::integer AND id_ciclo_escolar = $2::integer
+                    GROUP BY id_materia, cem.id_ciclo_escolar_materia;`, [idMateria, this.idCiclo]);
+                    const bloque_semestre = semestre_materia.rows[0].bloque_semestre;
+                    console.log('SEMESTRE MATERIA: ' + semestre_materia.rows[0].bloque_semestre)
+                    // vaciar consulta
+                    consultaHoras = '';
+
+                    // si ya existen grupos se revisa si hay del mismo semestre y su horario
+                    if (this.grupos.length > 0) {
+                        // si ya hay grupos de ese mismo semestre
+                        if (this.horasEvitarMayor[bloque_semestre - 1].length > 0) {
+                                // string para crear consulta
+                                consultaHoras = "SELECT FLOOR(COUNT(*) * 0.5) as total_horas_profesor, (SELECT horas_profesor FROM materias m WHERE id_materia = $1::integer ),";
+                                // contador para poner en la consulta: $1::integer, $2::date, etc...
+                                let contParametros = 2;
+                                // arreglo con los valores que se enviaran en la consulta
+                                parametrosConsulta = [];
+                                // agregar el id de la materia porque es el primer valor que se manda
+                                parametrosConsulta.push(idMateria);
+                                // se iteran por dia de la semana
+                                for (let dia = 0; dia < 5; dia++) {
+                                        // revisar que x dia ya se de una materia
+                                        if (this.horasEvitarMayor[bloque_semestre - 1][dia].length > 0) {
+                                                if (dia === 0) {
+                                                        consultaHoras += "FLOOR(COUNT(*) FILTER (WHERE dia_semana = 'lunes' ";
+                                                }
+                                                else if (dia === 1) {
+                                                        consultaHoras += "FLOOR(COUNT(*) FILTER (WHERE dia_semana = 'martes' ";
+                                                }
+                                                else if (dia === 2) {
+                                                        consultaHoras += "FLOOR(COUNT(*) FILTER (WHERE dia_semana LIKE 'mi%' ";
+                                                }
+                                                else if (dia === 3) {
+                                                        consultaHoras += "FLOOR(COUNT(*) FILTER (WHERE dia_semana = 'jueves' ";
+                                                }
+                                                else if (dia === 4) {
+                                                        consultaHoras += "FLOOR(COUNT(*) FILTER (WHERE dia_semana = 'viernes' ";
+                                                }
+
+                                                for (let i = 0; i < this.horasEvitarMayor[bloque_semestre - 1][dia].length; i++) {
+                                                        consultaHoras += " AND (hora_inicio < $";
+                                                        consultaHoras += contParametros;
+                                                        consultaHoras += "::time ";
+                                                        contParametros++;
+                                                        // consultaHoras += this.horasEvitarMenor[bloque_semestre - 1][dia][i];
+                                                        parametrosConsulta.push(this.horasEvitarMenor[bloque_semestre - 1][dia][i]);
+                                                        consultaHoras += " OR hora_inicio >= $";
+                                                        consultaHoras += contParametros;
+                                                        consultaHoras += "::time "
+                                                        contParametros++;
+                                                        // consultaHoras += this.horasEvitarMayor[bloque_semestre - 1][dia][i];
+                                                        parametrosConsulta.push(this.horasEvitarMayor[bloque_semestre - 1][dia][i]);
+                                                        consultaHoras += ")";
+                                                }
+                                                consultaHoras += ") * 0.5) AS total_horas_";
+                                                if (dia === 0) {
+                                                        consultaHoras += "lunes,";
+                                                }
+                                                else if (dia === 1) {
+                                                        consultaHoras += "martes,";
+                                                }
+                                                else if (dia === 2) {
+                                                        consultaHoras += "miercoles,";
+                                                }
+                                                else if (dia === 3) {
+                                                        consultaHoras += "jueves,";
+                                                }
+                                                else if (dia === 4) {
+                                                        consultaHoras += "viernes";
+                                                }
+
+                                        }
+                                        else {
+                                                if (dia === 0) {
+                                                        consultaHoras += "FLOOR(COUNT(*) FILTER (WHERE dia_semana = 'lunes')  * 0.5)  AS total_horas_lunes,";
+                                                }
+                                                else if (dia === 1) {
+                                                        consultaHoras += "FLOOR(COUNT(*) FILTER (WHERE dia_semana = 'martes')  * 0.5)  AS total_horas_martes,";
+                                                }
+                                                else if (dia === 2) {
+                                                        consultaHoras += "FLOOR(COUNT(*) FILTER (WHERE dia_semana LIKE 'mi%') * 0.5) AS total_horas_miercoles,";
+                                                }
+                                                else if (dia === 3) {
+                                                        consultaHoras += "FLOOR(COUNT(*) FILTER (WHERE dia_semana = 'jueves')  * 0.5)  AS total_horas_jueves,";
+                                                }
+                                                else if (dia === 4) {
+                                                        consultaHoras += "FLOOR(COUNT(*) FILTER (WHERE dia_semana = 'viernes')  * 0.5)  AS total_horas_viernes";
+                                                }
+                                        }
+                                }
+                                consultaHoras += " FROM profesores_disponibilidad pd WHERE id_profesor = $";
+                                consultaHoras += contParametros;
+                                contParametros++;
+                                consultaHoras += "::integer AND disponible = true AND id_ciclo_escolar = $";
+                                consultaHoras += contParametros;
+                                consultaHoras += "::integer;"
+                                parametrosConsulta.push(idProfesor);
+                                parametrosConsulta.push(this.idCiclo);
+                                console.log('QUERY: ' + consultaHoras);
+                                console.log('PARAMETROS: ');
+                                console.log(parametrosConsulta);
+                        }
+                    }
+                    else {
+                        consultaHoras = `SELECT
+                        FLOOR(COUNT(*) * 0.5) as total_horas_profesor, 
+                        (SELECT horas_profesor
+                        FROM materias m
+                        WHERE id_materia = $1::integer ),
+                        FLOOR(COUNT(*) FILTER (WHERE dia_semana = 'lunes') * 0.5) AS total_horas_lunes,
+                        FLOOR(COUNT(*) FILTER (WHERE dia_semana = 'martes') * 0.5) AS total_horas_martes,
+                        FLOOR(COUNT(*) FILTER (WHERE dia_semana LIKE 'mi%') * 0.5) AS total_horas_miercoles,
+                        FLOOR(COUNT(*) FILTER (WHERE dia_semana = 'jueves') * 0.5) AS total_horas_jueves,
+                        FLOOR(COUNT(*) FILTER (WHERE dia_semana = 'viernes') * 0.5) AS total_horas_viernes
+                        FROM profesores_disponibilidad pd
+                        WHERE id_profesor = $2::integer AND disponible = true AND id_ciclo_escolar = $3::integer;`;
+                        parametrosConsulta = [idMateria, idProfesor, this.idCiclo];
+                    }
                     /* obtengo la disponibilidad de nuevo para obtener 
                     las horas en total que necesita la materia */ 
-                    const disponibilidadProfesor = await Profesor.obtenerDisponibilidad(idMateria, idProfesor, this.idCiclo);
+                    // const disponibilidadProfesor = await Profesor.obtenerDisponibilidad(idMateria, idProfesor, this.idCiclo);
+
+                    
+                    const disponibilidadProfesor = await db.query(consultaHoras, parametrosConsulta);
                     const disp = disponibilidadProfesor.rows[0];
+
+                    horasTotalesSemana = disp.total_horas_lunes + disp.total_horas_martes + disp.total_horas_miercoles + disp.total_horas_jueves + disp.total_horas_viernes;
+
+                    console.log(disp);
                     /* acumulador de horas para compararlas con las que 
                     necesita la materia y las que ya fueron asignadas */
                     let horasImparte = 0;
@@ -274,10 +584,65 @@ module.exports = class GruposAutomaticos {
                         console.log(horasSemanaProfesor);
 
                         this.materiasAsignadas.push(idMateria);
-                        const horarioProfe = await Profesor.obtenerHorario(idProfesor, this.idCiclo);
                         for (let materia of this.materiasOfertadas.rows) {
                             if (materia.id_materia === idMateria) {
-                                this.asignarHorarioGrupo(horarioClase, horarioProfe, materia.id_ciclo_escolar_materia);
+                                if (this.grupos.length > 0) {
+                                    // si ya existen grupos del mismo semestre
+                                    if (this.horasEvitarMayor[bloque_semestre - 1].length > 0) {
+                                        // se genera una consulta especial para obtener las horas en las que no se imparta otra clase del mismo semestre
+                                        consultaHoras = "SELECT id_profesor, hora_inicio, hora_fin, id_profesor_disponibilidad, dia_semana FROM profesores_disponibilidad pd WHERE id_profesor = $1::integer AND disponible = true AND id_ciclo_escolar = $2::integer AND (";
+                                        // contador de parametros que se envian a la consulta
+                                        let contParametros = 3;
+                                        // arreglo que guarda los valores
+                                        parametrosConsulta = [];
+                                        // se agregan el id del profesor y del ciclo porque siempre son los primeros
+                                        parametrosConsulta.push(idProfesor);
+                                        parametrosConsulta.push(this.idCiclo);
+                                        // se itera el arreglo por dias de la semana
+                                        for (let dia = 0; dia < 5; dia++) {
+                                            if (dia === 0) {
+                                                consultaHoras += " (dia_semana = 'lunes'";
+                                            }
+                                            else if (dia === 1) {
+                                                consultaHoras += " OR (dia_semana = 'martes'";
+                                            }
+                                            else if (dia === 2) {
+                                                consultaHoras += " OR (dia_semana LIKE 'mi%'";
+                                            }
+                                            else if (dia === 3) {
+                                                consultaHoras += " OR (dia_semana = 'jueves'";
+                                            }
+                                            else if (dia === 4) {
+                                                consultaHoras += " OR (dia_semana = 'viernes'";
+                                            }
+                                            // revisar que x dia ya se de una materia
+                                            if (this.horasEvitarMayor[bloque_semestre - 1][dia].length > 0) {
+                                                for (let i = 0; i < this.horasEvitarMayor[bloque_semestre - 1][dia].length; i++) {
+                                                    consultaHoras += " AND (hora_inicio < $";
+                                                    consultaHoras += contParametros;
+                                                    consultaHoras += "::time";
+                                                    parametrosConsulta.push(this.horasEvitarMenor[bloque_semestre - 1][dia][i]);
+                                                    contParametros++;
+                                                    consultaHoras += " OR hora_inicio >= $";
+                                                    consultaHoras += contParametros;
+                                                    consultaHoras += "::time)";
+                                                    parametrosConsulta.push(this.horasEvitarMayor[bloque_semestre - 1][dia][i]);
+                                                    contParametros++;
+                                                }
+                                            }
+                                            consultaHoras += ")"
+                                        }
+                                        consultaHoras += ") GROUP BY id_profesor_disponibilidad ORDER BY dia_semana, hora_inicio;";
+                                        console.log(consultaHoras);
+                                        console.log(parametrosConsulta);
+                                        const horarioProfe = await db.query(consultaHoras, parametrosConsulta);
+                                        this.asignarHorarioGrupo(horarioClase, horarioProfe, materia.id_ciclo_escolar_materia);
+                                    }
+                                }
+                                else {
+                                    const horarioProfe = await Profesor.obtenerHorario(idProfesor, this.idCiclo);
+                                    this.asignarHorarioGrupo(horarioClase, horarioProfe, materia.id_ciclo_escolar_materia);
+                                }
                             }
                         }
                     }
@@ -299,10 +664,137 @@ module.exports = class GruposAutomaticos {
                 const idMateria = materiasExtra[i];
                 // revisar que no haya sido asignada la materia
                 if (this.materiasAsignadas.includes(idMateria) === false) {
-                    /* obtengo la disponibilidad de nuevo para obtener 
-                    las horas en total que necesita la materia */
-                    const disponibilidadProfesor = await Profesor.obtenerDisponibilidad(idMateria, idProfesor, this.idCiclo);
+                    // obtengo el semestre al que se dara la materia
+                    const semestre_materia = await db.query(`SELECT m.horas_profesor, cem.bloque_semestre
+                    FROM materias m
+                    JOIN planes_materias pm using (id_materia)
+                    JOIN ciclos_escolares_materias cem using (id_plan_materia)
+                    WHERE id_materia = $1::integer AND id_ciclo_escolar = $2::integer
+                    GROUP BY id_materia, cem.id_ciclo_escolar_materia;`, [idMateria, this.idCiclo]);
+                    // lo agrego a una variable
+                    const bloque_semestre = semestre_materia.rows[0].bloque_semestre;
+
+                    // vaciar consulta
+                    consultaHoras = '';
+
+                    // si ya existen grupos se revisa si hay del mismo semestre y su horario
+                    if (this.grupos.length > 0) {
+                        // si ya hay grupos de ese mismo semestre
+                        if (this.horasEvitarMayor[bloque_semestre - 1].length > 0) {
+                            // string para crear consulta
+                            consultaHoras = "SELECT FLOOR(COUNT(*) * 0.5) as total_horas_profesor, (SELECT horas_profesor FROM materias m WHERE id_materia = $1::integer ),";
+                            // contador para poner en la consulta: $1::integer, $2::date, etc...
+                            let contParametros = 2;
+                            // arreglo con los valores que se enviaran en la consulta
+                            parametrosConsulta = [];
+                            // agregar el id de la materia porque es el primer valor que se manda
+                            parametrosConsulta.push(idMateria);
+                            // se iteran por dia de la semana
+                            for (let dia = 0; dia < 5; dia++) {
+                                // revisar que x dia ya se de una materia
+                                if (this.horasEvitarMayor[bloque_semestre - 1][dia].length > 0) {
+                                    if (dia === 0) {
+                                        consultaHoras += "FLOOR(COUNT(*) FILTER (WHERE dia_semana = 'lunes' ";
+                                    }
+                                    else if (dia === 1) {
+                                        consultaHoras += "FLOOR(COUNT(*) FILTER (WHERE dia_semana = 'martes' ";
+                                    }
+                                    else if (dia === 2) {
+                                        consultaHoras += "FLOOR(COUNT(*) FILTER (WHERE dia_semana LIKE 'mi%' ";
+                                    }
+                                    else if (dia === 3) {
+                                        consultaHoras += "FLOOR(COUNT(*) FILTER (WHERE dia_semana = 'jueves' ";
+                                    }
+                                    else if (dia === 4) {
+                                        consultaHoras += "FLOOR(COUNT(*) FILTER (WHERE dia_semana = 'viernes' ";
+                                    }
+
+                                    for (let i = 0; i < this.horasEvitarMayor[bloque_semestre - 1][dia].length; i++) {
+                                        // garantizar que no se cuentan las horas en las que se imparte otra clase
+                                        consultaHoras += " AND (hora_inicio < $";
+                                        consultaHoras += contParametros;
+                                        consultaHoras += "::time ";
+                                        contParametros++;
+                                        parametrosConsulta.push(this.horasEvitarMenor[bloque_semestre - 1][dia][i]);
+                                        consultaHoras += " OR hora_inicio >= $";
+                                        consultaHoras += contParametros;
+                                        consultaHoras += "::time "
+                                        contParametros++;
+                                        parametrosConsulta.push(this.horasEvitarMayor[bloque_semestre - 1][dia][i]);
+                                        consultaHoras += ")";
+                                    }
+                                    consultaHoras += ") * 0.5) AS total_horas_";
+                                    if (dia === 0) {
+                                        consultaHoras += "lunes,";
+                                    }
+                                    else if (dia === 1) {
+                                        consultaHoras += "martes,";
+                                    }
+                                    else if (dia === 2) {
+                                        consultaHoras += "miercoles,";
+                                    }
+                                    else if (dia === 3) {
+                                        consultaHoras += "jueves,";
+                                    }
+                                    else if (dia === 4) {
+                                        consultaHoras += "viernes";
+                                    }
+
+                                }
+                                else {
+                                    if (dia === 0) {
+                                        consultaHoras += "FLOOR(COUNT(*) FILTER (WHERE dia_semana = 'lunes')  * 0.5)  AS total_horas_lunes,";
+                                    }
+                                    else if (dia === 1) {
+                                        consultaHoras += "FLOOR(COUNT(*) FILTER (WHERE dia_semana = 'martes')  * 0.5)  AS total_horas_martes,";
+                                    }
+                                    else if (dia === 2) {
+                                        consultaHoras += "FLOOR(COUNT(*) FILTER (WHERE dia_semana LIKE 'mi%') * 0.5) AS total_horas_miercoles,";
+                                    }
+                                    else if (dia === 3) {
+                                        consultaHoras += "FLOOR(COUNT(*) FILTER (WHERE dia_semana = 'jueves')  * 0.5)  AS total_horas_jueves,";
+                                    }
+                                    else if (dia === 4) {
+                                        consultaHoras += "FLOOR(COUNT(*) FILTER (WHERE dia_semana = 'viernes')  * 0.5)  AS total_horas_viernes";
+                                    }
+                                }
+                            }
+                            consultaHoras += " FROM profesores_disponibilidad pd WHERE id_profesor = $";
+                            consultaHoras += contParametros;
+                            contParametros++;
+                            consultaHoras += "::integer AND disponible = true AND id_ciclo_escolar = $";
+                            consultaHoras += contParametros;
+                            consultaHoras += "::integer;";
+                            parametrosConsulta.push(idProfesor);
+                            parametrosConsulta.push(this.idCiclo);
+                            console.log('QUERY: ' + consultaHoras);
+                            console.log('PARAMETROS: ');
+                            console.log(parametrosConsulta);
+                        }
+                    }
+                    else {
+                        consultaHoras = `SELECT
+                        FLOOR(COUNT(*) * 0.5) as total_horas_profesor, 
+                        (SELECT horas_profesor
+                        FROM materias m
+                        WHERE id_materia = $1::integer ),
+                        FLOOR(COUNT(*) FILTER (WHERE dia_semana = 'lunes') * 0.5) AS total_horas_lunes,
+                        FLOOR(COUNT(*) FILTER (WHERE dia_semana = 'martes') * 0.5) AS total_horas_martes,
+                        FLOOR(COUNT(*) FILTER (WHERE dia_semana LIKE 'mi%') * 0.5) AS total_horas_miercoles,
+                        FLOOR(COUNT(*) FILTER (WHERE dia_semana = 'jueves') * 0.5) AS total_horas_jueves,
+                        FLOOR(COUNT(*) FILTER (WHERE dia_semana = 'viernes') * 0.5) AS total_horas_viernes
+                        FROM profesores_disponibilidad pd
+                        WHERE id_profesor = $2::integer AND disponible = true AND id_ciclo_escolar = $3::integer;`;
+                        parametrosConsulta = [idMateria, idProfesor, this.idCiclo];
+                    }
+                    
+                    const disponibilidadProfesor = await db.query(consultaHoras, parametrosConsulta);
+                    horasTotalesSemana = horasLunes + horasMartes + horasMiercoles + horasJueves + horasViernes;
                     const disp = disponibilidadProfesor.rows[0];
+
+                    horasTotalesSemana = disp.total_horas_lunes + disp.total_horas_martes + disp.total_horas_miercoles + disp.total_horas_jueves + disp.total_horas_viernes;
+                    
+                    console.log(disp);
                     /* acumulador de horas para compararlas con las que 
                     necesita la materia y las que ya fueron asignadas */
                     let horasImparte = 0;
@@ -354,7 +846,59 @@ module.exports = class GruposAutomaticos {
                         const horarioProfe = await Profesor.obtenerHorario(idProfesor, this.idCiclo);
                         for (let materia of this.materiasOfertadas.rows) {
                             if (materia.id_materia === idMateria) {
-                                this.asignarHorarioGrupo(horarioClase, horarioProfe, materia.id_ciclo_escolar_materia);
+                                if (this.grupos.length > 0) {
+                                    if (this.horasEvitarMayor[bloque_semestre - 1].length > 0) {
+                                        consultaHoras = "SELECT id_profesor, hora_inicio, hora_fin, id_profesor_disponibilidad, dia_semana FROM profesores_disponibilidad pd WHERE id_profesor = $1::integer AND disponible = true AND id_ciclo_escolar = $2::integer AND (";
+                                        let contParametros = 3;
+                                        parametrosConsulta = [];
+                                        parametrosConsulta.push(idProfesor);
+                                        parametrosConsulta.push(this.idCiclo);
+
+                                        for (let dia = 0; dia < 5; dia++) {
+                                            if (dia === 0) {
+                                                consultaHoras += " (dia_semana = 'lunes'";
+                                            }
+                                            else if (dia === 1) {
+                                                consultaHoras += " OR (dia_semana = 'martes'";
+                                            }
+                                            else if (dia === 2) {
+                                                consultaHoras += " OR (dia_semana LIKE 'mi%'";
+                                            }
+                                            else if (dia === 3) {
+                                                consultaHoras += " OR (dia_semana = 'jueves'";
+                                            }
+                                            else if (dia === 4) {
+                                                consultaHoras += " OR (dia_semana = 'viernes'";
+                                            }
+                                            // revisar que x dia ya se de una materia
+                                            if (this.horasEvitarMayor[bloque_semestre - 1][dia].length > 0) {
+                                                for (let i = 0; i < this.horasEvitarMayor[bloque_semestre - 1][dia].length; i++) {
+                                                    consultaHoras += " AND (hora_inicio < $";
+                                                    consultaHoras += contParametros;
+                                                    consultaHoras += "::time";
+                                                    parametrosConsulta.push(this.horasEvitarMenor[bloque_semestre - 1][dia][i]);
+                                                    contParametros++;
+                                                    consultaHoras += " OR hora_inicio >= $";
+                                                    consultaHoras += contParametros;
+                                                    consultaHoras += "::time)";
+                                                    parametrosConsulta.push(this.horasEvitarMayor[bloque_semestre - 1][dia][i]);
+                                                    contParametros++;
+                                                }
+                                            }
+                                            consultaHoras += ")"
+                                            
+                                        }
+                                        consultaHoras += ") GROUP BY id_profesor_disponibilidad ORDER BY dia_semana, hora_inicio;";
+                                        console.log(consultaHoras);
+                                        console.log(parametrosConsulta);
+                                        const horarioProfe = await db.query(consultaHoras, parametrosConsulta);
+                                        this.asignarHorarioGrupo(horarioClase, horarioProfe, materia.id_ciclo_escolar_materia);
+                                    }
+                                }
+                                else {
+                                    const horarioProfe = await Profesor.obtenerHorario(idProfesor, this.idCiclo);
+                                    this.asignarHorarioGrupo(horarioClase, horarioProfe, materia.id_ciclo_escolar_materia);
+                                }
                             }
                         }
                         
@@ -401,6 +945,9 @@ module.exports = class GruposAutomaticos {
 
     static async getProfes(idCicloIn, carrera) {
         this.idCiclo = idCicloIn
+
+        this.obtenerGruposSemestre();
+
         // agregar materias ofertadas
         this.materiasOfertadas = await Oferta.fetchAll(this.idCiclo, carrera);
         // ver si el profe ya existe en el arreglo materiasPrioritarias
