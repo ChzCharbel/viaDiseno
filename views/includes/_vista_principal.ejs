@@ -3,9 +3,14 @@
   <div class="row justify-content-center">
     <!-- Materias por semestre -->
     <div class="col-md-3">
-      <div class="card p-3">
+      <div class="card p-3 mb-4">
         <h6 class="text-center">Materias por Semestre</h6>
         <canvas id="graficoMateriasSemestre" height="80"></canvas>
+      </div>
+
+      <!-- Gráfica: Grupos creados vs Oferta académica -->
+      <div class="card p-3">
+        <canvas id="graficaBarrasInicio"></canvas>
       </div>
     </div>
 
@@ -18,7 +23,6 @@
     </div>
 
     <!-- Gráfica: Alumnos inscritos -->
-    <div class="col-md-4 mb-4">
     <!-- Alumnos Inscritos -->
     <div class="col-md-3">
       <div class="card p-3">
@@ -30,22 +34,13 @@
     </div>
 
     <!-- Número de Solicitudes -->
-    <div class="col-md-3">
+    <div class="col-md-3 mb-4">
       <div class="card p-3">
         <h6 class="text-center">Número de Solicitudes</h6>
         <canvas id="graficoSolicitudes" height="80"></canvas>
       </div>
     </div>
-
   </div>
-
-  <!-- Gráfica: Grupos creados vs Oferta académica -->
-
-  <div class="col-md-4">
-      <div class="card p-3">
-        <canvas id="graficaBarras"></canvas>
-      </div>
-    </div>
 </div>
 
 
@@ -190,9 +185,7 @@ new Chart(ctxSolicitudes, {
 </script>
 
 <script>
-
-const barras = document.getElementById('graficaBarras');
-const pastel = document.getElementById('graficaPastel');
+const barras = document.getElementById('graficaBarrasInicio');
 
 const grupos = JSON.parse(`<%- JSON.stringify(grupos) %>`);
 const materiasOfertadas = JSON.parse(`<%- JSON.stringify(ofertaAcademica) %>`);
@@ -281,7 +274,6 @@ for (let grupo of grupos) {
 }
 console.log(materiasOfertadas)
 console.log(grupoMateria);
-
 
 new Chart(barras, {
     type: 'bar',
