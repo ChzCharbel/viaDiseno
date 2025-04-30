@@ -1,7 +1,7 @@
 <div class="container mt-4">
     <!-- Tabs de navegación (sin cambios visuales) -->
     <div class="row mb-3 p-3">
-      <div class="col offset-1" id="col_tabs">
+      <div class="col" id="col_tabs">
         <ul class="nav nav-underline">
           <li class="nav-item">
             <a class="nav-link link-dark active" aria-current="page" href="/oferta_academica/<%= cicloActual %>/<%= planActual %>">
@@ -11,6 +11,11 @@
           <li class="nav-item">
             <a class="nav-link link-dark" href="/oferta_academica/<%= cicloActual %>/<%= planActual %>/agregar">
               Agregar materias
+            </a>
+          </li>
+          <li class="nav-item offset-8">
+            <a class="btn btn-secondary" href="/oferta_academica/<%= cicloActual %>/<%= planActual %>/editar">
+              <i class="bi bi-pencil-square"></i>
             </a>
           </li>
         </ul>
@@ -24,6 +29,9 @@
           <table class="table table-striped table-hover">
             <thead class="table-light">
               <tr class="text-center">
+                <th scope="col text-center" data-bs-toggle="tooltip" 
+                data-bs-placement="top" 
+                data-bs-title="Escoge el semestre al que se le impartirá la materia">Semestre</th>
                 <th scope="col text-center">Plan</th>
                 <th scope="col text_center">Clave</th>
                 <th scope="col">Materia</th>
@@ -33,9 +41,20 @@
               </tr>
             </thead>
             <tbody>
-              <% for (let i = 0; i < materias.length; i++) { 
-                const materia = materias[i]; %>
+              <% for (let i = 0; i < materias.length; i++) { %>
+                <% const materia = materias[i]; %>
                 <tr id="row-<%= materia.id_plan_materia %>">
+                  <td class="text-center">
+                    <select class="form-select form-select-sm fs-5" aria-label="Default select example">
+                      <% for (j = 1; j < 10; j++) { %>
+                        <% if (j !== materia.bloque_semestre) { %>
+                          <option value="<%=j%>"><%=j%></option>
+                        <% } else { %>
+                          <option selected><%= materia.bloque_semestre %></option>
+                        <% } %>
+                      <% } %>
+                    </select>
+                  </td>
                   <td class="text-center"><%= materia.plan_estudio %></td>
                   <td class="text-center"><%= materia.id_materia %></td>
                   <td class="text-center"><%= materia.materia %></td>
