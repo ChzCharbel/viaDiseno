@@ -1,7 +1,7 @@
 <div class="container mt-4">
     <!-- Tabs de navegación (sin cambios visuales) -->
     <div class="row mb-3 p-3">
-      <div class="col" id="col_tabs">
+      <div class="col-auto" id="col_tabs">
         <ul class="nav nav-underline">
           <li class="nav-item">
             <a class="nav-link link-dark active" aria-current="page" href="/oferta_academica/<%= cicloActual %>/<%= planActual %>">
@@ -13,12 +13,20 @@
               Agregar materias
             </a>
           </li>
-          <li class="nav-item offset-8">
-            <a class="btn btn-secondary" href="/oferta_academica/<%= cicloActual %>/<%= planActual %>/editar">
+        </ul>
+      </div>
+      <div class="col">
+        <div class="d-flex">
+          <% if (editar == true) { %>
+            <a class="btn btn-success shadow-sm ms-auto" href="/oferta_academica/<%= cicloActual %>/<%= planActual %>">
+              <i class="bi bi-check-circle-fill"></i>
+            </a>
+          <% } else { %>
+            <a class="btn btn-secondary shadow-sm ms-auto" href="/oferta_academica/<%= cicloActual %>/<%= planActual %>/editar">
               <i class="bi bi-pencil-square"></i>
             </a>
-          </li>
-        </ul>
+          <% } %>
+        </div>
       </div>
     </div>
   
@@ -29,15 +37,23 @@
           <table class="table table-striped table-hover">
             <thead class="table-light">
               <tr class="text-center">
-                <th scope="col text-center" data-bs-toggle="tooltip" 
+                <% if (editar == true) { %>
+                <th scope="col-auto text-center" data-bs-toggle="tooltip" 
                 data-bs-placement="top" 
                 data-bs-title="Escoge el semestre al que se le impartirá la materia">Semestre</th>
+                <% } else { %>
+                <th scope="col-auto text-center" data-bs-toggle="tooltip" 
+                data-bs-placement="top" 
+                data-bs-title="Semestre al que se le impartirá la materia">Semestre</th>
+                <% } %>
                 <th scope="col text-center">Plan</th>
                 <th scope="col text_center">Clave</th>
                 <th scope="col">Materia</th>
                 <th scope="col text-center">Hrs/semana</th>
                 <th scope="col text-center">Créditos</th>
-                <th scope="col">Acciones</th>
+                <% if (editar == true) { %>
+                  <th scope="col">Acciones</th>
+                <% } %>
               </tr>
             </thead>
             <tbody>
@@ -45,26 +61,32 @@
                 <% const materia = materias[i]; %>
                 <tr id="row-<%= materia.id_plan_materia %>">
                   <td class="text-center">
-                    <select class="form-select form-select-sm fs-5" aria-label="Default select example">
-                      <% for (j = 1; j < 10; j++) { %>
-                        <% if (j !== materia.bloque_semestre) { %>
-                          <option value="<%=j%>"><%=j%></option>
-                        <% } else { %>
-                          <option selected><%= materia.bloque_semestre %></option>
-                        <% } %>
-                      <% } %>
-                    </select>
+                    <% if (editar == true) { %>
+                      <select class="form-select form-select-sm fs-5" aria-label="Default select example">
+                          <% for (j = 1; j < 10; j++) { %>
+                            <% if (j !== materia.bloque_semestre) { %>
+                              <option value="<%=j%>"><%=j%></option>
+                            <% } else { %>
+                              <option selected><%= materia.bloque_semestre %></option>
+                            <% } %>
+                          <% } %>
+                      </select>
+                    <% } else { %>
+                      <%= materia.bloque_semestre %>
+                    <% } %>
                   </td>
                   <td class="text-center"><%= materia.plan_estudio %></td>
                   <td class="text-center"><%= materia.id_materia %></td>
                   <td class="text-center"><%= materia.materia %></td>
                   <td class="text-center"><%= materia.horas_profesor %></td>
                   <td class="text-center"><%= materia.creditos %></td>
-                  <td class="text-center">
-                    <button type="button" class="btn btn-outline-danger btn-sm eliminar-materia" data-id="<%= materia.id_plan_materia %>">
-                      <i class="bi bi-dash-circle"></i>
-                    </button>
-                  </td>
+                  <% if (editar == true) { %>
+                    <td class="text-center">
+                      <button type="button" class="btn btn-outline-danger btn-sm eliminar-materia" data-id="<%= materia.id_plan_materia %>">
+                        <i class="bi bi-dash-circle"></i>
+                      </button>
+                    </td>
+                  <% } %>
                 </tr>
               <% } %>
             </tbody>
