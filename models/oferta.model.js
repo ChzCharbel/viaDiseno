@@ -35,7 +35,8 @@ module.exports = class OfertaAcademica {
             JOIN materias m using (id_materia)
             JOIN planes_estudios pe using (id_plan_estudio)
             JOIN carreras c using (id_carrera)
-            WHERE id_ciclo_escolar = $1::integer  AND carrera = $2::text`, [idCicloE, carrera]);
+            WHERE id_ciclo_escolar = $1::integer  AND carrera = $2::text
+            ORDER BY bloque_semestre`, [idCicloE, carrera]);
     }
 
     static eliminarMateriaPorId(idPlanMateria) {
