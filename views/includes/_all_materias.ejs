@@ -27,50 +27,36 @@
                 <li class="nav-item">
                     <a class="nav-link link-dark active" href="/oferta_academica/<%= cicloActual %>/plan_version/agregar">Agregar materias</a>
                 </li>
-        </div>
-        <div class="col-auto">
-            <div class="dropdown">
-                <a
-                class="nav-link dropdown-toggle text-dark"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                data-bs-target="#dropdown-planes"
-                aria-expanded="false"
-            >
-                Versión del Plan
-            </a>
-            <ul class="dropdown-menu" id="dropdown-planes">
-                <% for (let plan of planes) { %>
-                    <% if (plan.id_plan_estudio == planActual) {%>
-                        <li>
-                            <a class="dropdown-item active" id="planActivo" nombrePlan="<%= plan.plan_estudio %>" href="/oferta_academica/<%=cicloActual %>/<%= plan.id_plan_estudio %>/agregar"><%= plan.plan_estudio %></a>
-                        </li>
-                    <% } else { %>
-                        <li>
-                            <a class="dropdown-item" href="/oferta_academica/<%=cicloActual %>/<%= plan.id_plan_estudio %>/agregar"><%= plan.plan_estudio %></a> 
-                        </li>
-                    <% } } %>
-            </ul>
-            </div>
-        </div>
-        <div class="col-auto justify-content-end">
-
-            
-            <nav class="search-nav">
-                <div class="container-fluid">
-                    <form class="d-flex" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Materia" aria-label="Search" />
-                        <button class="btn btn-outline-success" type="submit">
-                            Buscar
-                        </button>
-                    </form>
+                <div class="col-auto offset-6">
+                <li>
+                  <div class="dropdown">
+                    <a
+                    class="nav-link dropdown-toggle text-dark fw-medium"
+                    href="#"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    data-bs-target="#dropdown-planes"
+                    aria-expanded="false"
+                >
+                    Versión del Plan
+                </a>
+                <ul class="dropdown-menu" id="dropdown-planes">
+                    <% for (let plan of planes) { %>
+                        <% if (plan.id_plan_estudio == planActual) {%>
+                            <li>
+                                <a class="dropdown-item active" id="planActivo" nombrePlan="<%= plan.plan_estudio %>" href="/oferta_academica/<%=cicloActual %>/<%= plan.id_plan_estudio %>/agregar"><%= plan.plan_estudio %></a>
+                            </li>
+                        <% } else { %>
+                            <li>
+                                <a class="dropdown-item" href="/oferta_academica/<%=cicloActual %>/<%= plan.id_plan_estudio %>/agregar"><%= plan.plan_estudio %></a> 
+                            </li>
+                        <% } } %>
+                </ul>
+                </li>
                 </div>
-            </nav> 
+                
         </div>
-        
         </ul>
-        <br></br>
     </div>
     <div class="container mt-5">
     <div class="row">
