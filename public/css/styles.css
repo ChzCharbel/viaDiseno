@@ -173,6 +173,12 @@
   border-color: #a6bada;
 }
 
+.alert-warning {
+  background-color: #f8eed0 !important;
+  color: rgb(113, 93, 41) !important;
+  border-color: #caa821;
+}
+
 .alert-danger {
   background-color: #f3e2e2 ;
   color: #95404c !important;
