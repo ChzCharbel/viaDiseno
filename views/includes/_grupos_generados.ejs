@@ -1,5 +1,5 @@
 <div class="container mt-4">
-    <div class="card mb-4">
+    <div class="card mb-4 shadow">
         <div class="card-body">
             <div class="card-title fw-semibold fs-3">¿Cómo funciona?</div>
             <ol class="mt-3">
@@ -24,7 +24,7 @@
     <% if (grupos.length == 0) { %>
         <a href="/grupos/crear/<%=cicloActual%>" class="btn btn-primary offset-5">Generar grupos</a>
     <% } else { %>
-        <div class="accordion mb-4" id="accordionExample">
+        <div class="accordion mb-4 shadow-sm" id="accordionExample">
             <div class="accordion-item">
                 <h2 class="accordion-header">
                 <button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -41,9 +41,10 @@
             </div>
         </div>
         <div class="table-responsive">
-            <table class="table table-bordered align-middle text-center shadow-sm overflow-hidden">
+            <table class="table table-bordered table-hover shadow align-middle text-center overflow-hidden">
                 <thead class="table-light">
                     <tr>
+                    <th>Semestre</th>
                     <th>Profesor</th>
                     <th>Clave</th>
                     <th>Materia</th>
@@ -57,6 +58,7 @@
                     <% for (let grupo of grupos) { %>
                         <tr>
                             <% if (gruposMostrados.includes(grupo.id_grupo_horario) === false) { %>
+                                <td> <%= grupo.bloque_semestre %> </td>
                                 <td> <%= grupo.profesor %> </td>
                                 <td> <%= grupo.id_materia %> </td>
                                 <td> <%= grupo.materia %> </td>
