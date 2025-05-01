@@ -209,4 +209,11 @@
   background-color: #e6eef44b;
 }
 
+.card-grupos:hover{
+    background-color: #f3f3f3;
+    transform: scale(1.07);
+}
 
+.text-primary{
+  color: #95404c !important;
+}
