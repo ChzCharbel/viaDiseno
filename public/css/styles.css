@@ -190,3 +190,17 @@
   background-color: #95404c;
 }
 
+.nav-pills .nav-link.active {
+  background-color: #8f3d48;
+  color: rgb(255, 255, 255);
+}
+
+.nav-pills .nav-link {
+  color: rgb(0, 0, 0);
+}
+
+.bg-semestre {
+  background-color: #e6eef44b;
+}
+
+
