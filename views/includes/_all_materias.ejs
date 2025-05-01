@@ -18,11 +18,11 @@
     </div>
     
 
-    <div class="row mb-3 ">
-        <div class="col" id="col_tabs">
-          <div class="d-flex">
+    <div class="row mb-3 w-75 ms-5 mt-3">
+        <div class="col ms-4" id="col_tabs">
+          <div class="d-flex justify-content-end">
             <ul class="nav nav-underline">
-              <li class="nav-item me-auto">
+              <li class="nav-item">
                 <a class="nav-link link-dark" aria-current="page" href="/oferta_academica/<%= cicloActual %>/plan_version">Materias seleccionadas</a>
               </li>
               <li class="nav-item">
@@ -31,10 +31,10 @@
             </ul>
           </div>
         </div>
-        <div class="col">
-          <div class="d-flex">
-            <div class="dropdown  ms-auto">
-              <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown">
+        <div class="col ms-5">
+          <div class="d-flex ">
+            <div class="dropdown">
+              <button class="btn dropdown-toggle fw-medium" type="button" data-bs-toggle="dropdown">
                 Plan de Estudio
               </button>
             <ul class="dropdown-menu" id="dropdown-planes">
@@ -557,9 +557,12 @@
 <% } %>
         </div>
         <div class="row mt-3 mb-4">
-            <div class="offset-10">
+          <div class="d-flex">
+            <div class="ms-auto p-4">
                 <button id="botonEnviarOA" class="btn btn-primary visually-hidden" data-bs-toggle="modal" data-bs-target="#ofertaSelected" onclick="enviarSeleccion()">Enviar</button>
             </div>
+          </div>
+            
         </div>
         </div>
         </div>
