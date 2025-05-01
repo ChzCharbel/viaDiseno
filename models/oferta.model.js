@@ -10,12 +10,13 @@ module.exports = class OfertaAcademica {
     save() {
         /* cadena para guardar toda la oferta con una sola 
         consulta */
-        let consulta = `INSERT INTO ciclos_escolares_materias(id_ciclo_escolar, id_plan_materia) VALUES`;
+        let consulta = `INSERT INTO ciclos_escolares_materias(id_ciclo_escolar, id_plan_materia, bloque_semestre) VALUES`;
         let i = 2;
         for (let id of this.idsMaterias) {
             if (id != '') {
                 consulta += `($1::integer,$`;
-                consulta += (i) + `::integer),`;
+                consulta += (i) + `::integer, (SELECT semestre FROM planes_materias WHERE id_plan_materia = $`;
+                consulta += (i) + `::integer)),`;
                 i++;
             }
         }
