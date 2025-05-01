@@ -18,6 +18,7 @@ exports.get_oferta = (request, response, next) => {
             cicloActual: request.params.idCiclo || '',
             username: request.session.username || '',
             mail: request.session.mail || '',
+            editar: false,
             planes: [],
             planActual: request.params.idPlan || '',
             rol: request.session.rol || '',
@@ -32,6 +33,40 @@ exports.get_oferta = (request, response, next) => {
     }).catch((error) => {
         console.log(error);
     })
+}
+
+exports.get_editar = (request, response, next) => {
+    Oferta.fetchAll(request.params.idCiclo, request.session.carrera).then((materiasOfertadas) => {
+        response.render('oferta_academica.ejs',{
+        titulo: 'oferta_academica',
+        privilegios: request.session.privilegios || [],
+        materias: materiasOfertadas.rows || [],
+        carrera: request.session.carrera || '',
+        ciclosEscolares: request.session.ciclosEscolares || [],
+        cicloActual: request.params.idCiclo || '',
+        username: request.session.username || '',
+        mail: request.session.mail || '',
+        editar: true,
+        planes: [],
+        planActual: request.params.idPlan || '',
+        rol: request.session.rol || '',
+    });
+    }).catch((error) => {
+        console.log(error);
+    })
+}
+
+exports.post_editar = (request, response, next) => {
+    const bloqueSemestres = request.body.bloqueSemestres;
+    const materiasActualizar = request.body.idMateriasActualizar;
+    const arregloSemestres = bloqueSemestres.split(',');
+    const arregloMateriasActualizar = materiasActualizar.split(',');
+    arregloSemestres.pop();
+    arregloMateriasActualizar.pop();
+    console.log(arregloMateriasActualizar);
+    console.log(arregloSemestres);
+    Oferta.editarSemestre(arregloMateriasActualizar, arregloSemestres);
+    response.redirect('/oferta_academica/' + request.params.idCiclo + '/plan_version')
 }
 
 exports.get_agregar = (request, response, next) => {
