@@ -46,4 +46,11 @@ module.exports = class OfertaAcademica {
         );
     }
 
+    static async editarSemestre(idMateriasActualizar, arregloSemestres) {
+        for (let i = 0; i < idMateriasActualizar.length; i++) {
+            await db.query(`UPDATE ciclos_escolares_materias SET bloque_semestre
+                = $1::integer WHERE id_ciclo_escolar_materia = $2::integer;`, 
+                [parseInt(arregloSemestres[i]), parseInt(idMateriasActualizar[i])]);
+        }
+    }
 }
