@@ -17,7 +17,8 @@ BEGIN
 END;
 $function$;
 
-DROP FUNCTION public.consulta_info_alumnos(text);
+DROP FUNCTION IF EXISTS public.consulta_info_alumnos(text);
+
 CREATE OR REPLACE FUNCTION public.consulta_info_alumnos(IN matricula_usr text)
  RETURNS TABLE (id_carrera integer,
  id_ivd TEXT, 
@@ -238,7 +239,7 @@ CREATE OR REPLACE PROCEDURE sincronizar_ciclos_escolares(
     id_ciclo_api integer,
     nombre_ciclo TEXT,
     start_date DATE,
-    end_date DATE,
+    end_date DATE
 )
 LANGUAGE plpgsql
 AS $$
@@ -246,13 +247,11 @@ BEGIN
 	INSERT INTO ciclos_escolares
     VALUES (id_ciclo_api, nombre_ciclo, start_date, end_date)
     ON CONFLICT (id_ciclo_api) DO NOTHING;
-
-
     UPDATE ciclos_escolares 
     SET id_ciclo_escolar = id_ciclo_api,
-    ciclo_escolar = nombre_ciclo
+    ciclo_escolar = nombre_ciclo,
     fecha_inicio = start_date,
-    fecha_fin = end_date,    
+    fecha_fin = end_date   
     WHERE id_ciclo_escolar = id_ciclo_api;
     
 END;
