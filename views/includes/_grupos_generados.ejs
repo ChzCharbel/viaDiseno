@@ -262,28 +262,28 @@ for (let materia of materiasOfertadas) {
     if (materia.semestre === 1) {
         primeroOferta.push(materia);
     }
-    else if (materia.semestre === 2) {
+    else if (materia.bloque_semestre === 2) {
         segundoOferta.push(materia);
     }
-    else if (materia.semestre === 3) {
+    else if (materia.bloque_semestre === 3) {
         terceroOferta.push(materia);
     }
-    else if (materia.semestre === 4) {
+    else if (materia.bloque_semestre === 4) {
         cuartoOferta.push(materia);
     }
-    else if (materia.semestre === 5) {
+    else if (materia.bloque_semestre === 5) {
         quintoOferta.push(materia);
     }
-    else if (materia.semestre === 6) {
+    else if (materia.bloque_semestre === 6) {
         sextoOferta.push(materia);
     }
-    else if (materia.semestre === 7) {
+    else if (materia.bloque_semestre === 7) {
         septimoOferta.push(materia);
     }
-    else if (materia.semestre === 8) {
+    else if (materia.bloque_semestre === 8) {
         octavoOferta.push(materia);
     }
-    else if (materia.semestre === 9) {
+    else if (materia.bloque_semestre === 9) {
         novenoOferta.push(materia);
     }
 }
@@ -291,31 +291,31 @@ for (let materia of materiasOfertadas) {
 for (let grupo of grupos) {
     if (grupoMateria.includes(grupo.id_ciclo_escolar_materia) === false) {
         grupoMateria.push(grupo.id_ciclo_escolar_materia);
-        if (grupo.semestre === 1) {
+        if (grupo.bloque_semestre === 1) {
             primero.push(grupo);
         }
-        else if (grupo.semestre === 2) {
+        else if (grupo.bloque_semestre === 2) {
             segundo.push(grupo);
         }
-        else if (grupo.semestre === 3) {
+        else if (grupo.bloque_semestre === 3) {
             tercero.push(grupo);
         }
-        else if (grupo.semestre === 4) {
+        else if (grupo.bloque_semestre === 4) {
             cuarto.push(grupo);
         }
-        else if (grupo.semestre === 5) {
+        else if (grupo.bloque_semestre === 5) {
             quinto.push(grupo);
         }
-        else if (grupo.semestre === 6) {
+        else if (grupo.bloque_semestre === 6) {
             sexto.push(grupo);
         }
-        else if (grupo.semestre === 7) {
+        else if (grupo.bloque_semestre === 7) {
             septimo.push(grupo);
         }
-        else if (grupo.semestre === 8) {
+        else if (grupo.bloque_semestre === 8) {
             octavo.push(grupo);
         }
-        else if (grupo.semestre === 9) {
+        else if (grupo.bloque_semestre === 9) {
             noveno.push(grupo);
         }
     }
