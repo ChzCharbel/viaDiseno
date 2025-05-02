@@ -6,10 +6,10 @@ const path = require('path');
 const pool = require('./database');
 
 // Archivos SQL para crear tablas e insertar datos
-const TABLES_SQL_FILE = 'crearTablasnuevo.sql';
-const INSERTS_SQL_FILE = 'inserts_nuevas_tablas.sql';
-const FUNCTIONS_SQL_FILE = 'functions.sql';
-const UPDATE_SQL_FILE = 'update3.sql';
+const TABLES_SQL_FILE = 'crear_bd.sql';
+const INSERTS_SQL_FILE = 'registros_final.sql';
+const FUNCTIONS_SQL_FILE = 'funciones_final.sql';
+const PROCEDURES_SQL_FILE = 'procedures_final.sql';
 const SCHEME_SQL_FILE = 'nuevo_schema.sql';
 /**
  * Ejecuta un script SQL desde un archivo
@@ -43,7 +43,10 @@ const initializeDatabase = async () => {
 
 
     // Inserta datos iniciales
-    await executeSQL(UPDATE_SQL_FILE);
+    await executeSQL(TABLES_SQL_FILE);
+    await executeSQL(INSERTS_SQL_FILE)
+    await executeSQL(PROCEDURES_SQL_FILE);
+    await executeSQL(FUNCTIONS_SQL_FILE);
     
     console.log('Database initialization completed successfully.');
     return true;
