@@ -46,4 +46,9 @@ module.exports = class Grupo {
         WHERE id_ciclo_escolar = $1::integer AND id_salon IS NOT NULL;`, [idCicloEscolar]);
   }
 
+  static async asignarSalonGrupoExistente(idGrupo, idSalon) {
+    const cupoSalon = await db.query('SELECT capacidad FROM salones WHERE id_salon = $1::integer', [idSalon]);
+    return db.query(`UPDATE grupos SET id_salon = $1::integer, cupo_maximo = $2::integer, cupo_disponible = $2::integer WHERE id_grupo = $3::integer`, [idSalon, cupoSalon.rows[0].capacidad, idGrupo]);
+  }
+
 };
