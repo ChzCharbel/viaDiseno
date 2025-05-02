@@ -44,3 +44,24 @@ exports.getDatosGrupos = async (req, res) => {
     res.status(500).json({ mensaje: 'Error interno al obtener datos' });
   }
 };
+
+exports.get_grupos = (request, response, next) => {
+  Grupo.fetchAll(request.params.idCiclo).then((grupos) => {
+    console.log(grupos.rows)
+    response.render('materias.ejs', {
+      titulo: 'materias' || '',
+      materias: grupos.rows || [],
+      salones: [],
+      privilegios: request.session.privilegios || [],
+      csrfToken: request.csrfToken(),
+      carrera: request.session.carrera || '',
+      ciclosEscolares: request.session.ciclosEscolares || [],
+      cicloActual: request.params.idCiclo || '',
+      username: request.session.username || '',
+      mail: request.session.mail || '',
+      rol: request.session.rol || '',
+    })
+  }).catch((error) => {
+    console.log(error);
+  })
+}
