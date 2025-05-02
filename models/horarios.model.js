@@ -28,53 +28,62 @@ module.exports = class Horario {
             VALUES ($1::text, $2::integer)
         `, [id_alumno, parseInt(id_grupo)]);
     }
-
     static async getHorariosDeGrupo(id_grupo) {
         try {
             const query = `
                 SELECT 
-                    grupos_horarios.id_grupo,
-                    CASE WHEN LOWER(dia_semana) = 'lunes' THEN hora_inicio ELSE NULL END as lunes_inicio,
-                    CASE WHEN LOWER(dia_semana) = 'lunes' THEN hora_fin ELSE NULL END as lunes_fin,
-                    CASE WHEN LOWER(dia_semana) = 'martes' THEN hora_inicio ELSE NULL END as martes_inicio,
-                    CASE WHEN LOWER(dia_semana) = 'martes' THEN hora_fin ELSE NULL END as martes_fin,
-                    CASE WHEN LOWER(dia_semana) = 'miercoles' THEN hora_inicio ELSE NULL END as miercoles_inicio,
-                    CASE WHEN LOWER(dia_semana) = 'miercoles' THEN hora_fin ELSE NULL END as miercoles_fin,
-                    CASE WHEN LOWER(dia_semana) = 'jueves' THEN hora_inicio ELSE NULL END as jueves_inicio,
-                    CASE WHEN LOWER(dia_semana) = 'jueves' THEN hora_fin ELSE NULL END as jueves_fin,
-                    CASE WHEN LOWER(dia_semana) = 'viernes' THEN hora_inicio ELSE NULL END as viernes_inicio,
-                    CASE WHEN LOWER(dia_semana) = 'viernes' THEN hora_fin ELSE NULL END as viernes_fin
+                    id_grupo,
+                    LOWER(dia_semana) as dia_semana,
+                    hora_inicio,
+                    hora_fin
                 FROM grupos_horarios
                 WHERE id_grupo = $1::integer
             `;
             
             const result = await db.query(query, [parseInt(id_grupo)]);
             
-            // Convertir el resultado a un objeto más fácil de usar
+            // Inicializamos un objeto con valores nulos para todos los días
+            const horario = {
+                id_grupo: id_grupo,
+                lunes_inicio: null, lunes_fin: null,
+                martes_inicio: null, martes_fin: null,
+                miercoles_inicio: null, miercoles_fin: null,
+                jueves_inicio: null, jueves_fin: null,
+                viernes_inicio: null, viernes_fin: null
+            };
+              // Procesamos cada registro y lo asignamos al día correspondiente
             if (result.rows.length > 0) {
-                return {
-                    id_grupo: id_grupo,
-                    lunes_inicio: result.rows[0].lunes_inicio,
-                    lunes_fin: result.rows[0].lunes_fin,
-                    martes_inicio: result.rows[0].martes_inicio,
-                    martes_fin: result.rows[0].martes_fin,
-                    miercoles_inicio: result.rows[0].miercoles_inicio,
-                    miercoles_fin: result.rows[0].miercoles_fin,
-                    jueves_inicio: result.rows[0].jueves_inicio,
-                    jueves_fin: result.rows[0].jueves_fin,
-                    viernes_inicio: result.rows[0].viernes_inicio,
-                    viernes_fin: result.rows[0].viernes_fin
-                };
-            } else {
-                return {
-                    id_grupo: id_grupo,
-                    lunes_inicio: null, lunes_fin: null,
-                    martes_inicio: null, martes_fin: null,
-                    miercoles_inicio: null, miercoles_fin: null,
-                    jueves_inicio: null, jueves_fin: null,
-                    viernes_inicio: null, viernes_fin: null
-                };
+                for (const row of result.rows) {
+                    // Normalizar el día: convertir a minúsculas y manejar acentos
+                    let dia = row.dia_semana.toLowerCase();
+                    if (dia === 'miércoles') {
+                        dia = 'miercoles';
+                    }
+                    
+                    console.log(`Procesando horario: día=${dia}, inicio=${row.hora_inicio}, fin=${row.hora_fin}`);
+                    
+                    // Asignamos la hora de inicio y fin para el día correspondiente
+                    if (dia === 'lunes') {
+                        horario.lunes_inicio = row.hora_inicio;
+                        horario.lunes_fin = row.hora_fin;
+                    } else if (dia === 'martes') {
+                        horario.martes_inicio = row.hora_inicio;
+                        horario.martes_fin = row.hora_fin;
+                    } else if (dia === 'miercoles') {
+                        horario.miercoles_inicio = row.hora_inicio;
+                        horario.miercoles_fin = row.hora_fin;
+                    } else if (dia === 'jueves') {
+                        horario.jueves_inicio = row.hora_inicio;
+                        horario.jueves_fin = row.hora_fin;
+                    } else if (dia === 'viernes') {
+                        horario.viernes_inicio = row.hora_inicio;
+                        horario.viernes_fin = row.hora_fin;
+                    }
+                }
             }
+            
+            console.log('Horario recuperado para grupo', id_grupo, ':', horario);
+            return horario;
         } catch (error) {
             console.error('Error al obtener horarios del grupo:', error);
             return {

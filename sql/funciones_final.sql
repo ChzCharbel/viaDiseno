@@ -13,7 +13,7 @@ DECLARE
     traslapes INT;
     traslapes_profe INT;
     traslapes_salon INT;
-    id_ciclo_escolar INT;
+    id_ciclo_escolar_var INT; -- Renombrado para evitar ambigüedad
     id_profesor_grupo INT;
 BEGIN
     -- Validar empalmes de horario del grupo
@@ -51,22 +51,23 @@ BEGIN
     END IF;
 
     -- Obtener id_ciclo_escolar relacionado con el grupo
-    SELECT cem.id_ciclo_escolar INTO id_ciclo_escolar
+    SELECT cem.id_ciclo_escolar INTO id_ciclo_escolar_var
     FROM grupos g
     JOIN grupos_ciclos_materias gcm ON g.id_grupo = gcm.id_grupo
     JOIN ciclos_escolares_materias cem ON gcm.id_ciclo_escolar_materia = cem.id_ciclo_escolar_materia
     WHERE g.id_grupo = id_grupo_param
     LIMIT 1;
 
-    IF id_ciclo_escolar IS NULL THEN
+    IF id_ciclo_escolar_var IS NULL THEN
         RETURN 'Error: No se pudo determinar el ciclo escolar del grupo.';
     END IF;
 
     -- Validar si el salón ya está ocupado
+    -- Aquí corregimos la ambigüedad usando el nombre de la variable local
     SELECT COUNT(*) INTO traslapes_salon
     FROM salones_disponibilidad
     WHERE id_salon = id_salon_param
-      AND id_ciclo_escolar = id_ciclo_escolar
+      AND id_ciclo_escolar = id_ciclo_escolar_var
       AND dia_semana = dia_param
       AND hora_inicio < hora_fin_param
       AND hora_fin > hora_inicio_param
@@ -82,28 +83,28 @@ BEGIN
 
     -- Registrar disponibilidad del salón si no existe
     INSERT INTO salones_disponibilidad(id_salon, id_ciclo_escolar, dia_semana, hora_inicio, hora_fin, disponible)
-    VALUES (id_salon_param, id_ciclo_escolar, dia_param, hora_inicio_param, hora_fin_param, TRUE)
+    VALUES (id_salon_param, id_ciclo_escolar_var, dia_param, hora_inicio_param, hora_fin_param, TRUE)
     ON CONFLICT DO NOTHING;
 
     -- Marcar salón como ocupado
     UPDATE salones_disponibilidad
     SET disponible = FALSE
     WHERE id_salon = id_salon_param
-      AND id_ciclo_escolar = id_ciclo_escolar
+      AND id_ciclo_escolar = id_ciclo_escolar_var
       AND dia_semana = dia_param
       AND hora_inicio <= hora_inicio_param
       AND hora_fin >= hora_fin_param;
 
     -- Registrar disponibilidad del profesor si no existe
     INSERT INTO profesores_disponibilidad(id_profesor, id_ciclo_escolar, dia_semana, hora_inicio, hora_fin, disponible)
-    VALUES (id_profesor_grupo, id_ciclo_escolar, dia_param, hora_inicio_param, hora_fin_param, TRUE)
+    VALUES (id_profesor_grupo, id_ciclo_escolar_var, dia_param, hora_inicio_param, hora_fin_param, TRUE)
     ON CONFLICT DO NOTHING;
 
-    -- Marcar profesor como ocupado
+    -- Marcar el profesor como no disponible
     UPDATE profesores_disponibilidad
     SET disponible = FALSE
     WHERE id_profesor = id_profesor_grupo
-      AND id_ciclo_escolar = id_ciclo_escolar
+      AND id_ciclo_escolar = id_ciclo_escolar_var
       AND dia_semana = dia_param
       AND hora_inicio <= hora_inicio_param
       AND hora_fin >= hora_fin_param;

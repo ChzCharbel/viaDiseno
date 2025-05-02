@@ -78,8 +78,8 @@
                     <form id="formHorario_<%= materia.id %>" action="/materias/guardar-horario" method="POST">
                       <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                       <input type="hidden" name="id_grupo" value="<%= materia.id %>">
-                      <input type="hidden" name="id_salon" id="inputHiddenSalon_<%= materia.id_materia %>">
-                      <input type="hidden" name="id_profesor" id="inputHiddenProfesor_<%= materia.id_materia %>">
+                      <input type="hidden" name="id_salon" id="inputHiddenSalon_<%= materia.id_materia %>" value="<%= materia.id_salon || 1 %>">
+                      <input type="hidden" name="id_profesor" id="inputHiddenProfesor_<%= materia.id_materia %>" value="<%= materia.id_profesor || '' %>">
                       <input type="hidden" name="id_ciclo_escolar" value="<%= cicloActual %>">
                     
                       <div class="modal-content">
@@ -91,6 +91,22 @@
                         <div class="modal-body">
                           <% const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes']; %>
                           <% dias.forEach((dia, index) => { %>
+                            <% 
+                              // Comprobar si hay datos de horario existentes para este día
+                              let horaInicio = '';
+                              let horaFin = '';
+                              
+                              if (materia.horario) {
+                                const diaLower = dia.toLowerCase();
+                                if (diaLower === 'miércoles') {
+                                  horaInicio = materia.horario[`miercoles_inicio`] || '';
+                                  horaFin = materia.horario[`miercoles_fin`] || '';
+                                } else {
+                                  horaInicio = materia.horario[`${diaLower}_inicio`] || '';
+                                  horaFin = materia.horario[`${diaLower}_fin`] || '';
+                                }
+                              }
+                            %>
                             <div class="mb-3">
                               <label><strong><%= dia %></strong></label>
                               <div class="input-group">
@@ -99,9 +115,9 @@
                                   <% for (let h = 7; h <= 16; h++) {
                                        let horaStr = h < 10 ? '0' + h : '' + h;
                                   %>
-                                    <option value="<%= horaStr %>:00"><%= horaStr %>:00</option>
+                                    <option value="<%= horaStr %>:00" <%= horaInicio === `${horaStr}:00` ? 'selected' : '' %>><%= horaStr %>:00</option>
                                     <% if (h < 16) { %>
-                                      <option value="<%= horaStr %>:30"><%= horaStr %>:30</option>
+                                      <option value="<%= horaStr %>:30" <%= horaInicio === `${horaStr}:30` ? 'selected' : '' %>><%= horaStr %>:30</option>
                                     <% } %>
                                   <% } %>
                                 </select>
@@ -111,9 +127,9 @@
                                   <% for (let h = 7; h <= 16; h++) {
                                        let horaStr = h < 10 ? '0' + h : '' + h;
                                   %>
-                                    <option value="<%= horaStr %>:00"><%= horaStr %>:00</option>
+                                    <option value="<%= horaStr %>:00" <%= horaFin === `${horaStr}:00` ? 'selected' : '' %>><%= horaStr %>:00</option>
                                     <% if (h < 16) { %>
-                                      <option value="<%= horaStr %>:30"><%= horaStr %>:30</option>
+                                      <option value="<%= horaStr %>:30" <%= horaFin === `${horaStr}:30` ? 'selected' : '' %>><%= horaStr %>:30</option>
                                     <% } %>
                                   <% } %>
                                 </select>
@@ -132,7 +148,22 @@
                   </div>
                 </div>
 
-                <div id="horario_<%= materia.id %>" class="text-muted small mt-2">Sin asignar</div>
+                <div id="horario_<%= materia.id %>" class="text-muted small mt-2">
+                  <% if (materia.horario) { %>
+                    <% let hasHorario = false; %>
+                    <% const dias = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes']; %>
+                    <% for (const dia of dias) { %>
+                      <% if (materia.horario[`${dia}_inicio`] && materia.horario[`${dia}_fin`]) { %>
+                        <% hasHorario = true; %>
+                        <%= dia.charAt(0).toUpperCase() + dia.slice(1) %>: 
+                        <%= materia.horario[`${dia}_inicio`] %> - <%= materia.horario[`${dia}_fin`] %><br>
+                      <% } %>
+                    <% } %>
+                    <% if (!hasHorario) { %>Sin asignar<% } %>
+                  <% } else { %>
+                    Sin asignar
+                  <% } %>
+                </div>
               </td>
 
               <td>

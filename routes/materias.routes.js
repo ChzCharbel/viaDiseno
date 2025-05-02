@@ -14,6 +14,6 @@ const materiasController = require('../controllers/materias.controller.js');
 router.get('/:idCiclo/', isAuth, canView, materiasVistaController.getMateriasCiclo);
 
 // Ruta para guardar horarios
-router.post('/guardar-horario/:id_grupo', isAuth, canView, materiasController.guardarHorario);
+router.post('/guardar-horario', isAuth, canView, materiasController.guardarHorario);
 
 module.exports = router;
