@@ -16,6 +16,8 @@ exports.get_enlista = async (req, res, next) => {
     const materiasDisponibles = await Grupo.getMateriasPorCiclo(ciclo);
     console.log("Materias disponibles:", materiasDisponibles);
 
+    const alumnoInfo = await EnlistaModel.obtenerEstadoInscripcion(matricula);
+
     res.render('horario_alumnos_regulares', {
       grupos,
       titulo: 'Horario de Clases',
@@ -28,7 +30,8 @@ exports.get_enlista = async (req, res, next) => {
       rol: req.session.rol || '',
       matricula,
       csrfToken: req.csrfToken(),
-      materiasDisponibles
+      materiasDisponibles,
+      inscrito: alumnoInfo ? alumnoInfo.inscrito : false
     });
   } catch (err) {
     console.error('Error al obtener grupos o materias:', err);
@@ -36,3 +39,21 @@ exports.get_enlista = async (req, res, next) => {
   }
 };
 
+exports.confirmar_inscripcion = async (req, res, next) => {
+  const matricula = req.session.matricula;
+
+  if (!matricula) {
+    return res.status(401).json({ error: 'Sesión no iniciada.' });
+  }
+
+  try {
+    const result = await EnlistaModel.confirmarInscripcion(matricula);
+    res.status(200).json({ 
+      success: true, 
+      mensaje: 'Inscripción confirmada exitosamente',
+      alumno: result
+    });  } catch (error) {
+    console.error('Error al confirmar inscripción:', error);
+    res.status(500).json({ error: 'Error al confirmar inscripción' });
+  }
+};

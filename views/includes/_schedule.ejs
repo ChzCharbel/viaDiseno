@@ -76,8 +76,19 @@
     </div>
   
     <div class="d-flex justify-content-end mt-3">
-      <button class="btn btn-secondary me-2" data-bs-toggle="modal" data-bs-target="#modalAgregarMateria">Agregar materia</button>
-      <button class="btn btn-primary">Confirmar</button>
+      <% 
+      const estaInscrito = typeof inscrito !== 'undefined' ? inscrito : false;
+      %>
+      
+      <% if (!estaInscrito) { %>
+        <button class="btn btn-secondary me-2" data-bs-toggle="modal" data-bs-target="#modalAgregarMateria" id="btnAgregarMateria">Agregar materia</button>
+        <button class="btn btn-primary" id="btnConfirmar">Confirmar</button>
+      <% } else { %>
+        <div class="alert alert-success" role="alert">
+          <i class="bi bi-check-circle-fill me-2"></i>
+          <strong>Horario confirmado.</strong> Tu inscripción ha sido completada exitosamente.
+        </div>
+      <% } %>
     </div>
     <!-- Modal Agregar Materia -->
     <div class="modal fade" id="modalAgregarMateria" tabindex="-1" aria-labelledby="modalAgregarMateriaLabel" aria-hidden="true">
@@ -128,6 +139,7 @@
   document.addEventListener("DOMContentLoaded", function () {
     const dropdown = document.getElementById("id_materia_dropdown");
     const textoMateria = document.getElementById("materiaSeleccionadaTexto");
+    const btnConfirmar = document.getElementById("btnConfirmar");
 
     if (dropdown && textoMateria) {
       textoMateria.textContent = dropdown.options[dropdown.selectedIndex]?.text;
@@ -137,7 +149,34 @@
       });
     }
 
-    document.getElementById("formAgregarMateria").addEventListener("submit", async function (e) {
+    if (btnConfirmar) {
+      btnConfirmar.addEventListener("click", async function() {
+        if (confirm("¿Estás seguro que deseas confirmar tu inscripción? Una vez confirmada, no podrás realizar más cambios.")) {
+          try {
+            const response = await fetch("/enlista/confirmar", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "CSRF-Token": document.querySelector('input[name="_csrf"]')?.value || ""
+              }
+            });
+
+            if (!response.ok) throw new Error("Error al confirmar inscripción");
+
+            const result = await response.json();
+            alert(result.mensaje || "Inscripción confirmada correctamente");
+            
+            // Recargar la página para mostrar los cambios actualizados
+            window.location.reload();
+          } catch (error) {
+            console.error(error);
+            alert("Ocurrió un error al confirmar la inscripción.");
+          }
+        }
+      });
+    }
+
+    document.getElementById("formAgregarMateria")?.addEventListener("submit", async function (e) {
       e.preventDefault();
       const form = e.target;
       const data = {};

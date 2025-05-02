@@ -7,5 +7,6 @@ const canView = require('../util/canViewAssignedGroups');
 const enlistaController = require('../controllers/enlista.controller');
 
 router.get('/alumno', isAuth, canView, enlistaController.get_enlista);
+router.post('/confirmar', isAuth, enlistaController.confirmar_inscripcion);
 
 module.exports = router;

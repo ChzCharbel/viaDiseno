@@ -11,7 +11,8 @@ module.exports = class Enlista {
         COALESCE(s.id_salon, 99) as id_salon,
         gh.dia_semana,
         gh.hora_inicio,
-        gh.hora_fin
+        gh.hora_fin,
+        a.inscrito
       FROM grupos g
       JOIN grupos_ciclos_materias gcm ON g.id_grupo = gcm.id_grupo
       JOIN ciclos_escolares_materias cem ON gcm.id_ciclo_escolar_materia = cem.id_ciclo_escolar_materia
@@ -21,6 +22,7 @@ module.exports = class Enlista {
       LEFT JOIN salones s ON g.id_salon = s.id_salon
       JOIN enlista e ON g.id_grupo = e.id_grupo
       JOIN grupos_horarios gh ON g.id_grupo = gh.id_grupo
+      JOIN alumnos a ON e.id_ivd = a.id_ivd
       WHERE e.id_ivd = $1
       ORDER BY g.id_grupo, gh.dia_semana, gh.hora_inicio
     `, [id_ivd]);
@@ -44,6 +46,7 @@ module.exports = class Enlista {
           salon: {
             id: row.id_salon
           },
+          inscrito: row.inscrito,
           horarios: []
         };
       }
@@ -64,5 +67,36 @@ module.exports = class Enlista {
     });
 
     return Object.values(gruposAgrupados);
+  }  
+  
+  static async confirmarInscripcion(id_ivd) {
+    try {
+      const alumnosResult = await db.query(`
+        UPDATE alumnos 
+        SET inscrito = true 
+        WHERE id_ivd = $1
+        RETURNING *
+      `, [id_ivd]);
+      
+      return alumnosResult.rows[0];
+    } catch (error) {
+      console.error('Error al confirmar inscripción:', error);
+      throw error;
+    }
+  }
+
+  static async obtenerEstadoInscripcion(id_ivd) {
+    try {
+      const result = await db.query(`
+        SELECT inscrito 
+        FROM alumnos 
+        WHERE id_ivd = $1
+      `, [id_ivd]);
+      
+      return result.rows[0];
+    } catch (error) {
+      console.error('Error al obtener estado de inscripción:', error);
+      throw error;
+    }
   }
 };
