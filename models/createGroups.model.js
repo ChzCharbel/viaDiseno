@@ -161,7 +161,7 @@ module.exports = class GruposAutomaticos {
         JOIN profesores using (id_profesor)
         JOIN planes_materias using (id_plan_materia)
         JOIN materias using (id_materia)
-        WHERE id_ciclo_escolar = $1::integer;`, [ciclo]);
+        WHERE id_ciclo_escolar = $1::integer AND id_salon IS NULL;`, [ciclo]);
     }
 
     static resultadoAsignacion() {
