@@ -202,12 +202,13 @@
                 </tbody>
             </table>
         </div>
-    <% } %>
-    <div class="text-center mb-4">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        <i class="bi bi-floppy2-fill"></i> Guardar y continuar con creación manual
-        </button>
+        <div class="text-center mb-4">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <i class="bi bi-floppy2-fill"></i> Guardar y continuar con creación manual
+            </button>
     </div>
+    <% } %>
+    
     
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -216,12 +217,13 @@
             <h1 class="modal-title fs-5" id="exampleModalLabel">Guardar grupos creados automáticamente</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
-            ¿Estás seguro de que deseas guardar los grupos y continuar con la creción manual?
+        <div class="modal-body text-center">
+            <p class="fw-semibold">¿Estás seguro de que deseas guardar los cambios y continuar con la creción manual?</p>
+            <span class="fst-italic">Si continúas, <span class="fw-medium text-primary">no podrás volver a utilizar la creación automática.</span></span>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <a href="/materias/<%=cicloActual%>" class="btn btn-primary">Confirmar</a>
+            <a href="/grupos/confirmar/<%=cicloActual%>" class="btn btn-primary">Confirmar</a>
         </div>
         </div>
     </div>
