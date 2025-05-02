@@ -1,36 +1,26 @@
 <div class="container mt-5">
   <!-- Buscador estilizado -->
-  <ul class="nav nav-tabs mb-4">
-    <li class="nav-item fw-semibold shadow-sm"">
-      <a class="nav-link active text-dark" aria-current="page" href="/materias/no_asignadas/<%=cicloActual%>">Materias sin asignar</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link text-dark" href="/materias/automaticamente_asignadas/<%=cicloActual%>">Materias asignadas automáticamente</a>
-    </li>
-  </ul>
-  <% if (materias && materias.length === 0) { %>
-    <p class="text-center">No hay materias disponibles</p>
-  <% } else if (materias) { %>
-    <div class="row justify-content-center mb-4">
-      <div class="col-md-8">
-        <div class="card shadow-sm border-0 rounded-4 p-4">
-          <h5 class="mb-3 fw-semibold">Buscar materia</h5>
-            <form id="editForm" class="d-flex" role="search" onsubmit="return false;">
-              <input
-                id="inputBuscarMateria"
-                class="form-control form-control-lg me-3 rounded-pill"
-                type="search"
-                placeholder="Materia"
-                aria-label="Search"
-              />
-              <button class="btn btn-outline-success rounded-pill px-4" type="submit">
-                Buscar
-              </button>
-            </form>          
-        </div>
+  <div class="row justify-content-center mb-4">
+    <div class="col-md-8">
+      <div class="card shadow-sm border-0 rounded-4 p-4">
+        <h5 class="mb-3 fw-semibold">Buscar materia</h5>
+        <form id="editForm" class="d-flex" role="search" onsubmit="return false;">
+          <input
+            id="inputBuscarMateria"
+            class="form-control form-control-lg me-3 rounded-pill"
+            type="search"
+            placeholder="Materia"
+            aria-label="Search"
+          />
+          <button class="btn btn-outline-success rounded-pill px-4" type="submit">
+            Buscar
+          </button>
+        </form>
       </div>
     </div>
-    <input type="hidden" id="cicloActualId" value="<%= cicloActual %>">
+  </div>
+
+  <input type="hidden" id="cicloActualId" value="<%= cicloActual %>">
 
   <!-- Tabla de materias -->
   <div class="table-responsive">
@@ -74,10 +64,10 @@
               </td>
 
               <td>
-                <button 
-                  type="button" 
-                  class="btn btn-outline-secondary btn-sm rounded-pill" 
-                  data-bs-toggle="modal" 
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary btn-sm rounded-pill"
+                  data-bs-toggle="modal"
                   data-bs-target="#modalHorario<%= materia.id %>">
                   Seleccionar horario
                 </button>
@@ -101,7 +91,7 @@
                         <div class="modal-body">
                           <% const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes']; %>
                           <% dias.forEach((dia, index) => { %>
-                            <% 
+                            <%
                               // Comprobar si hay datos de horario existentes para este día
                               let horaInicio = '';
                               let horaFin = '';
@@ -165,7 +155,7 @@
                     <% for (const dia of dias) { %>
                       <% if (materia.horario[`${dia}_inicio`] && materia.horario[`${dia}_fin`]) { %>
                         <% hasHorario = true; %>
-                        <%= dia.charAt(0).toUpperCase() + dia.slice(1) %>: 
+                        <%= dia.charAt(0).toUpperCase() + dia.slice(1) %>:
                         <%= materia.horario[`${dia}_inicio`] %> - <%= materia.horario[`${dia}_fin`] %><br>
                       <% } %>
                     <% } %>
@@ -182,14 +172,13 @@
               </td>
             </tr>
           <% } %>
-        
+        <% } %>
       </tbody>
     </table>
+
     <div class="d-flex justify-content-end mt-3">
       <button class="btn btn-primary" id="generarHorariosBtn">Generar Horarios</button>
     </div>
-<% } } %>
-    
   </div>
 </div>
 
