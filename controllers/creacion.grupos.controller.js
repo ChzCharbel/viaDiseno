@@ -61,3 +61,9 @@ exports.get_rechazar = (request, response, next) => {
         console.log(error);
     });
 }
+
+exports.get_confirmar = (request, response, next) => {
+    // inicializar el objeto
+    crearGrupos.inicializar();
+    response.redirect('/materias/' + request.params.idCiclo);
+}
