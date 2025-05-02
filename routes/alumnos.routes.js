@@ -12,6 +12,4 @@ router.get('/irregulares/:idCiclo', isAuth, canViewSelf, alumnosController.get_h
 router.get('/:idCiclo/buscar/:nombre', isAuth, canViewAll, alumnosController.get_buscar);
 router.get('/:idCiclo/', isAuth, canViewAll, alumnosController.get_alumnos);
 
-
-
 module.exports = router;

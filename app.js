@@ -60,8 +60,11 @@ const disponibleRoutes = require("./routes/disponible.routes");
 const cicloRoutes = require('./routes/ciclo.routes');
 const creacionGruposRoutes = require('./routes/creacion.grupos.routes')
 
-const gruposRoutes = require("./routes/grupos.routes"); 
+const gruposRoutes = require("./routes/grupos.routes");
+const horarioRoutes = require("./routes/horario.routes");
+
 app.use("/grupos", gruposRoutes);
+app.use("/horario", horarioRoutes);
 
 app.use("/grupos", creacionGruposRoutes);
 

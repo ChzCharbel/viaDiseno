@@ -154,6 +154,44 @@
 <script>
   localStorage.setItem('cicloActual', '<%= cicloActual %>');
   console.log('Ciclo escolar guardado en localStorage:', '<%= cicloActual %>');
+    // Agregar evento al botón de generar horarios
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('generarHorariosBtn').addEventListener('click', async function() {
+      try {
+        // Mostrar indicador de carga
+        this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generando...';
+        this.disabled = true;
+        
+        const cicloActual = document.getElementById('cicloActualId').value;
+        
+        const response = await fetch('/horario/generarTodos', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': '<%= csrfToken %>'
+          },
+          body: JSON.stringify({ id_ciclo_escolar: cicloActual })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          // Mostrar mensaje de éxito
+          alert(`${data.message}\nSe procesaron ${data.detalle ? data.detalle.length : 0} alumnos.`);
+        } else {
+          // Mostrar mensaje de error
+          alert(`Error: ${data.error || 'No se pudieron generar los horarios'}`);
+        }
+      } catch (error) {
+        console.error('Error al generar horarios:', error);
+        alert('Ocurrió un error al generar los horarios. Revisa la consola para más detalles.');
+      } finally {
+        // Restaurar el botón
+        this.innerHTML = 'Generar Horarios';
+        this.disabled = false;
+      }
+    });
+  });
 </script>
 <script src="/js/asignarSalon.js"></script>
 <script src="/js/scriptIVD.js"></script>
