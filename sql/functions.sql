@@ -17,6 +17,7 @@ BEGIN
 END;
 $function$;
 
+DROP FUNCTION public.consulta_info_alumnos(text);
 CREATE OR REPLACE FUNCTION public.consulta_info_alumnos(IN matricula_usr text)
  RETURNS TABLE (id_carrera integer,
  id_ivd TEXT, 
