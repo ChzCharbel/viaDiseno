@@ -73,7 +73,7 @@ exports.get_asignadas_automaticamente = (request, response, next) => {
     crearGrupos.fetchAll(request.params.idCiclo).then((grupos) => {
         Salon.fetchAll().then((salones) => {
         response.render('materias_asignadas_autom.ejs', {
-            titulo: 'materias_no_asignadas' || '',
+            titulo: 'materias_asignadas_autom' || '',
             materias: grupos.rows || [],
             salones: salones.rows || [],
             privilegios: request.session.privilegios || [],
