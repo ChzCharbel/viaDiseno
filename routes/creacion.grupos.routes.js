@@ -11,5 +11,7 @@ router.get('/crear/:idCiclo', isAuth, creacionGruposController.get_crear);
 
 router.get('/creados/:idCiclo', isAuth, creacionGruposController.get_creados);
 
+router.get('/opciones/:idCiclo', isAuth, creacionGruposController.get_opciones);
+
 
 module.exports = router;
