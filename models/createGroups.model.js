@@ -71,6 +71,26 @@ module.exports = class GruposAutomaticos {
         [ [], [], [], [], [] ]
     ];
 
+    static inicializar() {
+        this.materiasOfertadas = [];
+        this.materiasPrioritarias = [];
+        this.materiasMultiplesProfes = [];
+        this.materiasAsignadas = [];
+        this.grupos = [];
+        this.idProfes = [];
+        this.idCiclo = -1;
+        this.semana = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes'];
+        this.gruposPrimero = [];
+        this.gruposSegundo = [];
+        this.gruposTercero = [];
+        this.gruposCuarto = [];
+        this.gruposQuinto = [];
+        this.gruposSexto = [];
+        this.gruposSeptimo = [];
+        this.gruposOctavo = [];
+        this.gruposNoveno = [];
+    }
+
     static async rollbackDisponibilidadProfe(idMateriaCiclo) {
         const grupos = await this.fetchGruposByIdMateriaCiclo(idMateriaCiclo);
         const idsCambiar = [];

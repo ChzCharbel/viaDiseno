@@ -33,6 +33,22 @@
                  <%= ciclo.ciclo_escolar %> 
               </a>
             </li>
+          <% } else if (titulo == 'crear_grupos') { %>
+            <li>
+              <a class="dropdown-item active ciclo-link"
+                 data-ciclo-id="<%= ciclo.id_ciclo_escolar %>"
+                 href="/grupos/creados/<%= ciclo.id_ciclo_escolar %>"> 
+                 <%= ciclo.ciclo_escolar %> 
+              </a>
+            </li>
+          <% } else if (titulo == 'crear_grupos_opciones') { %>
+            <li>
+              <a class="dropdown-item active ciclo-link"
+                 data-ciclo-id="<%= ciclo.id_ciclo_escolar %>"
+                 href="/grupos/opciones/<%= ciclo.id_ciclo_escolar %>"> 
+                 <%= ciclo.ciclo_escolar %> 
+              </a>
+            </li>
           <% } else { %> 
               <li>
               <a class="dropdown-item active ciclo-link"
@@ -55,6 +71,22 @@
               <a class="dropdown-item ciclo-link" 
                  data-ciclo-id="<%= ciclo.id_ciclo_escolar %>"
                  href="/oferta_academica/<%= ciclo.id_ciclo_escolar %>/<% if (planActual != '') {%><%=planActual%><%} else {%>plan_version<% } %>/agregar"> 
+                 <%= ciclo.ciclo_escolar %> 
+              </a>
+            </li>
+          <% } else if (titulo == 'crear_grupos') { %>
+            <li>
+              <a class="dropdown-item ciclo-link"
+                 data-ciclo-id="<%= ciclo.id_ciclo_escolar %>"
+                 href="/grupos/creados/<%= ciclo.id_ciclo_escolar %>"> 
+                 <%= ciclo.ciclo_escolar %> 
+              </a>
+            </li>
+          <% } else if (titulo == 'crear_grupos_opciones') { %>
+            <li>
+              <a class="dropdown-item ciclo-link"
+                 data-ciclo-id="<%= ciclo.id_ciclo_escolar %>"
+                 href="/grupos/opciones/<%= ciclo.id_ciclo_escolar %>"> 
                  <%= ciclo.ciclo_escolar %> 
               </a>
             </li>

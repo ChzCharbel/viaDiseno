@@ -1,4 +1,7 @@
-<div class="container mt-4">
+<div class="mt-2 ms-2 p-2">
+    <a href="/grupos/opciones/<%=cicloActual%>"><i class="bi bi-arrow-left-circle-fill text-secondary fs-1"></i></a>
+</div>
+<div class="container mt-2">
     <div class="card mb-4 shadow">
         <div class="card-body">
             <div class="card-title fw-semibold fs-3">¿Cómo funciona?</div>
@@ -28,10 +31,10 @@
             <div class="accordion-item">
                 <h2 class="accordion-header">
                 <button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                    <i class="bi bi-file-earmark-bar-graph p-2 fw-bold"> </i>  Gráficas con Resultados
+                    <i class="bi bi-file-earmark-bar-graph p-2 fw-bold"> </i>  Gráfica Grupos vs Oferta Académica
                 </button>
                 </h2>
-                <div id="collapseOne" class="accordion-collapse collapse " data-bs-parent="#accordionExample">
+                <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
                         <div>
                             <canvas id="graficaBarras" style="width: 100px; height: 300px;"></canvas>
@@ -40,7 +43,88 @@
                 </div>
             </div>
         </div>
-        <div class="table-responsive">
+        <div class="accordion mb-4 shadow-sm" id="accordionTablaOfertaGrupos">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                <button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTablaOfertaGrupos" aria-expanded="true" aria-controls="collapseTablaOfertaGrupos">
+                    <i class="bi bi-table p-2 fw-bold"></i> Tabla Oferta Académica vs Materias Asignadas
+                </button>
+                </h2>
+                <div id="collapseTablaOfertaGrupos" class="accordion-collapse collapse" data-bs-parent="#accordionTablaOfertaGrupos">
+                <div class="accordion-body">
+                    <div class="row">
+                        <div class="col">
+                            <p class="fs-4 fw-medium text-center">Oferta Académica</p>
+                            <div class="table-responsive mb-4">
+                                <table class="table table-bordered table-hover shadow align-middle text-center overflow-hidden">
+                                    <thead class="table-light">
+                                        <tr>
+                                        <th>Semestre</th>
+                                        <th>Profesor(es)</th>
+                                        <th>Clave</th>
+                                        <th>Materia</th>
+                                        <th><a data-bs-toggle="tooltip" data-bs-title="Horas que requiere la materia">Hrs/semana de materia</a></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% for (let materia of ofertaAcademica) { %>
+                                            <tr>
+                                                <td> <%= materia.bloque_semestre %></td>
+                                                <td>
+                                                    <% for (let profeMateria of profesoresMaterias) { %>
+                                                        <% if (profeMateria.id_ciclo_escolar_materia == materia.id_ciclo_escolar_materia) { %>
+                                                            <%= profeMateria.profesor %>
+                                                    <% } } %>
+                                                </td>
+                                                <td> <%= materia.id_materia %> </td>
+                                                <td> <%= materia.materia %> </td>
+                                                <td> <%= materia.horas_profesor %> </td>
+                                            </tr>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <p class="fs-4 fw-medium text-center">Materias asignadas</p>
+                            <div class="table-responsive mb-4">
+                                <table class="table table-bordered table-hover shadow align-middle text-center overflow-hidden">
+                                    <thead class="table-light">
+                                        <tr>
+                                        <th>Semestre</th>
+                                        <th>Profesor</th>
+                                        <th>Clave</th>
+                                        <th>Materia</th>
+                                        <th><a data-bs-toggle="tooltip" data-bs-title="Horas totales del grupo">Hrs/semana del grupo</a></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% const gruposMostradosResultados = [] %>
+                                        <% for (let grupoResultados of grupos) { %>
+                                            <tr>
+                                                <% if (gruposMostradosResultados.includes(grupoResultados.id_grupo_horario) === false) { %>
+                                                    <td> <%= grupoResultados.bloque_semestre %> </td>
+                                                    <td> <%= grupoResultados.profesor %> </td>
+                                                    <td> <%= grupoResultados.id_materia %> </td>
+                                                    <td> <%= grupoResultados.materia %> </td>
+                                                    <td id="celdaComparacion<%=grupoResultados.id_ciclo_escolar_materia%>"></td>
+                                                    <% for (let grupoInternoResultados of grupos) { %>
+                                                        <% if (grupoInternoResultados.id_ciclo_escolar_materia === grupoResultados.id_ciclo_escolar_materia) { %>
+                                                            <span class="visually-hidden">  <%- gruposMostradosResultados.push(grupoInternoResultados.id_grupo_horario) %> </span>
+                                                    
+                                            </tr>
+                                                <% } } } } %>
+                                            
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive mb-4">
             <table class="table table-bordered table-hover shadow align-middle text-center overflow-hidden">
                 <thead class="table-light">
                     <tr>
@@ -48,7 +132,8 @@
                     <th>Profesor</th>
                     <th>Clave</th>
                     <th>Materia</th>
-                    <th><a data-bs-toggle="tooltip" data-bs-title="Horas que requiere la materia, por favor compáralas con las del grupo">Hrs/semana de materia</a></th>
+                    <th><a data-bs-toggle="tooltip" data-bs-title="Horas que requiere la materia">Hrs/semana materia</a></th>
+                    <th><a data-bs-toggle="tooltip" data-bs-title="Horas totales del grupo">Hrs/semana grupo</a></th>
                     <th>Horario</th>
                     <th></th>
                     </tr>
@@ -58,12 +143,15 @@
                     <% for (let grupo of grupos) { %>
                         <tr>
                             <% if (gruposMostrados.includes(grupo.id_grupo_horario) === false) { %>
+                                <script src="/js/calculosGruposAutomaticos.js"></script>
                                 <td> <%= grupo.bloque_semestre %> </td>
                                 <td> <%= grupo.profesor %> </td>
                                 <td> <%= grupo.id_materia %> </td>
                                 <td> <%= grupo.materia %> </td>
-                                <td> <%= grupo.horas_profesor %> </td>
-                                <td> 
+                                <td><%= grupo.horas_profesor %></td>
+                                <td id="celda<%=grupo.id_ciclo_escolar_materia%>"> <%= grupo.horas_profesor %> </td>
+                                <td>
+                                    <script>horasTotalClase = 0;</script>
                                     <% for (let grupoInterno of grupos) { %>
                                         <% if (grupoInterno.id_ciclo_escolar_materia === grupo.id_ciclo_escolar_materia) { %>
                                             <% if (grupoInterno.dia_semana === 'lunes') { %>
@@ -79,6 +167,8 @@
                                             <% } %>
                                             
                                             <p>
+                                                <script> stringToTime("<%= grupoInterno.hora_inicio %>","<%= grupoInterno.hora_fin %>", "<%=grupo.id_ciclo_escolar_materia%>")  </script>
+                                                
                                                 <%=grupoInterno.hora_inicio%> - <%=grupoInterno.hora_fin%> 
                                             </p>
                                             <span class="visually-hidden">  <%- gruposMostrados.push(grupoInterno.id_grupo_horario) %> </span>
@@ -112,7 +202,33 @@
                 </tbody>
             </table>
         </div>
+        <div class="text-center mb-4">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <i class="bi bi-floppy2-fill"></i> Guardar y continuar con creación manual
+            </button>
+    </div>
     <% } %>
+    
+    
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Guardar grupos creados automáticamente</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">
+            <p class="fw-semibold">¿Estás seguro de que deseas guardar los cambios y continuar con la creción manual?</p>
+            <span class="fst-italic">Si continúas, <span class="fw-medium text-primary">no podrás volver a utilizar la creación automática.</span></span>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <a href="/grupos/confirmar/<%=cicloActual%>" class="btn btn-primary">Confirmar</a>
+        </div>
+        </div>
+    </div>
+    </div>
+    
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>

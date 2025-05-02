@@ -90,13 +90,6 @@
   border-bottom: none;
 }
 
-#loginBody {
-  background-image: url(/images/background.jpg);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center top;
-}
-
 #loginLogo {
   border: #ffffff;
   border-width: 10px;
@@ -209,4 +202,11 @@
   background-color: #e6eef44b;
 }
 
+.card-grupos:hover{
+    background-color: #f3f3f3;
+    transform: scale(1.07);
+}
 
+.text-primary{
+  color: #95404c !important;
+}

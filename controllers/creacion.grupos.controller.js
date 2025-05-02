@@ -1,28 +1,48 @@
 const crearGrupos = require('../models/createGroups.model');
 const Oferta = require('../models/oferta.model');
+const Materia = require('../models/materias.model');
+
+exports.get_opciones = (request, response, next) => {
+    response.render('crear_grupos.ejs', {
+        titulo: "crear_grupos_opciones",
+        privilegios: request.session.privilegios || [],
+        carrera: request.session.carrera || "",
+        profesores: request.session.profesores || [],
+        ciclosEscolares: request.session.ciclosEscolares || [],
+        cicloActual: request.params.idCiclo || "",
+        username: request.session.username || "",
+        mail: request.session.mail || "",
+        rol: request.session.rol || "",
+        csrfToken: request.csrfToken(),
+    });
+}
 
 exports.get_creados = (request, response, next) => {
     Oferta.fetchAll(request.params.idCiclo, request.session.carrera).then( (ofertaAcademica) => {
         crearGrupos.fetchAll(request.params.idCiclo).then((grupos) => {
-            response.render('grupos_creados.ejs', {
-                titulo: "crear_grupos",
-                privilegios: request.session.privilegios || [],
-                carrera: request.session.carrera || "",
-                profesores: request.session.profesores || [],
-                grupos: grupos.rows || [],
-                ofertaAcademica: ofertaAcademica.rows || [],
-                ciclosEscolares: request.session.ciclosEscolares || [],
-                cicloActual: request.params.idCiclo || "",
-                username: request.session.username || "",
-                mail: request.session.mail || "",
-                rol: request.session.rol || "",
-                csrfToken: request.csrfToken(),
+            Materia.getMateriasConProfesorPorCiclo(request.params.idCiclo).then((profesMaterias) => {
+                response.render('grupos_creados.ejs', {
+                    titulo: "crear_grupos",
+                    privilegios: request.session.privilegios || [],
+                    carrera: request.session.carrera || "",
+                    profesores: request.session.profesores || [],
+                    grupos: grupos.rows || [],
+                    ofertaAcademica: ofertaAcademica.rows || [],
+                    profesoresMaterias: profesMaterias || [],
+                    ciclosEscolares: request.session.ciclosEscolares || [],
+                    cicloActual: request.params.idCiclo || "",
+                    username: request.session.username || "",
+                    mail: request.session.mail || "",
+                    rol: request.session.rol || "",
+                    csrfToken: request.csrfToken(),
+                });
+            }).catch((error) => {
+                console.log(error);
             });
         });
     }).catch( (error) => {
         console.log(error);
     })
-    
 }
 
 exports.get_crear = (request, response, next) => {
@@ -40,4 +60,10 @@ exports.get_rechazar = (request, response, next) => {
     }).catch((error) => {
         console.log(error);
     });
+}
+
+exports.get_confirmar = (request, response, next) => {
+    // inicializar el objeto
+    crearGrupos.inicializar();
+    response.redirect('/materias/' + request.params.idCiclo);
 }
