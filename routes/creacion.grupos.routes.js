@@ -9,6 +9,8 @@ router.get('/rechazar/:idCiclo/:idCicloMateria', isAuth, creacionGruposControlle
 
 router.get('/crear/:idCiclo', isAuth, creacionGruposController.get_crear);
 
+router.get('/confirmar/:idCiclo', isAuth, creacionGruposController.get_confirmar);
+
 router.get('/creados/:idCiclo', isAuth, creacionGruposController.get_creados);
 
 router.get('/opciones/:idCiclo', isAuth, creacionGruposController.get_opciones);
