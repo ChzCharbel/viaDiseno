@@ -199,6 +199,26 @@ module.exports = class Grupo{
           console.error("Error al obtener materias con profesor:", error);
           return [];
         }
-      }                 
+    }
+    static fetchMateriasNoAsignadas(idCicloEscolar) {
+        return db.query(`SELECT DISTINCT ON (m.id_materia, p.id_profesor)
+            m.materia AS nombre_materia,
+            p.profesor AS profesor,
+            pm.id_profesor_materia,
+            p.id_profesor,
+            m.id_materia,
+            cem.id_ciclo_escolar_materia,
+            g.id_grupo AS id
+            FROM profesores_materias pm
+            JOIN profesores p ON p.id_profesor = pm.id_profesor
+            JOIN ciclos_escolares_materias cem ON cem.id_ciclo_escolar_materia = pm.id_ciclo_escolar_materia
+            JOIN planes_materias plm ON plm.id_plan_materia = cem.id_plan_materia
+            JOIN materias m ON m.id_materia = plm.id_materia
+            LEFT JOIN grupos_ciclos_materias gcm ON gcm.id_ciclo_escolar_materia = cem.id_ciclo_escolar_materia
+            LEFT JOIN grupos g ON gcm.id_grupo = g.id_grupo
+            WHERE cem.id_ciclo_escolar = $1::integer AND cem.id_ciclo_escolar_materia NOT IN (SELECT id_ciclo_escolar_materia FROM grupos_ciclos_materias)
+            ORDER BY m.id_materia, p.id_profesor, g.id_grupo NULLS LAST;`, [idCicloEscolar]);
+    }
+
 
     }
