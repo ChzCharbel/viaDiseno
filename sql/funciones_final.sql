@@ -130,6 +130,8 @@ BEGIN
 END;
 $BODY$;
 
+DROP FUNCTION IF EXISTS public.consulta_info_alumnos(text);
+
 CREATE OR REPLACE FUNCTION public.consulta_info_alumnos(
 	matricula_usr text)
     RETURNS TABLE(id_carrera integer, id_ivd text, nombre_usuario text, password text, correo_institucional text, rol text, semestre text, regular boolean, estatus_alumno text, inscrito boolean, carrera text) 
