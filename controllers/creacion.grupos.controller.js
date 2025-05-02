@@ -1,6 +1,21 @@
 const crearGrupos = require('../models/createGroups.model');
 const Oferta = require('../models/oferta.model');
 
+exports.get_opciones = (request, response, next) => {
+    response.render('crear_grupos.ejs', {
+        titulo: "crear_grupos",
+        privilegios: request.session.privilegios || [],
+        carrera: request.session.carrera || "",
+        profesores: request.session.profesores || [],
+        ciclosEscolares: request.session.ciclosEscolares || [],
+        cicloActual: request.params.idCiclo || "",
+        username: request.session.username || "",
+        mail: request.session.mail || "",
+        rol: request.session.rol || "",
+        csrfToken: request.csrfToken(),
+    });
+}
+
 exports.get_creados = (request, response, next) => {
     Oferta.fetchAll(request.params.idCiclo, request.session.carrera).then( (ofertaAcademica) => {
         crearGrupos.fetchAll(request.params.idCiclo).then((grupos) => {
