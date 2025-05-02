@@ -99,7 +99,7 @@ exports.get_rechazar = (request, response, next) => {
 exports.get_confirmar = (request, response, next) => {
     // inicializar el objeto
     crearGrupos.inicializar();
-    response.redirect('/materias/' + request.params.idCiclo);
+    response.redirect('/materias/no_asignadas/' + request.params.idCiclo);
 }
 
 exports.get_asignadas_automaticamente = (request, response, next) => {
