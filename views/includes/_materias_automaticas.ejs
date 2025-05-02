@@ -1,0 +1,117 @@
+<div class="container mt-5">
+  <!-- Buscador estilizado -->
+  <ul class="nav nav-tabs mb-4">
+    <li class="nav-item">
+      <a class="nav-link text-dark" href="/materias/no_asignadas/<%=cicloActual%>">Materias sin asignar</a>
+    </li>
+    <li class="nav-item fw-semibold shadow-sm">
+      <a class="nav-link active text-dark" aria-current="page" href="/materias/automaticamente_asignadas/<%=cicloActual%>">Materias asignadas automáticamente</a>
+    </li>
+  </ul>
+  <% if (materias && materias.length === 0) { %>
+    <p class="text-center">No hay materias disponibles</p>
+  <% } else if (materias) { %>
+    <div class="row justify-content-center mb-4">
+      <div class="col-md-8">
+        <div class="card shadow-sm border-0 rounded-4 p-4">
+          <h5 class="mb-3 fw-semibold">Buscar materia</h5>
+            <form id="editForm" class="d-flex" role="search" onsubmit="return false;">
+              <input
+                id="inputBuscarMateria"
+                class="form-control form-control-lg me-3 rounded-pill"
+                type="search"
+                placeholder="Materia"
+                aria-label="Search"
+              />
+              <button class="btn btn-outline-success rounded-pill px-4" type="submit">
+                Buscar
+              </button>
+            </form>          
+        </div>
+      </div>
+    </div>
+    <input type="hidden" id="cicloActualId" value="<%= cicloActual %>">
+
+  <!-- Tabla de materias -->
+  <div class="table-responsive">
+    <table class="table table-bordered align-middle text-center shadow-sm overflow-hidden">
+      <thead class="table-light">
+        <tr>
+          <th>Profesor</th>
+          <th>Materia</th>
+          <th>Salón</th>
+          <th>Horario</th>
+          <th>Estatus</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% const gruposMostradosManual = [] %>
+        <% for (let materia of materias) { %>
+          <% if (gruposMostradosManual.includes(materia.id_grupo_horario) === false) { %>
+          <tr>
+            <td><%= materia.profesor || 'Sin asignar' %></td>
+            <td><%= materia.materia %></td>
+            <td>
+              <%= materia.id_salon %>
+              <button
+                    type="button"
+                    class="btn btn-outline-secondary btn-sm rounded-pill"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalSalones<%= materia.id_materia %>">
+                    Seleccionar salón
+              </button>
+
+                  <%- include('_modal_salones.ejs', { materia: materia, salones: salones }) %>
+
+                  <div id="salonSeleccionado_<%= materia.id_materia %>" class="mt-2 text-muted small">
+                    No seleccionado
+                  </div>
+
+                  <input type="hidden" id="inputSalon_<%= materia.id_materia %>">
+                  <input type="hidden" id="inputProfesor_<%= materia.id_materia %>" value="<%= materia.id_profesor %>">
+                </td>
+
+                <td>
+                  <% for (let grupoInterno of materias) { %>
+                    <% if (grupoInterno.id_ciclo_escolar_materia === materia.id_ciclo_escolar_materia) { %>
+                      <% if (grupoInterno.dia_semana === 'lunes') { %>
+                        <p class="fw-semibold"> Lunes </p>
+                        <% } else if (grupoInterno.dia_semana === 'martes') { %>
+                          <p class="fw-semibold"> Martes </p>
+                        <% } else if (grupoInterno.dia_semana === 'miercoles') { %>
+                          <p class="fw-semibold"> Miércoles </p>
+                        <% } else if (grupoInterno.dia_semana === 'jueves')  { %>
+                          <p class="fw-semibold"> Jueves </p>
+                        <% } else if (grupoInterno.dia_semana === 'viernes') { %>
+                          <p class="fw-semibold"> Viernes </p>
+                        <% } %>
+                        <p>
+                          <%=grupoInterno.hora_inicio%> - <%=grupoInterno.hora_fin%> 
+                        </p>
+                        <span class="visually-hidden">  <%- gruposMostradosManual.push(grupoInterno.id_grupo_horario) %> </span>
+                                          
+                  <% } } %>
+                </td>
+
+                <td>
+                  <button class="btn btn-primary btn-sm rounded-pill px-3"
+                    onclick="guardarSalonSeleccionado('<%= materia.id_materia %>')">Guardar</button>
+                </td>
+              </tr>
+          <% } } %>
+          </tbody>
+      </table>
+    <% } %>
+      
+
+    
+  </div>
+</div>
+
+<script>
+  localStorage.setItem('cicloActual', '<%= cicloActual %>');
+  console.log('Ciclo escolar guardado en localStorage:', '<%= cicloActual %>');
+</script>
+<script src="/js/asignarSalon.js"></script>
+<script src="/js/scriptIVD.js"></script>
+<script src="/js/buscadorMaterias.js"></script>

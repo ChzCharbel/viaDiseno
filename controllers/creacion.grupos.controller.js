@@ -1,6 +1,7 @@
 const crearGrupos = require('../models/createGroups.model');
 const Oferta = require('../models/oferta.model');
 const Materia = require('../models/materias.model');
+const Salon = require('../models/salones.model');
 
 exports.get_opciones = (request, response, next) => {
     try {
@@ -96,11 +97,31 @@ exports.get_rechazar = (request, response, next) => {
 }
 
 exports.get_confirmar = (request, response, next) => {
-    try {
-        crearGrupos.inicializar();
-        response.redirect('/materias/' + request.params.idCiclo);
-    } catch (error) {
-        console.error('Error en get_confirmar:', error);
-        response.status(500).send('Error al confirmar. Por favor, intente nuevamente.');
-    }
+    // inicializar el objeto
+    crearGrupos.inicializar();
+    response.redirect('/materias/' + request.params.idCiclo);
+}
+
+exports.get_asignadas_automaticamente = (request, response, next) => {
+    crearGrupos.fetchAll(request.params.idCiclo).then((grupos) => {
+        Salon.fetchAll().then((salones) => {
+        response.render('materias_asignadas_autom.ejs', {
+            titulo: 'materias_asignadas_autom' || '',
+            materias: grupos.rows || [],
+            salones: salones.rows || [],
+            privilegios: request.session.privilegios || [],
+            csrfToken: request.csrfToken(),
+            carrera: request.session.carrera || '',
+            ciclosEscolares: request.session.ciclosEscolares || [],
+            cicloActual: request.params.idCiclo || '',
+            username: request.session.username || '',
+            mail: request.session.mail || '',
+            rol: request.session.rol || '',
+        });
+        }).catch((error) => {
+            console.log(error);
+        })
+    }).catch((error) => {
+        console.log(error);
+    })
 }

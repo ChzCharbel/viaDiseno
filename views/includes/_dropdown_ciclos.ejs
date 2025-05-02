@@ -49,6 +49,22 @@
                  <%= ciclo.ciclo_escolar %> 
               </a>
             </li>
+          <% } else if (titulo == 'materias_no_asignadas') { %>
+            <li>
+              <a class="dropdown-item active ciclo-link"
+                 data-ciclo-id="<%= ciclo.id_ciclo_escolar %>"
+                 href="/materias/no_asignadas/<%= ciclo.id_ciclo_escolar %>"> 
+                 <%= ciclo.ciclo_escolar %> 
+              </a>
+            </li>
+          <% } else if (titulo == 'materias_asignadas_autom') { %>
+            <li>
+              <a class="dropdown-item active ciclo-link"
+                 data-ciclo-id="<%= ciclo.id_ciclo_escolar %>"
+                 href="/materias/automaticamente_asignadas/<%= ciclo.id_ciclo_escolar %>"> 
+                 <%= ciclo.ciclo_escolar %> 
+              </a>
+            </li>
           <% } else { %> 
               <li>
               <a class="dropdown-item active ciclo-link"
@@ -87,6 +103,22 @@
               <a class="dropdown-item ciclo-link"
                  data-ciclo-id="<%= ciclo.id_ciclo_escolar %>"
                  href="/grupos/opciones/<%= ciclo.id_ciclo_escolar %>"> 
+                 <%= ciclo.ciclo_escolar %> 
+              </a>
+            </li>
+          <% } else if (titulo == 'materias_no_asignadas') { %>
+            <li>
+              <a class="dropdown-item ciclo-link"
+                 data-ciclo-id="<%= ciclo.id_ciclo_escolar %>"
+                 href="/materias/no_asignadas/<%= ciclo.id_ciclo_escolar %>"> 
+                 <%= ciclo.ciclo_escolar %> 
+              </a>
+            </li>
+          <% } else if (titulo == 'materias_asignadas_autom') { %>
+            <li>
+              <a class="dropdown-item ciclo-link"
+                 data-ciclo-id="<%= ciclo.id_ciclo_escolar %>"
+                 href="/materias/automaticamente_asignadas/<%= ciclo.id_ciclo_escolar %>"> 
                  <%= ciclo.ciclo_escolar %> 
               </a>
             </li>

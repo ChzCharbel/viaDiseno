@@ -28,3 +28,27 @@ exports.getMateriasCiclo = async (req, res) => {
     res.status(500).send("Error al obtener las materias");
   }
 };
+
+exports.get_no_asignadas = (request, response, next) => {
+    Materia.fetchMateriasNoAsignadas(request.params.idCiclo).then((materiasNoAsignadas) => {
+      Salon.fetchAll().then((salones) => {
+        response.render('materias_no_asignadas.ejs', {
+          titulo: 'materias_no_asignadas' || '',
+          materias: materiasNoAsignadas.rows || [],
+          salones: salones.rows || [],
+          privilegios: request.session.privilegios || [],
+          csrfToken: request.csrfToken(),
+          carrera: request.session.carrera || '',
+          ciclosEscolares: request.session.ciclosEscolares || [],
+          cicloActual: request.params.idCiclo || '',
+          username: request.session.username || '',
+          mail: request.session.mail || '',
+          rol: request.session.rol || '',
+        });
+        }).catch((error) => {
+          console.log(error);
+        })
+    }).catch((error) => {
+        console.log(error);
+    })
+}

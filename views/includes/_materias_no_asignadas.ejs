@@ -1,0 +1,240 @@
+<div class="container mt-5">
+  <!-- Buscador estilizado -->
+  <ul class="nav nav-tabs mb-4">
+    <li class="nav-item fw-semibold shadow-sm"">
+      <a class="nav-link active text-dark" aria-current="page" href="/materias/no_asignadas/<%=cicloActual%>">Materias sin asignar</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link text-dark" href="/materias/automaticamente_asignadas/<%=cicloActual%>">Materias asignadas automáticamente</a>
+    </li>
+  </ul>
+  <% if (materias && materias.length === 0) { %>
+    <p class="text-center">No hay materias disponibles</p>
+  <% } else if (materias) { %>
+    <div class="row justify-content-center mb-4">
+      <div class="col-md-8">
+        <div class="card shadow-sm border-0 rounded-4 p-4">
+          <h5 class="mb-3 fw-semibold">Buscar materia</h5>
+            <form id="editForm" class="d-flex" role="search" onsubmit="return false;">
+              <input
+                id="inputBuscarMateria"
+                class="form-control form-control-lg me-3 rounded-pill"
+                type="search"
+                placeholder="Materia"
+                aria-label="Search"
+              />
+              <button class="btn btn-outline-success rounded-pill px-4" type="submit">
+                Buscar
+              </button>
+            </form>          
+        </div>
+      </div>
+    </div>
+    <input type="hidden" id="cicloActualId" value="<%= cicloActual %>">
+
+  <!-- Tabla de materias -->
+  <div class="table-responsive">
+    <table class="table table-bordered align-middle text-center shadow-sm overflow-hidden">
+      <thead class="table-light">
+        <tr>
+          <th>Profesor</th>
+          <th>Materia</th>
+          <th>Salón</th>
+          <th>Horario</th>
+          <th>Estatus</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (materias && materias.length === 0) { %>
+          <tr>
+            <td colspan="5" class="text-center py-3">No hay materias disponibles</td>
+          </tr>
+        <% } else if (materias) { %>
+          <% for (let materia of materias) { %>
+            <tr>
+              <td><%= materia.profesor || 'Sin asignar' %></td>
+              <td><%= materia.nombre_materia %></td>
+              <td>
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary btn-sm rounded-pill"
+                  data-bs-toggle="modal"
+                  data-bs-target="#modalSalones<%= materia.id_materia %>">
+                  Seleccionar salón
+                </button>
+
+                <%- include('_modal_salones.ejs', { materia: materia, salones: salones }) %>
+
+                <div id="salonSeleccionado_<%= materia.id_materia %>" class="mt-2 text-muted small">
+                  No seleccionado
+                </div>
+
+                <input type="hidden" id="inputSalon_<%= materia.id_materia %>">
+                <input type="hidden" id="inputProfesor_<%= materia.id_materia %>" value="<%= materia.id_profesor %>">
+              </td>
+
+              <td>
+                <button 
+                  type="button" 
+                  class="btn btn-outline-secondary btn-sm rounded-pill" 
+                  data-bs-toggle="modal" 
+                  data-bs-target="#modalHorario<%= materia.id %>">
+                  Seleccionar horario
+                </button>
+
+                <!-- Modal de horario -->
+                <div class="modal fade" id="modalHorario<%= materia.id %>" tabindex="-1" aria-labelledby="modalHorarioLabel<%= materia.id %>" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <form id="formHorario_<%= materia.id %>" action="/materias/guardar-horario" method="POST">
+                      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                      <input type="hidden" name="id_grupo" value="<%= materia.id %>">
+                      <input type="hidden" name="id_salon" id="inputHiddenSalon_<%= materia.id_materia %>" value="<%= materia.id_salon || 1 %>">
+                      <input type="hidden" name="id_profesor" id="inputHiddenProfesor_<%= materia.id_materia %>" value="<%= materia.id_profesor || '' %>">
+                      <input type="hidden" name="id_ciclo_escolar" value="<%= cicloActual %>">
+                    
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="modalHorarioLabel<%= materia.id %>">Asignar horario para <%= materia.nombre_materia %></h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+
+                        <div class="modal-body">
+                          <% const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes']; %>
+                          <% dias.forEach((dia, index) => { %>
+                            <% 
+                              // Comprobar si hay datos de horario existentes para este día
+                              let horaInicio = '';
+                              let horaFin = '';
+                              
+                              if (materia.horario) {
+                                const diaLower = dia.toLowerCase();
+                                if (diaLower === 'miércoles') {
+                                  horaInicio = materia.horario[`miercoles_inicio`] || '';
+                                  horaFin = materia.horario[`miercoles_fin`] || '';
+                                } else {
+                                  horaInicio = materia.horario[`${diaLower}_inicio`] || '';
+                                  horaFin = materia.horario[`${diaLower}_fin`] || '';
+                                }
+                              }
+                            %>
+                            <div class="mb-3">
+                              <label><strong><%= dia %></strong></label>
+                              <div class="input-group">
+                                <select name="hora_inicio_<%= index %>" class="form-select">
+                                  <option value="">N/A</option>
+                                  <% for (let h = 7; h <= 16; h++) {
+                                       let horaStr = h < 10 ? '0' + h : '' + h;
+                                  %>
+                                    <option value="<%= horaStr %>:00" <%= horaInicio === `${horaStr}:00` ? 'selected' : '' %>><%= horaStr %>:00</option>
+                                    <% if (h < 16) { %>
+                                      <option value="<%= horaStr %>:30" <%= horaInicio === `${horaStr}:30` ? 'selected' : '' %>><%= horaStr %>:30</option>
+                                    <% } %>
+                                  <% } %>
+                                </select>
+
+                                <select name="hora_fin_<%= index %>" class="form-select">
+                                  <option value="">N/A</option>
+                                  <% for (let h = 7; h <= 16; h++) {
+                                       let horaStr = h < 10 ? '0' + h : '' + h;
+                                  %>
+                                    <option value="<%= horaStr %>:00" <%= horaFin === `${horaStr}:00` ? 'selected' : '' %>><%= horaStr %>:00</option>
+                                    <% if (h < 16) { %>
+                                      <option value="<%= horaStr %>:30" <%= horaFin === `${horaStr}:30` ? 'selected' : '' %>><%= horaStr %>:30</option>
+                                    <% } %>
+                                  <% } %>
+                                </select>
+
+                                <input type="hidden" name="dia_<%= index %>" value="<%= dia %>">
+                              </div>
+                            </div>
+                          <% }) %>
+                        </div>
+
+                        <div class="modal-footer">
+                          <button type="submit" class="btn btn-primary">Guardar horario</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+
+                <div id="horario_<%= materia.id %>" class="text-muted small mt-2">
+                  <% if (materia.horario) { %>
+                    <% let hasHorario = false; %>
+                    <% const dias = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes']; %>
+                    <% for (const dia of dias) { %>
+                      <% if (materia.horario[`${dia}_inicio`] && materia.horario[`${dia}_fin`]) { %>
+                        <% hasHorario = true; %>
+                        <%= dia.charAt(0).toUpperCase() + dia.slice(1) %>: 
+                        <%= materia.horario[`${dia}_inicio`] %> - <%= materia.horario[`${dia}_fin`] %><br>
+                      <% } %>
+                    <% } %>
+                    <% if (!hasHorario) { %>Sin asignar<% } %>
+                  <% } else { %>
+                    Sin asignar
+                  <% } %>
+                </div>
+              </td>
+
+              <td>
+                <button class="btn btn-primary btn-sm rounded-pill px-3"
+                  onclick="guardarSalonSeleccionado('<%= materia.id_materia %>')">Guardar</button>
+              </td>
+            </tr>
+          <% } %>
+        
+      </tbody>
+    </table>
+    <div class="d-flex justify-content-end mt-3">
+      <button class="btn btn-primary" id="generarHorariosBtn">Generar Horarios</button>
+    </div>
+<% } } %>
+    
+  </div>
+</div>
+
+<script>
+  localStorage.setItem('cicloActual', '<%= cicloActual %>');
+  console.log('Ciclo escolar guardado en localStorage:', '<%= cicloActual %>');
+    // Agregar evento al botón de generar horarios
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('generarHorariosBtn').addEventListener('click', async function() {
+      try {
+        // Mostrar indicador de carga
+        this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generando...';
+        this.disabled = true;
+        
+        const cicloActual = document.getElementById('cicloActualId').value;
+        
+        const response = await fetch('/horario/generarTodos', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': '<%= csrfToken %>'
+          },
+          body: JSON.stringify({ id_ciclo_escolar: cicloActual })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          // Mostrar mensaje de éxito
+          alert(`${data.message}\nSe procesaron ${data.detalle ? data.detalle.length : 0} alumnos.`);
+        } else {
+          // Mostrar mensaje de error
+          alert(`Error: ${data.error || 'No se pudieron generar los horarios'}`);
+        }
+      } catch (error) {
+        console.error('Error al generar horarios:', error);
+        alert('Ocurrió un error al generar los horarios. Revisa la consola para más detalles.');
+      } finally {
+        // Restaurar el botón
+        this.innerHTML = 'Generar Horarios';
+        this.disabled = false;
+      }
+    });
+  });
+</script>
+<script src="/js/asignarSalon.js"></script>
+<script src="/js/scriptIVD.js"></script>
+<script src="/js/buscadorMaterias.js"></script>

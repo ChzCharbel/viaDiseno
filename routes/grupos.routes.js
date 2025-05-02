@@ -3,10 +3,15 @@ const router = express.Router();
 const gruposController = require('../controllers/grupos.controller');
 const horariosController = require('../controllers/horarios.controller');
 
+const isAuth = require('../util/is-auth');
+const canView = require('../util/canViewAllGroups');
+
 router.post('/asignar-salon', gruposController.asignarSalonPorMateria);
 
 // nueva ruta para fetch("/grupos/datos")
-router.get('/datos', gruposController.getDatosGrupos);
-router.post('/horarios', horariosController.generarHorariosParaTodos);
+router.get('/datos', isAuth, gruposController.getDatosGrupos);
+router.post('/horarios', isAuth, horariosController.generarHorariosParaTodos);
+
+router.get('/:idCiclo', isAuth, canView, gruposController.get_grupos);
 
 module.exports = router;

@@ -1,6 +1,9 @@
 <div class="container mt-5">
   <!-- Buscador estilizado -->
-  <div class="row justify-content-center mb-4">
+  <% if (materias && materias.length === 0) { %>
+    <p class="text-center">No hay materias disponibles</p>
+  <% } else if (materias) { %>
+    <div class="row justify-content-center mb-4">
     <div class="col-md-8">
       <div class="card shadow-sm border-0 rounded-4 p-4">
         <h5 class="mb-3 fw-semibold">Buscar materia</h5>
@@ -31,154 +34,47 @@
           <th>Materia</th>
           <th>Salón</th>
           <th>Horario</th>
-          <th>Estatus</th>
         </tr>
       </thead>
       <tbody>
-        <% if (materias && materias.length === 0) { %>
-          <tr>
-            <td colspan="5" class="text-center py-3">No hay materias disponibles</td>
-          </tr>
-        <% } else if (materias) { %>
-          <% for (let materia of materias) { %>
+        <% const gruposMostradosFinal = [] %>
+        <% for (let materia of materias) { %>
+          <% if (gruposMostradosFinal.includes(materia.id_grupo_horario) === false) { %>
             <tr>
-              <td><%= materia.profesor || 'Sin asignar' %></td>
-              <td><%= materia.nombre_materia %></td>
-              <td>
-                <button
-                  type="button"
-                  class="btn btn-outline-secondary btn-sm rounded-pill"
-                  data-bs-toggle="modal"
-                  data-bs-target="#modalSalones<%= materia.id_materia %>">
-                  Seleccionar salón
-                </button>
-
-                <%- include('_modal_salones.ejs', { materia: materia, salones: salones }) %>
-
-                <div id="salonSeleccionado_<%= materia.id_materia %>" class="mt-2 text-muted small">
-                  No seleccionado
-                </div>
-
-                <input type="hidden" id="inputSalon_<%= materia.id_materia %>">
-                <input type="hidden" id="inputProfesor_<%= materia.id_materia %>" value="<%= materia.id_profesor %>">
-              </td>
-
-              <td>
-                <button 
-                  type="button" 
-                  class="btn btn-outline-secondary btn-sm rounded-pill" 
-                  data-bs-toggle="modal" 
-                  data-bs-target="#modalHorario<%= materia.id %>">
-                  Seleccionar horario
-                </button>
-
-                <!-- Modal de horario -->
-                <div class="modal fade" id="modalHorario<%= materia.id %>" tabindex="-1" aria-labelledby="modalHorarioLabel<%= materia.id %>" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <form id="formHorario_<%= materia.id %>" action="/materias/guardar-horario" method="POST">
-                      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                      <input type="hidden" name="id_grupo" value="<%= materia.id %>">
-                      <input type="hidden" name="id_salon" id="inputHiddenSalon_<%= materia.id_materia %>" value="<%= materia.id_salon || 1 %>">
-                      <input type="hidden" name="id_profesor" id="inputHiddenProfesor_<%= materia.id_materia %>" value="<%= materia.id_profesor || '' %>">
-                      <input type="hidden" name="id_ciclo_escolar" value="<%= cicloActual %>">
-                    
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="modalHorarioLabel<%= materia.id %>">Asignar horario para <%= materia.nombre_materia %></h5>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                        </div>
-
-                        <div class="modal-body">
-                          <% const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes']; %>
-                          <% dias.forEach((dia, index) => { %>
-                            <% 
-                              // Comprobar si hay datos de horario existentes para este día
-                              let horaInicio = '';
-                              let horaFin = '';
-                              
-                              if (materia.horario) {
-                                const diaLower = dia.toLowerCase();
-                                if (diaLower === 'miércoles') {
-                                  horaInicio = materia.horario[`miercoles_inicio`] || '';
-                                  horaFin = materia.horario[`miercoles_fin`] || '';
-                                } else {
-                                  horaInicio = materia.horario[`${diaLower}_inicio`] || '';
-                                  horaFin = materia.horario[`${diaLower}_fin`] || '';
-                                }
-                              }
-                            %>
-                            <div class="mb-3">
-                              <label><strong><%= dia %></strong></label>
-                              <div class="input-group">
-                                <select name="hora_inicio_<%= index %>" class="form-select">
-                                  <option value="">N/A</option>
-                                  <% for (let h = 7; h <= 16; h++) {
-                                       let horaStr = h < 10 ? '0' + h : '' + h;
-                                  %>
-                                    <option value="<%= horaStr %>:00" <%= horaInicio === `${horaStr}:00` ? 'selected' : '' %>><%= horaStr %>:00</option>
-                                    <% if (h < 16) { %>
-                                      <option value="<%= horaStr %>:30" <%= horaInicio === `${horaStr}:30` ? 'selected' : '' %>><%= horaStr %>:30</option>
-                                    <% } %>
-                                  <% } %>
-                                </select>
-
-                                <select name="hora_fin_<%= index %>" class="form-select">
-                                  <option value="">N/A</option>
-                                  <% for (let h = 7; h <= 16; h++) {
-                                       let horaStr = h < 10 ? '0' + h : '' + h;
-                                  %>
-                                    <option value="<%= horaStr %>:00" <%= horaFin === `${horaStr}:00` ? 'selected' : '' %>><%= horaStr %>:00</option>
-                                    <% if (h < 16) { %>
-                                      <option value="<%= horaStr %>:30" <%= horaFin === `${horaStr}:30` ? 'selected' : '' %>><%= horaStr %>:30</option>
-                                    <% } %>
-                                  <% } %>
-                                </select>
-
-                                <input type="hidden" name="dia_<%= index %>" value="<%= dia %>">
-                              </div>
-                            </div>
-                          <% }) %>
-                        </div>
-
-                        <div class="modal-footer">
-                          <button type="submit" class="btn btn-primary">Guardar horario</button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-
-                <div id="horario_<%= materia.id %>" class="text-muted small mt-2">
-                  <% if (materia.horario) { %>
-                    <% let hasHorario = false; %>
-                    <% const dias = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes']; %>
-                    <% for (const dia of dias) { %>
-                      <% if (materia.horario[`${dia}_inicio`] && materia.horario[`${dia}_fin`]) { %>
-                        <% hasHorario = true; %>
-                        <%= dia.charAt(0).toUpperCase() + dia.slice(1) %>: 
-                        <%= materia.horario[`${dia}_inicio`] %> - <%= materia.horario[`${dia}_fin`] %><br>
-                      <% } %>
-                    <% } %>
-                    <% if (!hasHorario) { %>Sin asignar<% } %>
-                  <% } else { %>
-                    Sin asignar
+            <td><%= materia.profesor %></td>
+            <td><%= materia.materia %></td>
+            <td>
+            <% if (materia.id_salon >= 5) { %>
+              <%= materia.id_salon + 1 %>
+            <% } %>
+            </td>
+            <td>
+              <% for (let grupoInterno of materias) { %>
+                <% if (grupoInterno.id_ciclo_escolar_materia === materia.id_ciclo_escolar_materia) { %>
+                  <% if (grupoInterno.dia_semana === 'lunes') { %>
+                    <p class="fw-semibold"> Lunes </p>
+                  <% } else if (grupoInterno.dia_semana === 'martes') { %>
+                    <p class="fw-semibold"> Martes </p>
+                  <% } else if (grupoInterno.dia_semana === 'miercoles') { %>
+                    <p class="fw-semibold"> Miércoles </p>
+                  <% } else if (grupoInterno.dia_semana === 'jueves')  { %>
+                    <p class="fw-semibold"> Jueves </p>
+                  <% } else if (grupoInterno.dia_semana === 'viernes') { %>
+                    <p class="fw-semibold"> Viernes </p>
                   <% } %>
-                </div>
-              </td>
-
-              <td>
-                <button class="btn btn-primary btn-sm rounded-pill px-3"
-                  onclick="guardarSalonSeleccionado('<%= materia.id_materia %>')">Guardar</button>
+                                            
+                  <p>
+                    <%=grupoInterno.hora_inicio%> - <%=grupoInterno.hora_fin%> 
+                  </p>
+                  <span class="visually-hidden">  <%- gruposMostradosFinal.push(grupoInterno.id_grupo_horario) %> </span>
+                  <% } %>          
+              
+                
               </td>
             </tr>
-          <% } %>
-        <% } %>
+          <% } } } } %>
       </tbody>
     </table>
-
-    <div class="d-flex justify-content-end mt-3">
-      <button class="btn btn-primary" id="generarHorariosBtn">Generar Horarios</button>
-    </div>
   </div>
 </div>
 
