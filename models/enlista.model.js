@@ -8,7 +8,7 @@ module.exports = class Enlista {
         m.id_materia,
         m.materia AS nombre_materia,
         p.profesor AS nombre_profesor,
-        s.id_salon,
+        COALESCE(s.id_salon, 99) as id_salon,
         gh.dia_semana,
         gh.hora_inicio,
         gh.hora_fin
@@ -18,7 +18,7 @@ module.exports = class Enlista {
       JOIN planes_materias pm ON cem.id_plan_materia = pm.id_plan_materia
       JOIN materias m ON pm.id_materia = m.id_materia
       JOIN profesores p ON g.id_profesor = p.id_profesor
-      JOIN salones s ON g.id_salon = s.id_salon
+      LEFT JOIN salones s ON g.id_salon = s.id_salon
       JOIN enlista e ON g.id_grupo = e.id_grupo
       JOIN grupos_horarios gh ON g.id_grupo = gh.id_grupo
       WHERE e.id_ivd = $1

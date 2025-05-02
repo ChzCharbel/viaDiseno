@@ -2,6 +2,14 @@ const db = require('../util/database');
 const Oferta = require('../models/oferta.model');
 const Profesor = require('../models/profesores.model');
 
+// Función utilitaria para garantizar que los valores de tiempo no sean vacíos
+function ensureValidTime(timeValue) {
+    if (!timeValue || timeValue === '') {
+        return '00:00:00'; // Valor por defecto
+    }
+    return timeValue;
+}
+
 module.exports = class GruposAutomaticos {
     /* se usaran para ver cuales imparte cada profe y 
     finalmente para ver cuantos grupos se crearon 
@@ -361,10 +369,16 @@ module.exports = class GruposAutomaticos {
             console.log('DIACLASE[0]: ' +  diaClase[0]);
             console.log('DIACLASE[1]: ' + diaClase[1]);
             console.log('DIACLASE[2]: ' + diaClase[2]);
+            
+            // Utilizar la función utilitaria para garantizar que los valores de tiempo sean válidos
+            const horaInicio = ensureValidTime(diaClase[1]);
+            const horaFin = ensureValidTime(diaClase[2]);
+            
             await db.query('BEGIN;');
             await db.query(`CALL insertar_grupo_horario($1::integer, $2::text, $3::time, $4::time, $5::integer);`,
-                [horario.rows[0].id_profesor, diaClase[0], diaClase[1], diaClase[2], idMateria]);
+                [horario.rows[0].id_profesor, diaClase[0], horaInicio, horaFin, idMateria]);
             await db.query('COMMIT;');
+            console.log(`Insertado horario: ${diaClase[0]} ${horaInicio}-${horaFin} para materia ${idMateria} con profesor ${horario.rows[0].id_profesor}`);
         }
     }
 
@@ -712,15 +726,14 @@ module.exports = class GruposAutomaticos {
                                     for (let i = 0; i < this.horasEvitarMayor[bloque_semestre - 1][dia].length; i++) {
                                         // garantizar que no se cuentan las horas en las que se imparte otra clase
                                         consultaHoras += " AND (hora_inicio < $";
-                                        consultaHoras += contParametros;
-                                        consultaHoras += "::time ";
-                                        contParametros++;
-                                        parametrosConsulta.push(this.horasEvitarMenor[bloque_semestre - 1][dia][i]);
-                                        consultaHoras += " OR hora_inicio >= $";
-                                        consultaHoras += contParametros;
-                                        consultaHoras += "::time "
-                                        contParametros++;
-                                        parametrosConsulta.push(this.horasEvitarMayor[bloque_semestre - 1][dia][i]);
+                                        consultaHoras += contParametros;                                                    consultaHoras += "::time ";
+                                                    contParametros++;
+                                                    parametrosConsulta.push(ensureValidTime(this.horasEvitarMenor[bloque_semestre - 1][dia][i]));
+                                                    consultaHoras += " OR hora_inicio >= $";
+                                                    consultaHoras += contParametros;
+                                                    consultaHoras += "::time "
+                                                    contParametros++;
+                                                    parametrosConsulta.push(ensureValidTime(this.horasEvitarMayor[bloque_semestre - 1][dia][i]));
                                         consultaHoras += ")";
                                     }
                                     consultaHoras += ") * 0.5) AS total_horas_";

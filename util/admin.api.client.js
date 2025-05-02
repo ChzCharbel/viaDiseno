@@ -437,4 +437,4 @@ module.exports = {
     getAllDegrees,
     getCiclosEscolares,
     createGrupo,
-};
+};  

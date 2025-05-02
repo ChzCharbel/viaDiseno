@@ -35,8 +35,8 @@ module.exports = class Alumno {
 		}
 	}
 
-    static fetchAll() {
-		return db.query(`SELECT * from usuarios JOIN alumnos using (id_ivd) JOIN carreras using(id_carrera)`);
+    static async fetchAll() {
+		return await db.query(`SELECT * from usuarios JOIN alumnos using (id_ivd) JOIN carreras using(id_carrera)`);
 	}
 	static fetchOne(id){
 		return db.query(`SELECT * from usuarios u JOIN alumnos using(id_ivd) JOIN carreras using(id_carrera)
