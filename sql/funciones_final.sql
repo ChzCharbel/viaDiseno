@@ -13,7 +13,7 @@ DECLARE
     traslapes INT;
     traslapes_profe INT;
     traslapes_salon INT;
-    id_ciclo_escolar_var INT; -- Renombrado para evitar ambigüedad
+    id_ciclo_escolar_var INT;
     id_profesor_grupo INT;
 BEGIN
     -- Validar empalmes de horario del grupo
@@ -63,7 +63,6 @@ BEGIN
     END IF;
 
     -- Validar si el salón ya está ocupado
-    -- Aquí corregimos la ambigüedad usando el nombre de la variable local
     SELECT COUNT(*) INTO traslapes_salon
     FROM salones_disponibilidad
     WHERE id_salon = id_salon_param
@@ -100,7 +99,7 @@ BEGIN
     VALUES (id_profesor_grupo, id_ciclo_escolar_var, dia_param, hora_inicio_param, hora_fin_param, TRUE)
     ON CONFLICT DO NOTHING;
 
-    -- Marcar el profesor como no disponible
+    -- Marcar profesor como ocupado
     UPDATE profesores_disponibilidad
     SET disponible = FALSE
     WHERE id_profesor = id_profesor_grupo

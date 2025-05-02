@@ -146,7 +146,7 @@ module.exports = class GruposAutomaticos {
             }
             else {
                 console.log('UPDATE profesores_disponibilidad SET disponible = TRUE WHERE id_profesor_disponibilidad = ' + idsCambiar[0]);
-                await db.query(`UPDATE profesores_disponibilidad SET disponible = TRUE WHERE id_profesor_disponibilidad = $1::integer`, idsCambiar[0]);
+                await db.query(`UPDATE profesores_disponibilidad SET disponible = TRUE WHERE id_profesor_disponibilidad = $1::integer`, [idsCambiar[0]]);
             }
             await db.query(`DELETE FROM grupos WHERE id_grupo = $1::integer`, [grupo.id_grupo]);
         }

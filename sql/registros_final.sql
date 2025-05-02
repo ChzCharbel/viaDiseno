@@ -5,7 +5,7 @@
 -- Dumped from database version 17.4
 -- Dumped by pg_dump version 17.4
 
--- Started on 2025-05-01 23:24:00
+-- Started on 2025-05-02 03:43:14
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -132,6 +132,8 @@ INSERT INTO public.usuarios VALUES ('100133', 'Alumno Prueba null', NULL, 'lalil
 INSERT INTO public.usuarios VALUES ('100136', 'Enrique Ayala null', NULL, 'ivd-admins-qa.upscale159@passmail.net', 'student');
 INSERT INTO public.usuarios VALUES ('100099', 'Santiago Metz Douglas', NULL, '100099@ivd.edu.mx', 'student');
 INSERT INTO public.usuarios VALUES ('100135', 'Enrique  Ayal null', NULL, 'enayala12@gmail.com', 'student');
+INSERT INTO public.usuarios VALUES ('100137', 'Nadia Martinez null', NULL, 'ivd-admins-qa.valuables244@passmail.net', 'student');
+INSERT INTO public.usuarios VALUES ('100138', 'John Alexander Doe Smith', NULL, 'ivd-admins-qa.morality974@passmail.net', 'student');
 
 
 --
@@ -156,8 +158,6 @@ INSERT INTO public.administradores VALUES ('300014', '', 7);
 -- Data for Name: alumnos; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.alumnos VALUES ('100001', '9', true, 'active', 7, false);
-INSERT INTO public.alumnos VALUES ('100002', '2', true, 'active', 7, false);
 INSERT INTO public.alumnos VALUES ('100007', '2', false, 'active', 7, false);
 INSERT INTO public.alumnos VALUES ('IVD87493', '1', true, 'active', 7, false);
 INSERT INTO public.alumnos VALUES ('IVD87495', '3', false, 'active', 7, false);
@@ -177,15 +177,19 @@ INSERT INTO public.alumnos VALUES ('IVD87504', '7', true, 'active', 8, false);
 INSERT INTO public.alumnos VALUES ('IVD87506', '1', true, 'active', 8, false);
 INSERT INTO public.alumnos VALUES ('100023', '2', true, 'active', 8, false);
 INSERT INTO public.alumnos VALUES ('100123', '1', true, 'active', 7, false);
+INSERT INTO public.alumnos VALUES ('100002', '2', true, 'active', 7, false);
 INSERT INTO public.alumnos VALUES ('100124', '1', true, 'active', 7, false);
 INSERT INTO public.alumnos VALUES ('100136', '1', true, 'active', 7, false);
 INSERT INTO public.alumnos VALUES ('100131', '3', true, 'active', 7, false);
 INSERT INTO public.alumnos VALUES ('100099', '2', false, 'active', 7, false);
 INSERT INTO public.alumnos VALUES ('100125', '1', true, 'active', 7, false);
 INSERT INTO public.alumnos VALUES ('100122', '4', true, 'active', 7, false);
+INSERT INTO public.alumnos VALUES ('100001', '9', true, 'active', 7, false);
 INSERT INTO public.alumnos VALUES ('100132', '2', false, 'active', 7, false);
+INSERT INTO public.alumnos VALUES ('100137', '1', false, 'active', 7, false);
 INSERT INTO public.alumnos VALUES ('100133', '1', true, 'active', 7, false);
 INSERT INTO public.alumnos VALUES ('100128', '3', false, 'active', 7, false);
+INSERT INTO public.alumnos VALUES ('100138', '4', false, 'active', 7, false);
 INSERT INTO public.alumnos VALUES ('100130', '4', false, 'active', 7, false);
 INSERT INTO public.alumnos VALUES ('100135', '3', true, 'active', 7, false);
 
@@ -207,6 +211,8 @@ INSERT INTO public.carreras VALUES (7, 'Diseño de la Moda e Industria del Vesti
 -- Data for Name: ciclos_escolares; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO public.ciclos_escolares VALUES (1, 'FebJun17', '2017-02-22', '2017-06-18', NULL, NULL);
+INSERT INTO public.ciclos_escolares VALUES (2, 'AgoDic17', '2017-08-19', '2017-12-17', NULL, NULL);
 INSERT INTO public.ciclos_escolares VALUES (18, '-', '2000-01-01', '2000-01-06', NULL, NULL);
 INSERT INTO public.ciclos_escolares VALUES (16, '2020-2', '2020-01-26', '2020-06-11', NULL, NULL);
 INSERT INTO public.ciclos_escolares VALUES (15, '2021-1', '2020-08-16', '2020-12-13', NULL, NULL);
@@ -215,6 +221,16 @@ INSERT INTO public.ciclos_escolares VALUES (13, '2022-1', '2021-08-15', '2021-12
 INSERT INTO public.ciclos_escolares VALUES (17, '2024-1', '2024-07-01', '2024-12-31', NULL, NULL);
 INSERT INTO public.ciclos_escolares VALUES (19, '2024-2', '2025-01-19', '2025-06-13', '2025-04-08', '2025-04-29');
 INSERT INTO public.ciclos_escolares VALUES (52, 'Lm099', '2025-02-01', '2025-02-13', NULL, NULL);
+INSERT INTO public.ciclos_escolares VALUES (3, 'FebJun18', '2018-02-21', '2018-06-16', NULL, NULL);
+INSERT INTO public.ciclos_escolares VALUES (4, 'AgoDic18', '2018-08-15', '2018-12-15', NULL, NULL);
+INSERT INTO public.ciclos_escolares VALUES (5, 'FebJun19', '2019-02-17', '2019-06-14', NULL, NULL);
+INSERT INTO public.ciclos_escolares VALUES (6, 'AgoDic19', '2019-08-10', '2019-12-10', NULL, NULL);
+INSERT INTO public.ciclos_escolares VALUES (7, 'FebJun20', '2020-02-20', '2020-06-11', NULL, NULL);
+INSERT INTO public.ciclos_escolares VALUES (8, 'AgoDic20', '2020-08-16', '2020-12-12', NULL, NULL);
+INSERT INTO public.ciclos_escolares VALUES (9, 'FebJun21', '2021-02-18', '2021-06-13', NULL, NULL);
+INSERT INTO public.ciclos_escolares VALUES (10, 'AgoDic21', '2021-08-19', '2021-12-14', NULL, NULL);
+INSERT INTO public.ciclos_escolares VALUES (11, 'FebJun22', '2022-02-15', '2022-06-15', NULL, NULL);
+INSERT INTO public.ciclos_escolares VALUES (12, 'AgoDic22', '2022-08-14', '2022-12-10', NULL, NULL);
 
 
 --
@@ -223,19 +239,6 @@ INSERT INTO public.ciclos_escolares VALUES (52, 'Lm099', '2025-02-01', '2025-02-
 -- Data for Name: materias; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.materias VALUES (387, 'Ilustración de prendas infantiles', 5, 3);
-INSERT INTO public.materias VALUES (388, 'Técnicas de traje de baño', 7, 2);
-INSERT INTO public.materias VALUES (389, 'Técnicas de mercadotecnia', 7, 2);
-INSERT INTO public.materias VALUES (390, 'Taller para prendas básicas', 8, 2);
-INSERT INTO public.materias VALUES (391, 'Taller para representación', 9, 5);
-INSERT INTO public.materias VALUES (392, 'Diseño de lencería', 9, 3);
-INSERT INTO public.materias VALUES (393, 'Herramientas de prendas masculinas', 8, 4);
-INSERT INTO public.materias VALUES (409, 'Progra', 15, 5);
-INSERT INTO public.materias VALUES (410, 'Algoritmos', 15, 3);
-INSERT INTO public.materias VALUES (308, 'Teoría para accesorios', 5, 4);
-INSERT INTO public.materias VALUES (309, 'Taller de diseño', 7, 5);
-INSERT INTO public.materias VALUES (310, 'Técnicas para prendas básicas', 6, 4);
-INSERT INTO public.materias VALUES (311, 'Confección para prendas básicas', 7, 2);
 INSERT INTO public.materias VALUES (312, 'Técnicas de prendas femeninas', 6, 2);
 INSERT INTO public.materias VALUES (313, 'Taller para prendas infantiles', 8, 4);
 INSERT INTO public.materias VALUES (314, 'Patronaje de prendas masculinas', 6, 4);
@@ -262,6 +265,20 @@ INSERT INTO public.materias VALUES (334, 'Fundamentos de lencería', 5, 3);
 INSERT INTO public.materias VALUES (335, 'Herramientas de lencería', 6, 2);
 INSERT INTO public.materias VALUES (336, 'Taller de joyería', 8, 3);
 INSERT INTO public.materias VALUES (337, 'Herramientas para lencería', 6, 2);
+INSERT INTO public.materias VALUES (338, 'Taller para representación', 5, 2);
+INSERT INTO public.materias VALUES (339, 'Confección para prendas básicas', 6, 4);
+INSERT INTO public.materias VALUES (340, 'Técnicas para joyería', 8, 4);
+INSERT INTO public.materias VALUES (341, 'Diseño de diseño', 8, 3);
+INSERT INTO public.materias VALUES (342, 'Patronaje para lencería', 5, 3);
+INSERT INTO public.materias VALUES (343, 'Teoría para color', 6, 4);
+INSERT INTO public.materias VALUES (344, 'Fundamentos de traje de baño', 8, 5);
+INSERT INTO public.materias VALUES (345, 'Fundamentos para traje de baño', 9, 2);
+INSERT INTO public.materias VALUES (346, 'Diseño para color', 6, 4);
+INSERT INTO public.materias VALUES (347, 'Fundamentos para textiles', 9, 4);
+INSERT INTO public.materias VALUES (348, 'Ilustración para representación', 8, 2);
+INSERT INTO public.materias VALUES (349, 'Fundamentos para prendas masculinas', 8, 3);
+INSERT INTO public.materias VALUES (350, 'Taller para traje de baño', 8, 4);
+INSERT INTO public.materias VALUES (351, 'Técnicas para lencería', 8, 3);
 INSERT INTO public.materias VALUES (1, 'Historia del Arte', 15, 8);
 INSERT INTO public.materias VALUES (2, 'Historia de la Arquitectura I', 18, 10);
 INSERT INTO public.materias VALUES (3, 'Historia de la Arquitectura II', 18, 10);
@@ -282,20 +299,6 @@ INSERT INTO public.materias VALUES (17, 'Modelos y Prototipos de Mobiliario', 21
 INSERT INTO public.materias VALUES (18, 'Fundamentos de Mercadotecnia', 21, 20);
 INSERT INTO public.materias VALUES (19, 'Imagen Corporativa', 21, 20);
 INSERT INTO public.materias VALUES (20, 'Ilustración Gráfica Digital', 21, 20);
-INSERT INTO public.materias VALUES (338, 'Taller para representación', 5, 2);
-INSERT INTO public.materias VALUES (339, 'Confección para prendas básicas', 6, 4);
-INSERT INTO public.materias VALUES (340, 'Técnicas para joyería', 8, 4);
-INSERT INTO public.materias VALUES (341, 'Diseño de diseño', 8, 3);
-INSERT INTO public.materias VALUES (342, 'Patronaje para lencería', 5, 3);
-INSERT INTO public.materias VALUES (343, 'Teoría para color', 6, 4);
-INSERT INTO public.materias VALUES (344, 'Fundamentos de traje de baño', 8, 5);
-INSERT INTO public.materias VALUES (345, 'Fundamentos para traje de baño', 9, 2);
-INSERT INTO public.materias VALUES (346, 'Diseño para color', 6, 4);
-INSERT INTO public.materias VALUES (347, 'Fundamentos para textiles', 9, 4);
-INSERT INTO public.materias VALUES (348, 'Ilustración para representación', 8, 2);
-INSERT INTO public.materias VALUES (349, 'Fundamentos para prendas masculinas', 8, 3);
-INSERT INTO public.materias VALUES (350, 'Taller para traje de baño', 8, 4);
-INSERT INTO public.materias VALUES (351, 'Técnicas para lencería', 8, 3);
 INSERT INTO public.materias VALUES (352, 'Patronaje para prendas masculinas', 9, 2);
 INSERT INTO public.materias VALUES (353, 'Taller de traje de baño', 7, 5);
 INSERT INTO public.materias VALUES (354, 'Diseño de prendas masculinas', 6, 4);
@@ -331,6 +334,26 @@ INSERT INTO public.materias VALUES (383, 'Taller de joyería', 6, 3);
 INSERT INTO public.materias VALUES (384, 'Taller de representación', 6, 2);
 INSERT INTO public.materias VALUES (385, 'Técnicas para lencería', 9, 4);
 INSERT INTO public.materias VALUES (386, 'Ilustración de prendas femeninas', 7, 2);
+INSERT INTO public.materias VALUES (387, 'Ilustración de prendas infantiles', 5, 3);
+INSERT INTO public.materias VALUES (388, 'Técnicas de traje de baño', 7, 2);
+INSERT INTO public.materias VALUES (389, 'Técnicas de mercadotecnia', 7, 2);
+INSERT INTO public.materias VALUES (390, 'Taller para prendas básicas', 8, 2);
+INSERT INTO public.materias VALUES (391, 'Taller para representación', 9, 5);
+INSERT INTO public.materias VALUES (392, 'Diseño de lencería', 9, 3);
+INSERT INTO public.materias VALUES (393, 'Herramientas de prendas masculinas', 8, 4);
+INSERT INTO public.materias VALUES (409, 'Progra', 15, 5);
+INSERT INTO public.materias VALUES (410, 'Algoritmos', 15, 3);
+INSERT INTO public.materias VALUES (308, 'Teoría para accesorios', 5, 4);
+INSERT INTO public.materias VALUES (309, 'Taller de diseño', 7, 5);
+INSERT INTO public.materias VALUES (310, 'Técnicas para prendas básicas', 6, 4);
+INSERT INTO public.materias VALUES (311, 'Confección para prendas básicas', 7, 2);
+INSERT INTO public.materias VALUES (403, 'Taller para color', 5, 4);
+INSERT INTO public.materias VALUES (404, 'Confección para traje de baño', 6, 2);
+INSERT INTO public.materias VALUES (405, 'Diseño para prendas básicas', 7, 3);
+INSERT INTO public.materias VALUES (406, 'Ilustración para color', 9, 5);
+INSERT INTO public.materias VALUES (407, 'Patronaje de prendas masculinas', 7, 3);
+INSERT INTO public.materias VALUES (408, 'Fundamentos de joyería', 7, 5);
+INSERT INTO public.materias VALUES (307, 'Confección de Lencería y Traje', 5, 5);
 INSERT INTO public.materias VALUES (394, 'Teoría para accesorios', 7, 3);
 INSERT INTO public.materias VALUES (395, 'Ilustración de lencería', 5, 4);
 INSERT INTO public.materias VALUES (396, 'Confección de diseño', 9, 2);
@@ -340,13 +363,6 @@ INSERT INTO public.materias VALUES (399, 'Diseño de color', 8, 2);
 INSERT INTO public.materias VALUES (400, 'Herramientas para accesorios', 5, 4);
 INSERT INTO public.materias VALUES (401, 'Taller para color', 9, 5);
 INSERT INTO public.materias VALUES (402, 'Taller de prendas femeninas', 5, 3);
-INSERT INTO public.materias VALUES (403, 'Taller para color', 5, 4);
-INSERT INTO public.materias VALUES (404, 'Confección para traje de baño', 6, 2);
-INSERT INTO public.materias VALUES (405, 'Diseño para prendas básicas', 7, 3);
-INSERT INTO public.materias VALUES (406, 'Ilustración para color', 9, 5);
-INSERT INTO public.materias VALUES (407, 'Patronaje de prendas masculinas', 7, 3);
-INSERT INTO public.materias VALUES (408, 'Fundamentos de joyería', 7, 5);
-INSERT INTO public.materias VALUES (307, 'Confección de Lencería y Traje', 5, 5);
 
 
 --
@@ -355,10 +371,10 @@ INSERT INTO public.materias VALUES (307, 'Confección de Lencería y Traje', 5, 
 -- Data for Name: planes_estudios; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO public.planes_estudios VALUES (9, 'Diseno y Arquitectura de Interiores 1', 8);
 INSERT INTO public.planes_estudios VALUES (10, 'Ingenieria en Sistemas 1', 9);
 INSERT INTO public.planes_estudios VALUES (7, 'Diseño de la Moda e Industria del Vestido 1', 7);
 INSERT INTO public.planes_estudios VALUES (8, 'Diseño de la Moda e Industria del Vestido 2', 7);
-INSERT INTO public.planes_estudios VALUES (9, 'Diseno y Arquitectura de Interiores 1', 8);
 
 
 --
@@ -513,6 +529,41 @@ INSERT INTO public.ciclos_escolares_materias VALUES (144, 19, 39, 2);
 INSERT INTO public.ciclos_escolares_materias VALUES (145, 19, 31, 2);
 INSERT INTO public.ciclos_escolares_materias VALUES (146, 19, 23, 2);
 INSERT INTO public.ciclos_escolares_materias VALUES (147, 19, 10, 2);
+INSERT INTO public.ciclos_escolares_materias VALUES (148, 52, 46, 1);
+INSERT INTO public.ciclos_escolares_materias VALUES (149, 52, 124, 1);
+INSERT INTO public.ciclos_escolares_materias VALUES (150, 52, 30, 1);
+INSERT INTO public.ciclos_escolares_materias VALUES (151, 52, 38, 1);
+INSERT INTO public.ciclos_escolares_materias VALUES (152, 52, 124, 1);
+INSERT INTO public.ciclos_escolares_materias VALUES (153, 52, 30, 1);
+INSERT INTO public.ciclos_escolares_materias VALUES (154, 52, 38, 1);
+INSERT INTO public.ciclos_escolares_materias VALUES (155, 52, 55, 2);
+INSERT INTO public.ciclos_escolares_materias VALUES (156, 52, 47, 2);
+INSERT INTO public.ciclos_escolares_materias VALUES (157, 52, 39, 2);
+INSERT INTO public.ciclos_escolares_materias VALUES (158, 52, 24, 3);
+INSERT INTO public.ciclos_escolares_materias VALUES (159, 52, 32, 3);
+INSERT INTO public.ciclos_escolares_materias VALUES (160, 52, 40, 3);
+INSERT INTO public.ciclos_escolares_materias VALUES (1, 1, 1, NULL);
+INSERT INTO public.ciclos_escolares_materias VALUES (2, 1, 2, NULL);
+INSERT INTO public.ciclos_escolares_materias VALUES (3, 2, 3, NULL);
+INSERT INTO public.ciclos_escolares_materias VALUES (4, 2, 4, NULL);
+INSERT INTO public.ciclos_escolares_materias VALUES (5, 3, 5, NULL);
+INSERT INTO public.ciclos_escolares_materias VALUES (6, 3, 6, NULL);
+INSERT INTO public.ciclos_escolares_materias VALUES (7, 4, 7, NULL);
+INSERT INTO public.ciclos_escolares_materias VALUES (8, 4, 8, NULL);
+INSERT INTO public.ciclos_escolares_materias VALUES (9, 5, 9, NULL);
+INSERT INTO public.ciclos_escolares_materias VALUES (10, 5, 10, NULL);
+INSERT INTO public.ciclos_escolares_materias VALUES (11, 6, 11, NULL);
+INSERT INTO public.ciclos_escolares_materias VALUES (12, 6, 12, NULL);
+INSERT INTO public.ciclos_escolares_materias VALUES (13, 7, 13, NULL);
+INSERT INTO public.ciclos_escolares_materias VALUES (14, 7, 14, NULL);
+INSERT INTO public.ciclos_escolares_materias VALUES (15, 8, 15, NULL);
+INSERT INTO public.ciclos_escolares_materias VALUES (16, 8, 16, NULL);
+INSERT INTO public.ciclos_escolares_materias VALUES (17, 9, 17, NULL);
+INSERT INTO public.ciclos_escolares_materias VALUES (18, 9, 18, NULL);
+INSERT INTO public.ciclos_escolares_materias VALUES (19, 10, 19, NULL);
+INSERT INTO public.ciclos_escolares_materias VALUES (20, 10, 20, NULL);
+INSERT INTO public.ciclos_escolares_materias VALUES (21, 11, 1, NULL);
+INSERT INTO public.ciclos_escolares_materias VALUES (22, 12, 2, NULL);
 
 
 --
@@ -576,6 +627,17 @@ INSERT INTO public.salones VALUES (10, 11, 22, 'especial', 'confeccion, maquinas
 -- Data for Name: grupos; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO public.grupos VALUES (1, 1, 4, 18, 18);
+INSERT INTO public.grupos VALUES (2, 2, 1, 15, 14);
+INSERT INTO public.grupos VALUES (3, 3, 10, 22, 20);
+INSERT INTO public.grupos VALUES (4, 4, 2, 20, 20);
+INSERT INTO public.grupos VALUES (5, 5, 9, 18, 15);
+INSERT INTO public.grupos VALUES (6, 6, 4, 18, 18);
+INSERT INTO public.grupos VALUES (7, 5, 3, 22, 21);
+INSERT INTO public.grupos VALUES (8, 2, 6, 20, 19);
+INSERT INTO public.grupos VALUES (9, 4, 7, 35, 30);
+INSERT INTO public.grupos VALUES (10, 1, 5, 15, 13);
+INSERT INTO public.grupos VALUES (11, 3, 8, 12, 11);
 
 
 --
@@ -584,6 +646,10 @@ INSERT INTO public.salones VALUES (10, 11, 22, 'especial', 'confeccion, maquinas
 -- Data for Name: enlista; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO public.enlista VALUES (1, 2, '100007');
+INSERT INTO public.enlista VALUES (2, 9, '100007');
+INSERT INTO public.enlista VALUES (3, 10, '100007');
+INSERT INTO public.enlista VALUES (4, 3, '100007');
 
 
 --
@@ -592,6 +658,26 @@ INSERT INTO public.salones VALUES (10, 11, 22, 'especial', 'confeccion, maquinas
 -- Data for Name: grupos_ciclos_materias; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO public.grupos_ciclos_materias VALUES (20, 9, 20);
+INSERT INTO public.grupos_ciclos_materias VALUES (19, 8, 19);
+INSERT INTO public.grupos_ciclos_materias VALUES (18, 7, 18);
+INSERT INTO public.grupos_ciclos_materias VALUES (17, 6, 17);
+INSERT INTO public.grupos_ciclos_materias VALUES (16, 5, 16);
+INSERT INTO public.grupos_ciclos_materias VALUES (15, 4, 15);
+INSERT INTO public.grupos_ciclos_materias VALUES (14, 3, 14);
+INSERT INTO public.grupos_ciclos_materias VALUES (13, 2, 13);
+INSERT INTO public.grupos_ciclos_materias VALUES (12, 1, 12);
+INSERT INTO public.grupos_ciclos_materias VALUES (11, 11, 11);
+INSERT INTO public.grupos_ciclos_materias VALUES (10, 10, 10);
+INSERT INTO public.grupos_ciclos_materias VALUES (9, 9, 9);
+INSERT INTO public.grupos_ciclos_materias VALUES (8, 8, 8);
+INSERT INTO public.grupos_ciclos_materias VALUES (7, 7, 7);
+INSERT INTO public.grupos_ciclos_materias VALUES (6, 6, 6);
+INSERT INTO public.grupos_ciclos_materias VALUES (5, 5, 5);
+INSERT INTO public.grupos_ciclos_materias VALUES (4, 4, 4);
+INSERT INTO public.grupos_ciclos_materias VALUES (3, 3, 3);
+INSERT INTO public.grupos_ciclos_materias VALUES (2, 2, 2);
+INSERT INTO public.grupos_ciclos_materias VALUES (1, 1, 1);
 
 
 --
@@ -600,6 +686,39 @@ INSERT INTO public.salones VALUES (10, 11, 22, 'especial', 'confeccion, maquinas
 -- Data for Name: grupos_horarios; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO public.grupos_horarios VALUES (1, 2, 'lunes', '07:00:00', '09:00:00');
+INSERT INTO public.grupos_horarios VALUES (3, 10, 'miercoles', '07:30:00', '10:00:00');
+INSERT INTO public.grupos_horarios VALUES (4, 3, 'miercoles', '13:00:00', '15:00:00');
+INSERT INTO public.grupos_horarios VALUES (5, 2, 'lunes', '12:00:00', '14:00:00');
+INSERT INTO public.grupos_horarios VALUES (6, 9, 'jueves', '09:00:00', '11:00:00');
+INSERT INTO public.grupos_horarios VALUES (7, 1, 'lunes', '07:00:00', '09:00:00');
+INSERT INTO public.grupos_horarios VALUES (9, 3, 'martes', '07:30:00', '09:30:00');
+INSERT INTO public.grupos_horarios VALUES (10, 4, 'martes', '10:00:00', '12:00:00');
+INSERT INTO public.grupos_horarios VALUES (11, 5, 'miércoles', '08:00:00', '10:00:00');
+INSERT INTO public.grupos_horarios VALUES (12, 6, 'miércoles', '11:00:00', '13:00:00');
+INSERT INTO public.grupos_horarios VALUES (13, 7, 'jueves', '07:30:00', '10:00:00');
+INSERT INTO public.grupos_horarios VALUES (14, 8, 'jueves', '12:00:00', '14:00:00');
+INSERT INTO public.grupos_horarios VALUES (16, 10, 'viernes', '13:00:00', '15:00:00');
+INSERT INTO public.grupos_horarios VALUES (17, 11, 'lunes', '08:00:00', '10:00:00');
+INSERT INTO public.grupos_horarios VALUES (18, 1, 'martes', '10:30:00', '12:30:00');
+INSERT INTO public.grupos_horarios VALUES (20, 3, 'jueves', '09:00:00', '11:00:00');
+INSERT INTO public.grupos_horarios VALUES (21, 4, 'viernes', '07:30:00', '10:00:00');
+INSERT INTO public.grupos_horarios VALUES (22, 5, 'lunes', '12:00:00', '14:00:00');
+INSERT INTO public.grupos_horarios VALUES (23, 6, 'martes', '08:00:00', '10:00:00');
+INSERT INTO public.grupos_horarios VALUES (24, 7, 'miércoles', '13:00:00', '15:00:00');
+INSERT INTO public.grupos_horarios VALUES (25, 8, 'jueves', '07:00:00', '09:00:00');
+INSERT INTO public.grupos_horarios VALUES (26, 9, 'viernes', '11:00:00', '13:00:00');
+INSERT INTO public.grupos_horarios VALUES (28, 11, 'martes', '09:30:00', '11:30:00');
+INSERT INTO public.grupos_horarios VALUES (29, 1, 'miércoles', '10:00:00', '12:00:00');
+INSERT INTO public.grupos_horarios VALUES (30, 2, 'jueves', '13:00:00', '15:00:00');
+INSERT INTO public.grupos_horarios VALUES (31, 3, 'viernes', '08:30:00', '10:30:00');
+INSERT INTO public.grupos_horarios VALUES (32, 4, 'lunes', '10:00:00', '12:00:00');
+INSERT INTO public.grupos_horarios VALUES (33, 5, 'martes', '07:00:00', '09:00:00');
+INSERT INTO public.grupos_horarios VALUES (34, 6, 'miércoles', '12:00:00', '14:00:00');
+INSERT INTO public.grupos_horarios VALUES (35, 7, 'jueves', '10:30:00', '12:30:00');
+INSERT INTO public.grupos_horarios VALUES (36, 8, 'viernes', '13:00:00', '15:00:00');
+INSERT INTO public.grupos_horarios VALUES (27, 10, 'martes', '07:30:00', '09:30:00');
+INSERT INTO public.grupos_horarios VALUES (2, 9, 'lunes', '09:00:00', '11:00:00');
 
 
 --
@@ -648,18 +767,16 @@ INSERT INTO public.profesores_disponibilidad VALUES (491, 8, 19, 'martes', '09:0
 INSERT INTO public.profesores_disponibilidad VALUES (529, 9, 19, 'viernes', '10:00:00', '10:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (577, 13, 19, 'martes', '15:00:00', '15:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (690, 28, 19, 'jueves', '12:30:00', '13:00:00', true);
-INSERT INTO public.profesores_disponibilidad VALUES (693, 28, 19, 'martes', '13:00:00', '13:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (700, 28, 19, 'jueves', '13:30:00', '14:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (525, 9, 19, 'lunes', '10:00:00', '10:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (721, 28, 19, 'viernes', '15:30:00', '16:00:00', false);
-INSERT INTO public.profesores_disponibilidad VALUES (703, 28, 19, 'martes', '14:00:00', '14:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (635, 28, 19, 'miercoles', '07:00:00', '07:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (707, 28, 19, 'lunes', '14:30:00', '15:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (710, 28, 19, 'jueves', '14:30:00', '15:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (592, 20, 19, 'lunes', '12:00:00', '12:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (714, 28, 19, 'miercoles', '15:00:00', '15:30:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (677, 28, 19, 'lunes', '11:30:00', '12:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (637, 28, 19, 'jueves', '07:30:00', '08:00:00', true);
-INSERT INTO public.profesores_disponibilidad VALUES (642, 28, 19, 'lunes', '08:00:00', '08:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (645, 28, 19, 'jueves', '08:00:00', '08:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (720, 28, 19, 'jueves', '15:30:00', '16:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (549, 9, 19, 'viernes', '12:00:00', '12:30:00', true);
@@ -672,15 +789,17 @@ INSERT INTO public.profesores_disponibilidad VALUES (565, 13, 19, 'viernes', '13
 INSERT INTO public.profesores_disponibilidad VALUES (478, 8, 19, 'viernes', '07:30:00', '08:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (484, 8, 19, 'viernes', '08:00:00', '08:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (664, 28, 19, 'miercoles', '10:00:00', '10:30:00', false);
-INSERT INTO public.profesores_disponibilidad VALUES (658, 28, 19, 'martes', '09:30:00', '10:00:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (633, 28, 19, 'martes', '07:00:00', '07:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (510, 9, 19, 'lunes', '08:30:00', '09:00:00', false);
-INSERT INTO public.profesores_disponibilidad VALUES (667, 28, 19, 'lunes', '10:30:00', '11:00:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (658, 28, 19, 'martes', '09:30:00', '10:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (470, 8, 19, 'lunes', '07:00:00', '07:30:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (683, 28, 19, 'martes', '12:00:00', '12:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (523, 9, 19, 'jueves', '09:30:00', '10:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (370, 10, 52, 'lunes', '07:00:00', '07:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (132, 7, 18, 'miercoles', '07:00:00', '07:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (131, 7, 18, 'martes', '07:00:00', '07:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (134, 7, 18, 'martes', '07:30:00', '08:00:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (693, 28, 19, 'martes', '13:00:00', '13:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (133, 7, 18, 'lunes', '07:00:00', '07:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (533, 9, 19, 'jueves', '10:30:00', '11:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (651, 28, 19, 'viernes', '08:30:00', '09:00:00', false);
@@ -691,9 +810,12 @@ INSERT INTO public.profesores_disponibilidad VALUES (612, 20, 19, 'lunes', '14:0
 INSERT INTO public.profesores_disponibilidad VALUES (509, 8, 19, 'viernes', '10:30:00', '11:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (686, 28, 19, 'viernes', '12:00:00', '12:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (679, 28, 19, 'miercoles', '11:30:00', '12:00:00', false);
-INSERT INTO public.profesores_disponibilidad VALUES (672, 28, 19, 'lunes', '11:00:00', '11:30:00', true);
-INSERT INTO public.profesores_disponibilidad VALUES (677, 28, 19, 'lunes', '11:30:00', '12:00:00', true);
-INSERT INTO public.profesores_disponibilidad VALUES (683, 28, 19, 'martes', '12:00:00', '12:30:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (703, 28, 19, 'martes', '14:00:00', '14:30:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (708, 28, 19, 'martes', '14:30:00', '15:00:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (642, 28, 19, 'lunes', '08:00:00', '08:30:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (667, 28, 19, 'lunes', '10:30:00', '11:00:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (662, 28, 19, 'lunes', '10:00:00', '10:30:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (672, 28, 19, 'lunes', '11:00:00', '11:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (574, 13, 19, 'jueves', '14:30:00', '15:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (624, 20, 19, 'martes', '15:00:00', '15:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (141, 7, 18, 'lunes', '08:00:00', '08:30:00', true);
@@ -730,22 +852,20 @@ INSERT INTO public.profesores_disponibilidad VALUES (297, 18, 18, 'viernes', '14
 INSERT INTO public.profesores_disponibilidad VALUES (299, 18, 18, 'martes', '15:00:00', '15:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (302, 18, 18, 'viernes', '15:00:00', '15:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (306, 18, 18, 'jueves', '15:30:00', '16:00:00', true);
-INSERT INTO public.profesores_disponibilidad VALUES (322, 7, 52, 'miercoles', '11:00:00', '11:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (350, 2, 52, 'lunes', '13:00:00', '13:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (355, 2, 52, 'lunes', '13:30:00', '14:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (360, 2, 52, 'lunes', '14:00:00', '14:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (339, 2, 52, 'viernes', '11:00:00', '11:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (344, 2, 52, 'viernes', '12:00:00', '12:30:00', false);
-INSERT INTO public.profesores_disponibilidad VALUES (314, 7, 52, 'miercoles', '10:30:00', '11:00:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (319, 7, 52, 'lunes', '11:00:00', '11:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (364, 2, 52, 'viernes', '14:00:00', '14:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (369, 2, 52, 'viernes', '14:30:00', '15:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (333, 2, 52, 'miercoles', '11:30:00', '12:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (342, 2, 52, 'miercoles', '12:00:00', '12:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (347, 2, 52, 'miercoles', '12:30:00', '13:00:00', false);
-INSERT INTO public.profesores_disponibilidad VALUES (311, 7, 52, 'martes', '10:00:00', '10:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (331, 2, 52, 'martes', '11:30:00', '12:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (330, 2, 52, 'lunes', '11:00:00', '11:30:00', false);
-INSERT INTO public.profesores_disponibilidad VALUES (319, 7, 52, 'lunes', '11:00:00', '11:30:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (314, 7, 52, 'miercoles', '10:30:00', '11:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (335, 2, 52, 'jueves', '11:30:00', '12:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (353, 2, 52, 'jueves', '13:00:00', '13:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (357, 2, 52, 'jueves', '13:30:00', '14:00:00', false);
@@ -791,6 +911,8 @@ INSERT INTO public.profesores_disponibilidad VALUES (479, 8, 19, 'lunes', '08:00
 INSERT INTO public.profesores_disponibilidad VALUES (532, 9, 19, 'miercoles', '10:30:00', '11:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (548, 9, 19, 'jueves', '12:00:00', '12:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (493, 8, 19, 'jueves', '09:00:00', '09:30:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (311, 7, 52, 'martes', '10:00:00', '10:30:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (322, 7, 52, 'miercoles', '11:00:00', '11:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (235, 13, 18, 'lunes', '13:00:00', '13:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (239, 13, 18, 'jueves', '13:30:00', '14:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (247, 13, 18, 'jueves', '14:00:00', '14:30:00', true);
@@ -818,12 +940,11 @@ INSERT INTO public.profesores_disponibilidad VALUES (288, 18, 18, 'lunes', '14:0
 INSERT INTO public.profesores_disponibilidad VALUES (301, 18, 18, 'jueves', '15:00:00', '15:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (304, 18, 18, 'martes', '15:30:00', '16:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (336, 2, 52, 'viernes', '11:30:00', '12:00:00', false);
-INSERT INTO public.profesores_disponibilidad VALUES (317, 7, 52, 'viernes', '10:30:00', '11:00:00', false);
-INSERT INTO public.profesores_disponibilidad VALUES (312, 7, 52, 'miercoles', '10:00:00', '10:30:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (755, 14, 52, 'martes', '14:30:00', '15:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (359, 2, 52, 'viernes', '13:30:00', '14:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (362, 2, 52, 'miercoles', '14:00:00', '14:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (332, 2, 52, 'martes', '11:00:00', '11:30:00', false);
-INSERT INTO public.profesores_disponibilidad VALUES (321, 7, 52, 'martes', '11:00:00', '11:30:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (317, 7, 52, 'viernes', '10:30:00', '11:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (340, 2, 52, 'lunes', '12:00:00', '12:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (392, 10, 52, 'miercoles', '09:00:00', '09:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (400, 10, 52, 'lunes', '10:00:00', '10:30:00', true);
@@ -840,6 +961,7 @@ INSERT INTO public.profesores_disponibilidad VALUES (626, 20, 19, 'viernes', '15
 INSERT INTO public.profesores_disponibilidad VALUES (446, 7, 19, 'martes', '09:30:00', '10:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (599, 20, 19, 'miercoles', '12:30:00', '13:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (567, 13, 19, 'martes', '14:00:00', '14:30:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (723, 7, 52, 'jueves', '08:30:00', '10:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (424, 7, 19, 'miercoles', '07:00:00', '07:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (442, 7, 19, 'miercoles', '09:00:00', '09:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (449, 7, 19, 'viernes', '09:30:00', '10:00:00', true);
@@ -853,20 +975,40 @@ INSERT INTO public.profesores_disponibilidad VALUES (573, 13, 19, 'miercoles', '
 INSERT INTO public.profesores_disponibilidad VALUES (578, 13, 19, 'miercoles', '15:00:00', '15:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (564, 13, 19, 'jueves', '13:30:00', '14:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (638, 28, 19, 'jueves', '07:00:00', '07:30:00', true);
-INSERT INTO public.profesores_disponibilidad VALUES (643, 28, 19, 'martes', '08:00:00', '08:30:00', true);
-INSERT INTO public.profesores_disponibilidad VALUES (647, 28, 19, 'lunes', '08:30:00', '09:00:00', true);
-INSERT INTO public.profesores_disponibilidad VALUES (588, 20, 19, 'martes', '11:30:00', '12:00:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (736, 14, 52, 'jueves', '12:30:00', '13:00:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (742, 14, 52, 'jueves', '13:00:00', '13:30:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (580, 13, 19, 'viernes', '15:00:00', '15:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (650, 28, 19, 'jueves', '08:30:00', '09:00:00', true);
-INSERT INTO public.profesores_disponibilidad VALUES (673, 28, 19, 'martes', '11:00:00', '11:30:00', true);
-INSERT INTO public.profesores_disponibilidad VALUES (718, 28, 19, 'martes', '15:30:00', '16:00:00', true);
-INSERT INTO public.profesores_disponibilidad VALUES (593, 20, 19, 'martes', '12:00:00', '12:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (519, 9, 19, 'lunes', '09:30:00', '10:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (516, 9, 19, 'jueves', '09:00:00', '09:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (476, 8, 19, 'jueves', '07:30:00', '08:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (608, 20, 19, 'lunes', '13:30:00', '14:00:00', false);
-INSERT INTO public.profesores_disponibilidad VALUES (580, 13, 19, 'viernes', '15:00:00', '15:30:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (750, 14, 52, 'lunes', '14:00:00', '14:30:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (752, 14, 52, 'jueves', '14:00:00', '14:30:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (643, 28, 19, 'martes', '08:00:00', '08:30:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (673, 28, 19, 'martes', '11:00:00', '11:30:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (718, 28, 19, 'martes', '15:30:00', '16:00:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (647, 28, 19, 'lunes', '08:30:00', '09:00:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (687, 28, 19, 'lunes', '12:30:00', '13:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (585, 13, 19, 'viernes', '15:30:00', '16:00:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (588, 20, 19, 'martes', '11:30:00', '12:00:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (593, 20, 19, 'martes', '12:00:00', '12:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (590, 20, 19, 'jueves', '11:30:00', '12:00:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (756, 14, 52, 'miercoles', '14:30:00', '15:00:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (321, 7, 52, 'martes', '11:00:00', '11:30:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (759, 14, 52, 'lunes', '15:00:00', '15:30:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (760, 14, 52, 'martes', '15:00:00', '15:30:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (761, 14, 52, 'miercoles', '15:00:00', '15:30:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (763, 14, 52, 'jueves', '15:00:00', '15:30:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (764, 14, 52, 'lunes', '15:30:00', '16:00:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (765, 14, 52, 'martes', '15:30:00', '16:00:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (766, 14, 52, 'miercoles', '15:30:00', '16:00:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (767, 14, 52, 'jueves', '15:30:00', '16:00:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (768, 14, 52, 'viernes', '15:30:00', '16:00:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (724, 14, 52, 'martes', '11:30:00', '12:00:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (734, 14, 52, 'martes', '12:30:00', '13:00:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (739, 14, 52, 'lunes', '12:00:00', '12:30:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (738, 14, 52, 'lunes', '13:00:00', '13:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (242, 13, 18, 'lunes', '14:00:00', '14:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (257, 13, 18, 'jueves', '15:00:00', '15:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (240, 13, 18, 'viernes', '13:30:00', '14:00:00', false);
@@ -895,26 +1037,24 @@ INSERT INTO public.profesores_disponibilidad VALUES (334, 2, 52, 'miercoles', '1
 INSERT INTO public.profesores_disponibilidad VALUES (358, 2, 52, 'miercoles', '13:30:00', '14:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (367, 2, 52, 'miercoles', '14:30:00', '15:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (346, 2, 52, 'martes', '12:30:00', '13:00:00', false);
-INSERT INTO public.profesores_disponibilidad VALUES (315, 7, 52, 'jueves', '10:00:00', '10:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (351, 2, 52, 'martes', '13:00:00', '13:30:00', false);
-INSERT INTO public.profesores_disponibilidad VALUES (325, 7, 52, 'lunes', '11:30:00', '12:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (343, 2, 52, 'jueves', '12:00:00', '12:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (406, 10, 52, 'martes', '10:30:00', '11:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (410, 10, 52, 'lunes', '11:00:00', '11:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (425, 7, 19, 'jueves', '07:00:00', '07:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (674, 28, 19, 'miercoles', '11:00:00', '11:30:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (325, 7, 52, 'lunes', '11:30:00', '12:00:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (315, 7, 52, 'jueves', '10:00:00', '10:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (665, 28, 19, 'jueves', '10:00:00', '10:30:00', true);
-INSERT INTO public.profesores_disponibilidad VALUES (668, 28, 19, 'martes', '10:30:00', '11:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (524, 9, 19, 'viernes', '09:30:00', '10:00:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (722, 7, 52, 'Miércoles', '10:00:00', '12:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (437, 7, 19, 'miercoles', '08:30:00', '09:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (434, 7, 19, 'viernes', '08:00:00', '08:30:00', true);
-INSERT INTO public.profesores_disponibilidad VALUES (678, 28, 19, 'martes', '11:30:00', '12:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (568, 13, 19, 'miercoles', '14:00:00', '14:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (541, 9, 19, 'martes', '11:30:00', '12:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (583, 13, 19, 'miercoles', '15:30:00', '16:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (561, 13, 19, 'martes', '13:30:00', '14:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (627, 20, 19, 'lunes', '15:30:00', '16:00:00', true);
-INSERT INTO public.profesores_disponibilidad VALUES (688, 28, 19, 'martes', '12:30:00', '13:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (556, 13, 19, 'lunes', '09:30:00', '10:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (589, 20, 19, 'miercoles', '11:30:00', '12:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (594, 20, 19, 'miercoles', '12:00:00', '12:30:00', false);
@@ -927,29 +1067,46 @@ INSERT INTO public.profesores_disponibilidad VALUES (475, 8, 19, 'jueves', '07:0
 INSERT INTO public.profesores_disponibilidad VALUES (600, 20, 19, 'jueves', '12:30:00', '13:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (521, 9, 19, 'miercoles', '09:30:00', '10:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (695, 28, 19, 'jueves', '13:00:00', '13:30:00', true);
-INSERT INTO public.profesores_disponibilidad VALUES (698, 28, 19, 'martes', '13:30:00', '14:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (702, 28, 19, 'lunes', '14:00:00', '14:30:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (648, 28, 19, 'martes', '08:30:00', '09:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (508, 8, 19, 'jueves', '10:30:00', '11:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (538, 9, 19, 'jueves', '11:00:00', '11:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (705, 28, 19, 'jueves', '14:00:00', '14:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (514, 9, 19, 'viernes', '08:30:00', '09:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (712, 28, 19, 'lunes', '15:00:00', '15:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (622, 20, 19, 'lunes', '15:00:00', '15:30:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (725, 14, 52, 'jueves', '11:30:00', '12:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (715, 28, 19, 'jueves', '15:00:00', '15:30:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (668, 28, 19, 'martes', '10:30:00', '11:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (719, 28, 19, 'miercoles', '15:30:00', '16:00:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (678, 28, 19, 'martes', '11:30:00', '12:00:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (688, 28, 19, 'martes', '12:30:00', '13:00:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (698, 28, 19, 'martes', '13:30:00', '14:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (639, 28, 19, 'viernes', '07:00:00', '07:30:00', false);
-INSERT INTO public.profesores_disponibilidad VALUES (598, 20, 19, 'martes', '12:30:00', '13:00:00', true);
-INSERT INTO public.profesores_disponibilidad VALUES (603, 20, 19, 'martes', '13:00:00', '13:30:00', true);
-INSERT INTO public.profesores_disponibilidad VALUES (648, 28, 19, 'martes', '08:30:00', '09:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (661, 28, 19, 'viernes', '09:30:00', '10:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (545, 9, 19, 'lunes', '12:00:00', '12:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (503, 8, 19, 'jueves', '10:00:00', '10:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (681, 28, 19, 'viernes', '11:30:00', '12:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (691, 28, 19, 'viernes', '12:30:00', '13:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (654, 28, 19, 'miercoles', '09:00:00', '09:30:00', false);
-INSERT INTO public.profesores_disponibilidad VALUES (606, 20, 19, 'martes', '13:30:00', '14:00:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (731, 14, 52, 'jueves', '12:00:00', '12:30:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (598, 20, 19, 'martes', '12:30:00', '13:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (579, 13, 19, 'jueves', '15:00:00', '15:30:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (744, 14, 52, 'lunes', '13:30:00', '14:00:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (603, 20, 19, 'martes', '13:00:00', '13:30:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (606, 20, 19, 'martes', '13:30:00', '14:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (613, 20, 19, 'martes', '14:00:00', '14:30:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (745, 14, 52, 'miercoles', '13:30:00', '14:00:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (746, 14, 52, 'martes', '13:30:00', '14:00:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (748, 14, 52, 'jueves', '13:30:00', '14:00:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (749, 14, 52, 'martes', '14:00:00', '14:30:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (751, 14, 52, 'miercoles', '14:00:00', '14:30:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (754, 14, 52, 'lunes', '14:30:00', '15:00:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (757, 14, 52, 'jueves', '14:30:00', '15:00:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (735, 14, 52, 'miercoles', '12:30:00', '13:00:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (729, 14, 52, 'martes', '12:00:00', '12:30:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (740, 14, 52, 'martes', '13:00:00', '13:30:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (733, 14, 52, 'lunes', '12:30:00', '13:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (433, 7, 19, 'jueves', '08:00:00', '08:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (440, 7, 19, 'lunes', '09:00:00', '09:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (443, 7, 19, 'jueves', '09:00:00', '09:30:00', true);
@@ -986,8 +1143,8 @@ INSERT INTO public.profesores_disponibilidad VALUES (283, 18, 18, 'lunes', '13:3
 INSERT INTO public.profesores_disponibilidad VALUES (285, 18, 18, 'miercoles', '13:30:00', '14:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (290, 18, 18, 'miercoles', '14:00:00', '14:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (292, 18, 18, 'viernes', '14:00:00', '14:30:00', true);
-INSERT INTO public.profesores_disponibilidad VALUES (634, 28, 19, 'martes', '07:30:00', '08:00:00', true);
-INSERT INTO public.profesores_disponibilidad VALUES (657, 28, 19, 'lunes', '09:30:00', '10:00:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (323, 7, 52, 'jueves', '11:00:00', '11:30:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (328, 7, 52, 'jueves', '11:30:00', '12:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (649, 28, 19, 'miercoles', '08:30:00', '09:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (669, 28, 19, 'miercoles', '10:30:00', '11:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (526, 9, 19, 'martes', '10:00:00', '10:30:00', false);
@@ -995,7 +1152,6 @@ INSERT INTO public.profesores_disponibilidad VALUES (531, 9, 19, 'martes', '10:3
 INSERT INTO public.profesores_disponibilidad VALUES (536, 9, 19, 'martes', '11:00:00', '11:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (569, 13, 19, 'jueves', '14:00:00', '14:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (625, 20, 19, 'jueves', '15:00:00', '15:30:00', true);
-INSERT INTO public.profesores_disponibilidad VALUES (641, 28, 19, 'lunes', '07:30:00', '08:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (557, 13, 19, 'lunes', '08:30:00', '09:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (607, 20, 19, 'viernes', '13:00:00', '13:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (604, 20, 19, 'miercoles', '13:00:00', '13:30:00', false);
@@ -1009,12 +1165,10 @@ INSERT INTO public.profesores_disponibilidad VALUES (570, 13, 19, 'viernes', '14
 INSERT INTO public.profesores_disponibilidad VALUES (477, 8, 19, 'viernes', '07:00:00', '07:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (361, 2, 52, 'martes', '14:00:00', '14:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (366, 2, 52, 'martes', '14:30:00', '15:00:00', true);
-INSERT INTO public.profesores_disponibilidad VALUES (318, 7, 52, 'viernes', '10:00:00', '10:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (349, 2, 52, 'viernes', '12:30:00', '13:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (354, 2, 52, 'viernes', '13:00:00', '13:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (341, 2, 52, 'martes', '12:00:00', '12:30:00', false);
-INSERT INTO public.profesores_disponibilidad VALUES (323, 7, 52, 'jueves', '11:00:00', '11:30:00', false);
-INSERT INTO public.profesores_disponibilidad VALUES (328, 7, 52, 'jueves', '11:30:00', '12:00:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (318, 7, 52, 'viernes', '10:00:00', '10:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (345, 2, 52, 'lunes', '12:30:00', '13:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (337, 2, 52, 'jueves', '11:00:00', '11:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (394, 10, 52, 'viernes', '09:00:00', '09:30:00', true);
@@ -1029,23 +1183,17 @@ INSERT INTO public.profesores_disponibilidad VALUES (485, 8, 19, 'lunes', '08:30
 INSERT INTO public.profesores_disponibilidad VALUES (656, 28, 19, 'viernes', '09:00:00', '09:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (540, 9, 19, 'lunes', '11:30:00', '12:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (660, 28, 19, 'jueves', '09:30:00', '10:00:00', true);
-INSERT INTO public.profesores_disponibilidad VALUES (663, 28, 19, 'martes', '10:00:00', '10:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (495, 8, 19, 'lunes', '09:30:00', '10:00:00', false);
-INSERT INTO public.profesores_disponibilidad VALUES (652, 28, 19, 'lunes', '09:00:00', '09:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (670, 28, 19, 'jueves', '10:30:00', '11:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (675, 28, 19, 'jueves', '11:00:00', '11:30:00', true);
-INSERT INTO public.profesores_disponibilidad VALUES (653, 28, 19, 'martes', '09:00:00', '09:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (488, 8, 19, 'jueves', '08:30:00', '09:00:00', false);
-INSERT INTO public.profesores_disponibilidad VALUES (632, 28, 19, 'lunes', '07:00:00', '07:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (689, 28, 19, 'miercoles', '12:30:00', '13:00:00', false);
-INSERT INTO public.profesores_disponibilidad VALUES (682, 28, 19, 'lunes', '12:00:00', '12:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (685, 28, 19, 'jueves', '12:00:00', '12:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (692, 28, 19, 'lunes', '13:00:00', '13:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (597, 20, 19, 'lunes', '12:30:00', '13:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (699, 28, 19, 'miercoles', '13:30:00', '14:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (640, 28, 19, 'viernes', '07:30:00', '08:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (709, 28, 19, 'miercoles', '14:30:00', '15:00:00', true);
-INSERT INTO public.profesores_disponibilidad VALUES (713, 28, 19, 'martes', '15:00:00', '15:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (646, 28, 19, 'viernes', '08:00:00', '08:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (706, 28, 19, 'viernes', '14:00:00', '14:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (716, 28, 19, 'viernes', '15:00:00', '15:30:00', false);
@@ -1081,24 +1229,20 @@ INSERT INTO public.profesores_disponibilidad VALUES (293, 18, 18, 'lunes', '14:3
 INSERT INTO public.profesores_disponibilidad VALUES (296, 18, 18, 'jueves', '14:30:00', '15:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (300, 18, 18, 'miercoles', '15:00:00', '15:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (307, 18, 18, 'viernes', '15:30:00', '16:00:00', true);
-INSERT INTO public.profesores_disponibilidad VALUES (324, 7, 52, 'viernes', '11:00:00', '11:30:00', true);
-INSERT INTO public.profesores_disponibilidad VALUES (327, 7, 52, 'miercoles', '11:30:00', '12:00:00', true);
-INSERT INTO public.profesores_disponibilidad VALUES (329, 7, 52, 'viernes', '11:30:00', '12:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (352, 2, 52, 'miercoles', '13:00:00', '13:30:00', false);
-INSERT INTO public.profesores_disponibilidad VALUES (313, 7, 52, 'martes', '10:30:00', '11:00:00', false);
-INSERT INTO public.profesores_disponibilidad VALUES (326, 7, 52, 'martes', '11:30:00', '12:00:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (316, 7, 52, 'jueves', '10:30:00', '11:00:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (327, 7, 52, 'miercoles', '11:30:00', '12:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (356, 2, 52, 'martes', '13:30:00', '14:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (551, 13, 19, 'lunes', '08:00:00', '08:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (429, 7, 19, 'viernes', '07:00:00', '07:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (562, 13, 19, 'lunes', '13:30:00', '14:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (566, 13, 19, 'lunes', '14:00:00', '14:30:00', false);
-INSERT INTO public.profesores_disponibilidad VALUES (708, 28, 19, 'martes', '14:30:00', '15:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (684, 28, 19, 'miercoles', '12:00:00', '12:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (615, 20, 19, 'jueves', '14:00:00', '14:30:00', false);
-INSERT INTO public.profesores_disponibilidad VALUES (316, 7, 52, 'jueves', '10:30:00', '11:00:00', false);
-INSERT INTO public.profesores_disponibilidad VALUES (310, 7, 52, 'lunes', '10:00:00', '10:30:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (329, 7, 52, 'viernes', '11:30:00', '12:00:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (313, 7, 52, 'martes', '10:30:00', '11:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (338, 2, 52, 'lunes', '11:30:00', '12:00:00', false);
-INSERT INTO public.profesores_disponibilidad VALUES (320, 7, 52, 'lunes', '10:30:00', '11:00:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (324, 7, 52, 'viernes', '11:00:00', '11:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (348, 2, 52, 'jueves', '12:30:00', '13:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (386, 10, 52, 'martes', '08:30:00', '09:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (391, 10, 52, 'martes', '09:00:00', '09:30:00', true);
@@ -1117,16 +1261,17 @@ INSERT INTO public.profesores_disponibilidad VALUES (506, 8, 19, 'martes', '10:3
 INSERT INTO public.profesores_disponibilidad VALUES (676, 28, 19, 'viernes', '11:00:00', '11:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (543, 9, 19, 'jueves', '11:30:00', '12:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (602, 20, 19, 'lunes', '13:00:00', '13:30:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (310, 7, 52, 'lunes', '10:00:00', '10:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (701, 28, 19, 'viernes', '13:30:00', '14:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (717, 28, 19, 'lunes', '15:30:00', '16:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (522, 9, 19, 'lunes', '09:00:00', '09:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (480, 8, 19, 'lunes', '07:30:00', '08:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (680, 28, 19, 'jueves', '11:30:00', '12:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (535, 9, 19, 'lunes', '11:00:00', '11:30:00', false);
-INSERT INTO public.profesores_disponibilidad VALUES (662, 28, 19, 'lunes', '10:00:00', '10:30:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (326, 7, 52, 'martes', '11:30:00', '12:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (605, 20, 19, 'jueves', '13:00:00', '13:30:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (634, 28, 19, 'martes', '07:30:00', '08:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (490, 8, 19, 'lunes', '09:00:00', '09:30:00', false);
-INSERT INTO public.profesores_disponibilidad VALUES (687, 28, 19, 'lunes', '12:30:00', '13:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (694, 28, 19, 'miercoles', '13:00:00', '13:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (498, 8, 19, 'jueves', '09:30:00', '10:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (547, 9, 19, 'miercoles', '12:00:00', '12:30:00', false);
@@ -1135,13 +1280,35 @@ INSERT INTO public.profesores_disponibilidad VALUES (610, 20, 19, 'jueves', '13:
 INSERT INTO public.profesores_disponibilidad VALUES (487, 8, 19, 'miercoles', '08:30:00', '09:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (697, 28, 19, 'lunes', '13:30:00', '14:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (530, 9, 19, 'lunes', '10:30:00', '11:00:00', false);
-INSERT INTO public.profesores_disponibilidad VALUES (633, 28, 19, 'martes', '07:00:00', '07:30:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (653, 28, 19, 'martes', '09:00:00', '09:30:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (704, 28, 19, 'miercoles', '14:00:00', '14:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (711, 28, 19, 'viernes', '14:30:00', '15:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (636, 28, 19, 'miercoles', '07:30:00', '08:00:00', false);
 INSERT INTO public.profesores_disponibilidad VALUES (659, 28, 19, 'miercoles', '09:30:00', '10:00:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (663, 28, 19, 'martes', '10:00:00', '10:30:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (713, 28, 19, 'martes', '15:00:00', '15:30:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (632, 28, 19, 'lunes', '07:00:00', '07:30:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (641, 28, 19, 'lunes', '07:30:00', '08:00:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (652, 28, 19, 'lunes', '09:00:00', '09:30:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (657, 28, 19, 'lunes', '09:30:00', '10:00:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (682, 28, 19, 'lunes', '12:00:00', '12:30:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (320, 7, 52, 'lunes', '10:30:00', '11:00:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (595, 20, 19, 'jueves', '12:00:00', '12:30:00', true);
 INSERT INTO public.profesores_disponibilidad VALUES (618, 20, 19, 'martes', '14:30:00', '15:00:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (726, 14, 52, 'lunes', '11:30:00', '12:00:00', false);
+INSERT INTO public.profesores_disponibilidad VALUES (312, 7, 52, 'miercoles', '10:00:00', '10:30:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (727, 14, 52, 'miercoles', '11:30:00', '12:00:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (730, 14, 52, 'miercoles', '12:00:00', '12:30:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (747, 14, 52, 'viernes', '13:30:00', '14:00:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (732, 14, 52, 'viernes', '12:00:00', '12:30:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (737, 14, 52, 'viernes', '12:30:00', '13:00:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (728, 14, 52, 'viernes', '11:30:00', '12:00:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (753, 14, 52, 'viernes', '14:00:00', '14:30:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (762, 14, 52, 'viernes', '15:00:00', '15:30:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (758, 14, 52, 'viernes', '14:30:00', '15:00:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (743, 14, 52, 'viernes', '13:00:00', '13:30:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (741, 14, 52, 'miercoles', '13:00:00', '13:30:00', true);
+INSERT INTO public.profesores_disponibilidad VALUES (769, 7, 52, 'lunes', '10:00:00', '12:00:00', false);
 
 
 --
@@ -1150,10 +1317,6 @@ INSERT INTO public.profesores_disponibilidad VALUES (618, 20, 19, 'martes', '14:
 -- Data for Name: profesores_materias; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.profesores_materias VALUES (98, 7, 136);
-INSERT INTO public.profesores_materias VALUES (99, 7, 140);
-INSERT INTO public.profesores_materias VALUES (100, 7, 135);
-INSERT INTO public.profesores_materias VALUES (101, 7, 134);
 INSERT INTO public.profesores_materias VALUES (102, 8, 138);
 INSERT INTO public.profesores_materias VALUES (103, 8, 137);
 INSERT INTO public.profesores_materias VALUES (104, 8, 139);
@@ -1176,6 +1339,10 @@ INSERT INTO public.profesores_materias VALUES (120, 20, 138);
 INSERT INTO public.profesores_materias VALUES (121, 20, 137);
 INSERT INTO public.profesores_materias VALUES (122, 20, 139);
 INSERT INTO public.profesores_materias VALUES (132, 28, 147);
+INSERT INTO public.profesores_materias VALUES (133, 7, 148);
+INSERT INTO public.profesores_materias VALUES (134, 14, 149);
+INSERT INTO public.profesores_materias VALUES (135, 14, 159);
+INSERT INTO public.profesores_materias VALUES (136, 14, 160);
 
 
 --
@@ -1199,6 +1366,9 @@ INSERT INTO public.salones_disponibilidad VALUES (18, 9, 16, 'jueves', '07:30:00
 INSERT INTO public.salones_disponibilidad VALUES (19, 10, 17, 'viernes', '08:00:00', '08:30:00', true);
 INSERT INTO public.salones_disponibilidad VALUES (20, 10, 18, 'viernes', '08:30:00', '09:00:00', true);
 INSERT INTO public.salones_disponibilidad VALUES (21, 1, 19, 'lunes', '09:00:00', '09:30:00', true);
+INSERT INTO public.salones_disponibilidad VALUES (1, 1, 52, 'Miércoles', '10:00:00', '12:00:00', false);
+INSERT INTO public.salones_disponibilidad VALUES (2, 1, 52, 'jueves', '08:30:00', '10:30:00', false);
+INSERT INTO public.salones_disponibilidad VALUES (3, 3, 52, 'lunes', '10:00:00', '12:00:00', false);
 
 
 --
@@ -1209,6 +1379,8 @@ INSERT INTO public.salones_disponibilidad VALUES (21, 1, 19, 'lunes', '09:00:00'
 
 INSERT INTO public.solicitudes_cambio VALUES (1, 'IVD87493', 13, 1, 'cambio', 'Cambio solicitado por incompatibilidad de horario.', NULL, '2024-02-10', '2024-02-12', true, true);
 INSERT INTO public.solicitudes_cambio VALUES (15, 'IVD87507', 19, 15, 'agregar', 'El alumno desea cambiar a una materia más avanzada.', NULL, '2024-02-24', NULL, NULL, false);
+INSERT INTO public.solicitudes_cambio VALUES (20, NULL, 52, NULL, NULL, NULL, '', '2025-05-01', NULL, NULL, false);
+INSERT INTO public.solicitudes_cambio VALUES (21, '100123', 52, 10, 'eliminar', 'El alumno solicita eliminar la materia Iluminación y Acústica. Motivo: No quiero llevar esta materia', '', '2025-05-01', NULL, NULL, false);
 
 
 --
@@ -1235,7 +1407,7 @@ SELECT pg_catalog.setval('public.ciclos_escolares_id_ciclo_escolar_seq', 70, tru
 -- Name: ciclos_escolares_materias_id_ciclo_escolar_materia_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.ciclos_escolares_materias_id_ciclo_escolar_materia_seq', 147, true);
+SELECT pg_catalog.setval('public.ciclos_escolares_materias_id_ciclo_escolar_materia_seq', 160, true);
 
 
 --
@@ -1244,7 +1416,7 @@ SELECT pg_catalog.setval('public.ciclos_escolares_materias_id_ciclo_escolar_mate
 -- Name: enlista_id_enlista_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.enlista_id_enlista_seq', 348, true);
+SELECT pg_catalog.setval('public.enlista_id_enlista_seq', 432, true);
 
 
 --
@@ -1253,7 +1425,7 @@ SELECT pg_catalog.setval('public.enlista_id_enlista_seq', 348, true);
 -- Name: grupos_ciclos_materias_id_grupo_ciclo_materia_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.grupos_ciclos_materias_id_grupo_ciclo_materia_seq', 143, true);
+SELECT pg_catalog.setval('public.grupos_ciclos_materias_id_grupo_ciclo_materia_seq', 173, true);
 
 
 --
@@ -1262,7 +1434,7 @@ SELECT pg_catalog.setval('public.grupos_ciclos_materias_id_grupo_ciclo_materia_s
 -- Name: grupos_horarios_id_grupo_horario_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.grupos_horarios_id_grupo_horario_seq', 132, true);
+SELECT pg_catalog.setval('public.grupos_horarios_id_grupo_horario_seq', 155, true);
 
 
 --
@@ -1271,7 +1443,7 @@ SELECT pg_catalog.setval('public.grupos_horarios_id_grupo_horario_seq', 132, tru
 -- Name: grupos_id_grupo_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.grupos_id_grupo_seq', 145, true);
+SELECT pg_catalog.setval('public.grupos_id_grupo_seq', 175, true);
 
 
 --
@@ -1307,7 +1479,7 @@ SELECT pg_catalog.setval('public.planes_materias_id_plan_materia_seq', 1, false)
 -- Name: profesores_disponibilidad_id_profesor_disponibilidad_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.profesores_disponibilidad_id_profesor_disponibilidad_seq', 721, true);
+SELECT pg_catalog.setval('public.profesores_disponibilidad_id_profesor_disponibilidad_seq', 769, true);
 
 
 --
@@ -1325,7 +1497,7 @@ SELECT pg_catalog.setval('public.profesores_id_profesor_seq', 35, true);
 -- Name: profesores_materias_id_profesor_materia_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.profesores_materias_id_profesor_materia_seq', 132, true);
+SELECT pg_catalog.setval('public.profesores_materias_id_profesor_materia_seq', 136, true);
 
 
 --
@@ -1343,7 +1515,7 @@ SELECT pg_catalog.setval('public.requisitos_id_requisito_seq', 1, false);
 -- Name: salones_disponibilidad_id_salon_disponibilidad_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.salones_disponibilidad_id_salon_disponibilidad_seq', 1, false);
+SELECT pg_catalog.setval('public.salones_disponibilidad_id_salon_disponibilidad_seq', 3, true);
 
 
 --
@@ -1361,10 +1533,10 @@ SELECT pg_catalog.setval('public.salones_id_salon_seq', 4, true);
 -- Name: solicitudes_cambio_id_solicitud_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.solicitudes_cambio_id_solicitud_seq', 19, true);
+SELECT pg_catalog.setval('public.solicitudes_cambio_id_solicitud_seq', 21, true);
 
 
--- Completed on 2025-05-01 23:24:00
+-- Completed on 2025-05-02 03:43:14
 
 --
 -- PostgreSQL database dump complete

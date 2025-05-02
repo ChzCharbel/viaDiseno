@@ -59,14 +59,14 @@ exports.guardarHorario = async (req, res) => {
       body: req.body
     });
     
-    if (isNaN(id_grupo) || isNaN(id_ciclo_escolar) || isNaN(id_salon)) {
+    if (isNaN(id_ciclo_escolar) || isNaN(id_salon)) {
         return res.status(400).send("Faltan datos obligatorios para guardar el horario.");
     }
 
     const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
   
     try {
-      // Primero, eliminamos los horarios actuales para este grupo si existen
+      // Eliminamos los horarios actuales para este grupo si existen
       // Esto nos asegura que no haya duplicados
       try {
         await db.query(`
@@ -75,16 +75,13 @@ exports.guardarHorario = async (req, res) => {
         `, [id_grupo]);
       } catch (deleteErr) {
         console.error('Error al eliminar horarios existentes:', deleteErr);
-        // Continuamos con la inserción aunque la eliminación falle
       }
-     // Ahora insertamos los nuevos horarios
       for (let i = 0; i < dias.length; i++) {
         const diaOriginal = req.body[`dia_${i}`];
         const hora_inicio = req.body[`hora_inicio_${i}`];
         const hora_fin = req.body[`hora_fin_${i}`];
   
         if (hora_inicio && hora_fin) {
-          // Normalizar el día (convertir a minúsculas y quitar acentos si es necesario)
           let diaNormalizado = diaOriginal.toLowerCase();
           if (diaNormalizado === 'miércoles') {
             diaNormalizado = 'miercoles';

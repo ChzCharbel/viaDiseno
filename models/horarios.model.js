@@ -42,7 +42,6 @@ module.exports = class Horario {
             
             const result = await db.query(query, [parseInt(id_grupo)]);
             
-            // Inicializamos un objeto con valores nulos para todos los días
             const horario = {
                 id_grupo: id_grupo,
                 lunes_inicio: null, lunes_fin: null,
@@ -51,18 +50,16 @@ module.exports = class Horario {
                 jueves_inicio: null, jueves_fin: null,
                 viernes_inicio: null, viernes_fin: null
             };
-              // Procesamos cada registro y lo asignamos al día correspondiente
+
             if (result.rows.length > 0) {
                 for (const row of result.rows) {
-                    // Normalizar el día: convertir a minúsculas y manejar acentos
                     let dia = row.dia_semana.toLowerCase();
                     if (dia === 'miércoles') {
                         dia = 'miercoles';
                     }
                     
                     console.log(`Procesando horario: día=${dia}, inicio=${row.hora_inicio}, fin=${row.hora_fin}`);
-                    
-                    // Asignamos la hora de inicio y fin para el día correspondiente
+
                     if (dia === 'lunes') {
                         horario.lunes_inicio = row.hora_inicio;
                         horario.lunes_fin = row.hora_fin;
