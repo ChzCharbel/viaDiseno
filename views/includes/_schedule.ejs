@@ -18,13 +18,13 @@
           const materiasColor = {};
           let colorIndex = 0;
   
-          const horario = { Lunes: {}, Martes: {}, Miércoles: {}, Jueves: {}, Viernes: {} };
+          const horario = { Lunes: {}, Martes: {}, Miercoles: {}, Jueves: {}, Viernes: {} };
   
           grupos.forEach(grupo => {
             grupo.horarios.forEach(h => {
               const dia = h.dia.charAt(0).toUpperCase() + h.dia.slice(1);
               
-              if (['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'].includes(dia)) {
+              if (['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes'].includes(dia)) {
                 if (!materiasColor[grupo.materia.nombre]) {
                   materiasColor[grupo.materia.nombre] = colores[colorIndex % colores.length];
                   colorIndex++;
@@ -59,7 +59,7 @@
           %>
             <tr>
               <th class="hour text-center align-middle"><%= hora %>:<%= minutos %></th>
-              <% ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'].forEach(dia => { %>
+              <% ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes'].forEach(dia => { %>
                 <% if (horario[dia][bloque] === 'ocupar') return; %>
                 <% if (horario[dia][bloque]) { %>
                   <td class="text-white text-center align-middle <%= horario[dia][bloque].color %>" rowspan="<%= horario[dia][bloque].rowspan %>">
