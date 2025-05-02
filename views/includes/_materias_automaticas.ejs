@@ -41,7 +41,6 @@
           <th>Materia</th>
           <th>Salón</th>
           <th>Horario</th>
-          <th>Estatus</th>
         </tr>
       </thead>
       <tbody>
@@ -57,18 +56,18 @@
                     type="button"
                     class="btn btn-outline-secondary btn-sm rounded-pill"
                     data-bs-toggle="modal"
-                    data-bs-target="#modalSalones<%= materia.id_materia %>">
+                    data-bs-target="#modalSalones<%= materia.id_grupo %>">
                     Seleccionar salón
               </button>
 
-                  <%- include('_modal_salones.ejs', { materia: materia, salones: salones }) %>
+                  <%- include('_modal_salones_grupos.ejs', { materia: materia, salones: salones }) %>
 
-                  <div id="salonSeleccionado_<%= materia.id_materia %>" class="mt-2 text-muted small">
+                  <div id="salonSeleccionado_<%= materia.id_grupo %>" class="mt-2 text-muted small">
                     No seleccionado
                   </div>
 
-                  <input type="hidden" id="inputSalon_<%= materia.id_materia %>">
-                  <input type="hidden" id="inputProfesor_<%= materia.id_materia %>" value="<%= materia.id_profesor %>">
+                  <input type="hidden" id="inputSalon_<%= materia.id_grupo %>">
+                  <input type="hidden" id="inputProfesor_<%= materia.id_grupo %>" value="<%= materia.id_profesor %>">
                 </td>
 
                 <td>
@@ -91,11 +90,6 @@
                         <span class="visually-hidden">  <%- gruposMostradosManual.push(grupoInterno.id_grupo_horario) %> </span>
                                           
                   <% } } %>
-                </td>
-
-                <td>
-                  <button class="btn btn-primary btn-sm rounded-pill px-3"
-                    onclick="guardarSalonSeleccionado('<%= materia.id_materia %>')">Guardar</button>
                 </td>
               </tr>
           <% } } %>
