@@ -6,7 +6,7 @@ const horariosController = require('../controllers/horarios.controller');
 const isAuth = require('../util/is-auth');
 const canView = require('../util/canViewAllGroups');
 
-router.get('/asignar/existente/:idGrupo/:idSalon', isAuth, canView, gruposController.get_asignar_salon_grupo);
+router.get('/asignar/existente/:idCiclo/:idGrupo/:idSalon', isAuth, canView, gruposController.get_asignar_salon_grupo);
 
 router.post('/asignar-salon', isAuth, gruposController.asignarSalonPorMateria);
 
