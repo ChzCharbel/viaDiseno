@@ -65,3 +65,11 @@ exports.get_grupos = (request, response, next) => {
     console.log(error);
   })
 }
+
+exports.get_asignar_salon_grupo = (request, response, next) => {
+  Grupo.asignarSalonGrupoExistente(request.params.idGrupo, request.params.idSalon).then(() => {
+    response.redirect('/materias/automaticamente_asignadas/' + request.params.idCiclo);
+  }).catch((error) => {
+    console.log(error);
+  });
+}
