@@ -3,7 +3,7 @@ const Oferta = require('../models/oferta.model');
 
 exports.get_opciones = (request, response, next) => {
     response.render('crear_grupos.ejs', {
-        titulo: "crear_grupos",
+        titulo: "crear_grupos_opciones",
         privilegios: request.session.privilegios || [],
         carrera: request.session.carrera || "",
         profesores: request.session.profesores || [],
