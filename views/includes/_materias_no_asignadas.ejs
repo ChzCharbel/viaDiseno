@@ -7,7 +7,10 @@
       <a class="nav-link text-dark" href="/materias/automaticamente_asignadas/<%=cicloActual%>">Materias asignadas automáticamente</a>
     </li>
   </ul>
-  <!-- Buscador estilizado -->
+        <% if (materias && materias.length === 0) { %>
+          <p class="text-center py-3">No hay materias disponibles</p>
+        <% } else if (materias) { %>
+              <!-- Buscador estilizado -->
   <div class="row justify-content-center mb-4">
     <div class="col-md-8">
       <div class="card shadow-sm border-0 rounded-4 p-4">
@@ -43,11 +46,6 @@
         </tr>
       </thead>
       <tbody>
-        <% if (materias && materias.length === 0) { %>
-          <tr>
-            <td colspan="5" class="text-center py-3">No hay materias disponibles</td>
-          </tr>
-        <% } else if (materias) { %>
           <% for (let materia of materias) { %>
             <tr>
               <td><%= materia.profesor || 'Sin asignar' %></td>
@@ -180,13 +178,14 @@
               </td>
             </tr>
           <% } %>
-        <% } %>
+        
       </tbody>
     </table>
 
     <div class="d-flex justify-content-end mt-3">
       <button class="btn btn-primary" id="generarHorariosBtn">Generar Horarios</button>
     </div>
+    <% } %>
   </div>
 </div>
 
