@@ -48,6 +48,45 @@ function seleccionarSalon(idMateria, idSalon, descripcionSalon) {
   }
 }
 
+function seleccionarSalonGrupoExistente(idGrupo, idSalon, descripcionSalon, idCiclo) {
+  console.log('Seleccionando salón:', { idGrupo, idSalon, descripcionSalon });
+
+  const botonGuardarSalon = document.getElementById("botonSalonGruposExistentes");
+  let rutaSalonGrupoExistente = '/grupos/asignar/existente/' + idCiclo + '/' + idGrupo + '/' + idSalon;
+
+  console.log('grupo ' + idGrupo + 'salon ' + idSalon);
+
+  botonGuardarSalon.setAttribute('href', rutaSalonGrupoExistente)
+  window.salonSeleccionado[idGrupo] = idSalon;
+  localStorage.setItem('salonSeleccionado', JSON.stringify(window.salonSeleccionado));
+
+  const texto = document.getElementById('salonSeleccionado_' + idGrupo);
+  if (texto) {
+    texto.textContent = 'Seleccionado: ' + descripcionSalon;
+  }
+  
+  const modal = document.getElementById('modalSalones' + idGrupo);
+  if (modal) {
+    const botones = modal.querySelectorAll('.modal-body .btn');
+    botones.forEach(btn => {
+      btn.classList.remove('btn-primary');
+      btn.classList.add('btn-light');
+    });
+    console.log('Buscando botón para salón ID:', idSalon);
+    let encontrado = false;
+    botones.forEach(btn => {
+      const btnSalonId = btn.getAttribute('data-salon-id');
+      console.log('Botón con salon ID:', btnSalonId);
+      if (btnSalonId === idSalon) {
+        console.log('¡Botón encontrado! Activando...');
+        btn.classList.remove('btn-light');
+        btn.classList.add('btn-primary');
+        encontrado = true;
+      }
+    });
+  }
+}
+
 function guardarSalonSeleccionado(idMateria) {
   console.log('Guardando salón para la materia:', idMateria);
   console.log('Estado actual de salonSeleccionado:', window.salonSeleccionado);
