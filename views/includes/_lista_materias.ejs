@@ -20,7 +20,6 @@
         <div class="card-body position-relative">          
           <h5 class="card-title"><%= grupo.materia.nombre %></h5>
           <p class="card-text">Profesor: <%= grupo.profesor.nombre %></p>
-          <p class="card-text">Salón: <%= grupo.salon.id %></p>
 
           <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#modal<%= index %>">
             Ver más
@@ -42,9 +41,7 @@
               <dl class="row">
                 <dt class="col-sm-9">Nombre de Profesor:</dt>
                 <dd class="col-sm-9"><%= grupo.profesor.nombre %></dd>
-
-                <dt class="col-sm-9">Salón:</dt>
-                <dd class="col-sm-9"><%= grupo.salon.id %></dd>                
+               
                 <dt class="col-sm-9">Horario:</dt>
                 <dd class="col-sm-9">
                   <ul>
