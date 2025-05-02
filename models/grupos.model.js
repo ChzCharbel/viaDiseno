@@ -35,4 +35,15 @@ module.exports = class Grupo {
     return db.query(query, values);
   }
 
+  static fetchAll(idCicloEscolar) {
+    return db.query(`SELECT * FROM grupos_ciclos_materias
+        JOIN ciclos_escolares_materias using (id_ciclo_escolar_materia)
+        JOIN grupos using (id_grupo)
+        JOIN grupos_horarios using (id_grupo)
+        JOIN profesores using (id_profesor)
+        JOIN planes_materias using (id_plan_materia)
+        JOIN materias using (id_materia)
+        WHERE id_ciclo_escolar = $1::integer AND id_salon IS NOT NULL;`, [idCicloEscolar]);
+  }
+
 };
