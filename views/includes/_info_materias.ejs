@@ -46,6 +46,8 @@
             <td>
             <% if (materia.id_salon >= 5) { %>
               <%= materia.id_salon + 1 %>
+            <% } else { %>
+              <%= materia.id_salon %>
             <% } %>
             </td>
             <td>
@@ -53,26 +55,30 @@
                 <% if (grupoInterno.id_ciclo_escolar_materia === materia.id_ciclo_escolar_materia) { %>
                   <% if (grupoInterno.dia_semana === 'lunes') { %>
                     <p class="fw-semibold"> Lunes </p>
+                    <p><%=grupoInterno.hora_inicio%> - <%=grupoInterno.hora_fin%> </p>
                   <% } else if (grupoInterno.dia_semana === 'martes') { %>
                     <p class="fw-semibold"> Martes </p>
+                    <p><%=grupoInterno.hora_inicio%> - <%=grupoInterno.hora_fin%> </p>
                   <% } else if (grupoInterno.dia_semana === 'miercoles') { %>
                     <p class="fw-semibold"> Miércoles </p>
+                    <p><%=grupoInterno.hora_inicio%> - <%=grupoInterno.hora_fin%> </p>
                   <% } else if (grupoInterno.dia_semana === 'jueves')  { %>
                     <p class="fw-semibold"> Jueves </p>
+                    <p><%=grupoInterno.hora_inicio%> - <%=grupoInterno.hora_fin%> </p>
                   <% } else if (grupoInterno.dia_semana === 'viernes') { %>
                     <p class="fw-semibold"> Viernes </p>
+                    <p><%=grupoInterno.hora_inicio%> - <%=grupoInterno.hora_fin%> </p>
                   <% } %>
-                                            
-                  <p>
-                    <%=grupoInterno.hora_inicio%> - <%=grupoInterno.hora_fin%> 
-                  </p>
                   <span class="visually-hidden">  <%- gruposMostradosFinal.push(grupoInterno.id_grupo_horario) %> </span>
                   <% } %>          
               
                 
-              </td>
-            </tr>
-          <% } } } } %>
+              
+          <% } } %>
+          </td>
+          <% } %>
+        </tr>
+        <% } %>
       </tbody>
     </table>
   </div>
