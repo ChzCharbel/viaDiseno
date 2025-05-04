@@ -240,7 +240,8 @@ async function actualizarEstatus(nuevoEstatus) {
 
       modal.hide();
     } else {
-      alert("Error al actualizar solicitud");
+      const error =  await res.json();
+      alert(error.error);
     }
   } catch (err) {
     console.error(err);
