@@ -132,7 +132,7 @@ module.exports = class SolicitaCambio {
         }
             
       }
-    return db.query(`INSERT INTO enlista (id_grupo, id_ivd) VALUES ($1::integer, $2::text)`, [grupoMateriaSolicitada.id_grupo, solicitud.id_ivd]);
+    return db.query(`INSERT INTO enlista (id_grupo, id_ivd) VALUES ($1::integer, $2::text)`, [grupoMateriaSolicitada[0].id_grupo, solicitud.id_ivd]);
     }
     else {
       throw new Error("El grupo al que se desea cambiar el alumno ya no tiene cupo disponible.");
