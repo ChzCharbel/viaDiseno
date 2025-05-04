@@ -1,7 +1,49 @@
 <div class="container mt-5">
   <!-- Buscador estilizado -->
   <% if (materias && materias.length === 0) { %>
-    <p class="text-center">No hay materias disponibles</p>
+    <div class="row justify-content-center mb-4">
+    <p class="fs-3">Semestre</p>
+      <div class="btn-group mb-4" role="group" aria-label="Basic example">
+        <% if (semestreActual == 1) { %> 
+          <a href="/grupos/<%=cicloActual%>/1"  class="btn btn-dark">1°</a>
+        <% } else { %>
+          <a href="/grupos/<%=cicloActual%>/1"  class="btn btn-outline-dark">1°</a>
+        <% } if (semestreActual == 2) { %>
+          <a href="/grupos/<%=cicloActual%>/2" class="btn btn-dark">2°</a>
+        <% } else { %>
+          <a href="/grupos/<%=cicloActual%>/2" class="btn btn-outline-dark">2°</a>
+        <% } if (semestreActual == 3) { %>
+          <a href="/grupos/<%=cicloActual%>/3" class="btn btn-dark">3°</a>
+        <% } else { %>
+          <a href="/grupos/<%=cicloActual%>/3" class="btn btn-outline-dark">3°</a>
+        <% } if (semestreActual == 4) { %>
+          <a href="/grupos/<%=cicloActual%>/4" class="btn btn-dark">4°</a>
+        <% } else { %>
+          <a href="/grupos/<%=cicloActual%>/4" class="btn btn-outline-dark">4°</a>
+        <% } if (semestreActual == 5) { %>
+          <a href="/grupos/<%=cicloActual%>/5" class="btn btn-dark">5°</a>
+        <% } else { %>
+          <a href="/grupos/<%=cicloActual%>/5" class="btn btn-outline-dark">5°</a>
+        <% } if (semestreActual == 6) { %>
+          <a href="/grupos/<%=cicloActual%>/6" class="btn btn-dark">6°</a>
+        <% } else { %>
+          <a href="/grupos/<%=cicloActual%>/6" class="btn btn-outline-dark">6°</a>
+        <% } if (semestreActual == 7) { %>
+          <a href="/grupos/<%=cicloActual%>/7" class="btn btn-dark">7°</a>
+        <% } else { %>
+          <a href="/grupos/<%=cicloActual%>/7" class="btn btn-outline-dark">7°</a>
+        <% } if (semestreActual == 8) { %>
+          <a href="/grupos/<%=cicloActual%>/8" class="btn btn-dark">8°</a>
+        <% } else { %>
+          <a href="/grupos/<%=cicloActual%>/8" class="btn btn-outline-dark">8°</a>
+        <% } if (semestreActual == 9) { %>
+          <a href="/grupos/<%=cicloActual%>/9" class="btn btn-dark">9°</a>
+        <% } else { %>
+          <a href="/grupos/<%=cicloActual%>/9" class="btn btn-outline-dark">9°</a>
+        <% } %>
+      </div>
+      <p class="text-center">No hay grupos disponibles</p>
+  </div>
   <% } else if (materias) { %>
     <div class="row justify-content-center mb-4">
     <div class="col-md-8">
@@ -21,6 +63,46 @@
         </form>          
       </div>
     </div>
+    <p class="fs-3">Semestre</p>
+      <div class="btn-group mb-4" role="group" aria-label="Basic outlined example">
+        <% if (semestreActual == 1) { %> 
+          <a href="/grupos/<%=cicloActual%>/1"  class="btn btn-dark">1°</a>
+        <% } else { %>
+          <a href="/grupos/<%=cicloActual%>/1"  class="btn btn-outline-dark">1°</a>
+        <% } if (semestreActual == 2) { %>
+          <a href="/grupos/<%=cicloActual%>/2" class="btn btn-dark">2°</a>
+        <% } else { %>
+          <a href="/grupos/<%=cicloActual%>/2" class="btn btn-outline-dark">2°</a>
+        <% } if (semestreActual == 3) { %>
+          <a href="/grupos/<%=cicloActual%>/3" class="btn btn-dark">3°</a>
+        <% } else { %>
+          <a href="/grupos/<%=cicloActual%>/3" class="btn btn-outline-dark">3°</a>
+        <% } if (semestreActual == 4) { %>
+          <a href="/grupos/<%=cicloActual%>/4" class="btn btn-dark">4°</a>
+        <% } else { %>
+          <a href="/grupos/<%=cicloActual%>/4" class="btn btn-outline-dark">4°</a>
+        <% } if (semestreActual == 5) { %>
+          <a href="/grupos/<%=cicloActual%>/5" class="btn btn-dark">5°</a>
+        <% } else { %>
+          <a href="/grupos/<%=cicloActual%>/5" class="btn btn-outline-dark">5°</a>
+        <% } if (semestreActual == 6) { %>
+          <a href="/grupos/<%=cicloActual%>/6" class="btn btn-dark">6°</a>
+        <% } else { %>
+          <a href="/grupos/<%=cicloActual%>/6" class="btn btn-outline-dark">6°</a>
+        <% } if (semestreActual == 7) { %>
+          <a href="/grupos/<%=cicloActual%>/7" class="btn btn-dark">7°</a>
+        <% } else { %>
+          <a href="/grupos/<%=cicloActual%>/7" class="btn btn-outline-dark">7°</a>
+        <% } if (semestreActual == 8) { %>
+          <a href="/grupos/<%=cicloActual%>/8" class="btn btn-dark">8°</a>
+        <% } else { %>
+          <a href="/grupos/<%=cicloActual%>/8" class="btn btn-outline-dark">8°</a>
+        <% } if (semestreActual == 9) { %>
+          <a href="/grupos/<%=cicloActual%>/9" class="btn btn-dark">9°</a>
+        <% } else { %>
+          <a href="/grupos/<%=cicloActual%>/9" class="btn btn-outline-dark">9°</a>
+        <% } %>
+      </div>
   </div>
 
   <input type="hidden" id="cicloActualId" value="<%= cicloActual %>">
@@ -30,6 +112,7 @@
     <table class="table table-bordered align-middle text-center shadow-sm overflow-hidden">
       <thead class="table-light">
         <tr>
+          <th>Semestre</th>
           <th>Profesor</th>
           <th>Materia</th>
           <th>Salón</th>
@@ -41,6 +124,7 @@
         <% for (let materia of materias) { %>
           <% if (gruposMostradosFinal.includes(materia.id_grupo_horario) === false) { %>
             <tr>
+            <td><%= materia.bloque_semestre %></td>
             <td><%= materia.profesor %></td>
             <td><%= materia.materia %></td>
             <td>
@@ -78,9 +162,14 @@
           </td>
           <% } %>
         </tr>
-        <% } %>
+       
+       
       </tbody>
     </table>
+     <% } %>
+     <% if (gruposSemestre.length > 0) { %>
+      <%- include('_schedule_semestres', { grupos: gruposSemestre }) %>
+     <% } %>
   </div>
 </div>
 
