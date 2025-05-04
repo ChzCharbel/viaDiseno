@@ -45,12 +45,15 @@ exports.getDatosGrupos = async (req, res) => {
   }
 };
 
-exports.get_grupos = (request, response, next) => {
-  Grupo.fetchAll(request.params.idCiclo).then((grupos) => {
-    console.log(grupos.rows)
+exports.get_grupos = async (request, response, next) => {
+  
+  const gruposSemestre = await Grupo.obtenerGruposPorSemestre(request.params.semestre, request.params.idCiclo);
+  Grupo.fetchAll(request.params.idCiclo, request.params.semestre).then((grupos) => {
     response.render('materias.ejs', {
       titulo: 'materias' || '',
       materias: grupos.rows || [],
+      gruposSemestre: gruposSemestre || [],
+      semestreActual: request.params.semestre || '',
       salones: [],
       privilegios: request.session.privilegios || [],
       csrfToken: request.csrfToken(),
