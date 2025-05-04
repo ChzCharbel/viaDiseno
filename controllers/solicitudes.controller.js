@@ -110,7 +110,7 @@ exports.actualizarSolicitud = async (req, res) => {
     });
   } catch (err) {
     console.error('Error al actualizar estatus:', err);
-    res.status(500).json({ error: 'Error al actualizar solicitud' });
+    res.status(500).json({ error: err.message });
   }
 };
 
