@@ -14,6 +14,8 @@ router.post('/asignar-salon', isAuth, gruposController.asignarSalonPorMateria);
 router.get('/datos', isAuth, gruposController.getDatosGrupos);
 router.post('/horarios', isAuth, horariosController.generarHorariosParaTodos);
 
+router.get('/:idCiclo/:semestre', isAuth, canView, gruposController.get_grupos);
+
 router.get('/:idCiclo', isAuth, canView, gruposController.get_grupos);
 
 module.exports = router;
