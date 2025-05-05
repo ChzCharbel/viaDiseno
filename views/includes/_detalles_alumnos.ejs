@@ -1,0 +1,25 @@
+<div class="container mt-5">
+    <div class="modal-body px-4 pt-2 pb-4">
+        <div class="border rounded-3 p-3 bg-light-subtle">
+            <div class="row text-end">
+                <a href="/alumnos/<%=cicloActual%>"><i class="bi bi-x-circle-fill text-secondary fs-1"></i></a>
+            </div>
+            <div class="row mt-0">
+                <div class="col-auto mt-5 p-5">
+                    <p><span class="fw-semibold">Nombre:</span> <%=alumno[0].nombre_usuario%></p>
+                    <p><span class="fw-semibold">Matrícula:</span> <%=alumno[0].id_ivd%> </p> 
+                    <p><span class="fw-semibold">Semestre:</span> <%=alumno[0].semestre%> </p> 
+                    <p><span class="fw-semibold">Estatus:</span> <% if (alumno[0].regular == true) { %>
+                        Regular
+                        <% } else { %>
+                            Irregular
+                        <% } %>
+                    </p> 
+                </div>
+                <div class="col">
+                    <%- include('_schedule_semestres', { grupos: grupos }) %>    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
