@@ -131,9 +131,7 @@
                       </span></td>
                       <td><%= alumno.carrera %></td>
                       <td>
-                        <button class="btn btn-sm btn-vino" data-bs-toggle="modal" data-bs-target="#modal<%= alumno.id_ivd %>">
-                          <i class="bi bi-eye"></i>
-                        </button>
+                        <a href="/alumnos/<%=cicloActual%>/horario/<%= alumno.id_ivd %>" class="btn btn-sm btn-vino"><i class="bi bi-calendar3"></i></a>
                       </td>
                     </tr>
                   <% } %>
