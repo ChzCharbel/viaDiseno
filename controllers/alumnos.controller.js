@@ -1,6 +1,7 @@
 const Alumno = require('../models/alumnos.model');
 const Enlista = require('../models/enlista.model');
 
+
 exports.get_horario_alumnos_regulares = (request, response, next) => {
     response.render('horario_alumnos_regulares.ejs', {
         titulo: 'alumnos_regulares',
@@ -82,6 +83,7 @@ exports.get_horario = (request, response, next) => {
             titulo: 'alumnos',
             privilegios: request.session.privilegios || [],
             alumno: alumno.rows || [],
+            editar: false,
             carrera: request.session.carrera || '',
             ciclosEscolares: request.session.ciclosEscolares || [],
             cicloActual: request.params.idCiclo || '',
@@ -93,4 +95,36 @@ exports.get_horario = (request, response, next) => {
     }).catch((error) => {
         console.log(error);
     })
+}
+
+exports.get_editar_horario = (request, response, next) => {
+    Promise.all([
+        Enlista.obtenerGruposDeAlumno(request.params.idIVD),
+        Alumno.fetchOne(request.params.idIVD),
+    ]).then(([gruposAlumno, alumno]) => {
+        console.log(gruposAlumno)
+        response.render('horario_alumno.ejs', {
+            titulo: 'alumnos',
+            privilegios: request.session.privilegios || [],
+            alumno: alumno.rows || [],
+            editar: true,
+            carrera: request.session.carrera || '',
+            ciclosEscolares: request.session.ciclosEscolares || [],
+            cicloActual: request.params.idCiclo || '',
+            username: request.session.username || '',
+            mail: request.session.mail || '',
+            grupos: gruposAlumno,
+            rol: request.session.rol || '',
+        })
+    }).catch((error) => {
+        console.log(error);
+    })
+}
+
+exports.get_eliminar_grupo = (request, response, next) => {
+    Alumno.eliminarMateria(request.params.idIVD, request.params.idMateria, request.params.idCiclo).then((data) => {
+        response.redirect('/alumnos/' + request.params.idCiclo + '/horario/' + request.params.idIVD + '/editar');
+    }).catch((error) => {
+        console.log(error);
+    });
 }
