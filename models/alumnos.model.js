@@ -49,4 +49,22 @@ module.exports = class Alumno {
 			WHERE u.nombre_usuario LIKE $1::text`,
             ['%' + nombreUsuario + '%']);
     }
+
+	static async eliminarMateria(idIVD, idMateria, idCicloEscolar) {
+		const gruposEliminar = await db.query(`SELECT g.id_grupo
+			FROM grupos g
+			JOIN grupos_ciclos_materias gcm using (id_grupo)
+			JOIN ciclos_escolares_materias cem using (id_ciclo_escolar_materia)
+			JOIN planes_materias pm using (id_plan_materia)
+			JOIN materias m using (id_materia)
+			JOIN profesores p using (id_profesor)
+			JOIN grupos_horarios gh using (id_grupo)
+			JOIN enlista using (id_grupo)
+			WHERE id_ivd = $1::text AND id_ciclo_escolar = $2::integer AND id_materia = $3::integer
+			ORDER BY g.id_grupo, gh.dia_semana, gh.hora_inicio;`, [idIVD, idCicloEscolar, idMateria]);
+
+		for (let grupo of gruposEliminar.rows) {
+			await db.query(`DELETE FROM enlista WHERE id_ivd = $1::text AND id_grupo = $2::integer;`, [idIVD, grupo.id_grupo]);
+		}
+	}
 }
