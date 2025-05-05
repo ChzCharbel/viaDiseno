@@ -1,4 +1,5 @@
 const Alumno = require('../models/alumnos.model');
+const Enlista = require('../models/enlista.model');
 
 exports.get_horario_alumnos_regulares = (request, response, next) => {
     response.render('horario_alumnos_regulares.ejs', {
@@ -71,3 +72,25 @@ exports.get_horario_alumnos_irregulares = (request, response, next) => {
         rol: request.session.rol || '',
     });
 };
+
+exports.get_horario = (request, response, next) => {
+    Promise.all([
+        Enlista.obtenerGruposDeAlumno(request.params.idIVD),
+        Alumno.fetchOne(request.params.idIVD),
+    ]).then(([gruposAlumno, alumno]) => {
+        response.render('horario_alumno.ejs', {
+            titulo: 'alumnos',
+            privilegios: request.session.privilegios || [],
+            alumno: alumno.rows || [],
+            carrera: request.session.carrera || '',
+            ciclosEscolares: request.session.ciclosEscolares || [],
+            cicloActual: request.params.idCiclo || '',
+            username: request.session.username || '',
+            mail: request.session.mail || '',
+            grupos: gruposAlumno,
+            rol: request.session.rol || '',
+        })
+    }).catch((error) => {
+        console.log(error);
+    })
+}
