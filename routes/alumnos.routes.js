@@ -7,6 +7,7 @@ const canViewSelf = require('../util/canViewAssignedGroups');
 
 const alumnosController = require('../controllers/alumnos.controller');
 
+router.get('/:idCiclo/horario/:idIVD', isAuth, canViewAll, alumnosController.get_horario);
 router.get('/regulares/:idCiclo', isAuth, canViewSelf, alumnosController.get_horario_alumnos_regulares);
 router.get('/irregulares/:idCiclo', isAuth, canViewSelf, alumnosController.get_horario_alumnos_regulares);
 router.get('/:idCiclo/buscar/:nombre', isAuth, canViewAll, alumnosController.get_buscar);
